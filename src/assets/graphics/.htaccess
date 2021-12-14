@@ -1,0 +1,29 @@
+FileETag MTime Size
+
+RewriteEngine On
+
+#zabezpiecz foldery przed listingiem
+Options All -Indexes
+
+
+#default
+RewriteRule ^root$ admin/admin.php [L,QSA]
+RewriteRule ^admin/(.*)$ admin/$1 [L,QSA]
+RewriteRule ^cron/(.*)$ cron/$1 [L,QSA]
+RewriteRule ^extras/(.*)$ extras/$1 [L,QSA]
+RewriteRule ^fix/(.*)$ fix/$1 [L,QSA]
+
+RewriteRule ^forum/([a-zA-Z_\-]+)/([0-9a-zA-Z_\-\+\,\/=]+)$ index.php?module=forum&action=thread&params=$2 [L,QSA]
+RewriteRule ^ajax/(.*)$ index.php?module=ajax&action=$1 [L,QSA]
+RewriteRule ^([a-z_]+)/([a-zA-Z_]+)/([0-9a-zA-Z_\-\+\,\/=]+)$ index.php?module=$1&action=$2&params=$3 [L,QSA]
+RewriteRule ^([a-z_]+)/([a-zA-Z_]+)$ index.php?module=$1&action=$2 [L,QSA]
+RewriteRule ^([a-z_]+)$ index.php?module=$1 [L,QSA]
+    
+#RewriteRule ^(.+)+\.html$ index.php/$1 [L,QSA]
+#RewriteRule ^([a-z_]+)/$ index.php/$1 [L,QSA]
+#RewriteRule ^([a-z_]+)$ index.php/$1 [L,QSA]
+#   
+    
+    
+#RewriteCond %{HTTP_HOST} ^127.1$
+#RewriteRule ^(.*)$ "127\.1/$1" [R=301,L]
