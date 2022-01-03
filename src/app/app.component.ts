@@ -71,6 +71,14 @@ export class AppComponent implements OnInit {
         this.world.populateMap(data);
     });
 
+    this.http.get(
+      'http://dl-api.devel/player/getEssentialData',
+      {responseType: 'json'}
+    )
+    .subscribe(data => {
+        console.log(data);
+    });
+
     this.player = new Player(this.player_x, this.player_y, this.world, this.scaledSize);
     //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
     this.viewport = new Viewport(0, 0, this.width, this.height);
@@ -78,7 +86,7 @@ export class AppComponent implements OnInit {
 
     this.tile_sheet.addEventListener('load', (event) => { this.loop(); });
     this.tile_sheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
-    this.hero_image.src = 'assets/graphics/postacie/professor_walk_cycle_no_hat.png';
+    this.hero_image.src = '../assets/graphics/postacie/professor_walk_cycle_no_hat.png';
 
     this.context.canvas.addEventListener('click', (event) => {
 

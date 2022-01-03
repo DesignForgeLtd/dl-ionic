@@ -1,0 +1,18 @@
+{
+  "appId": "dragon.lords",
+  "appName": "Dragon Lords",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {
+    "preferences": {
+      "AllowedSchemes": "smartlab"
+    }
+  },
+  "linuxAndroidStudioPath": "/home/sachem/android-studio/bin/studio.sh"
+}

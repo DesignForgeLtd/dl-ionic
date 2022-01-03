@@ -1,5 +1,7 @@
 {
   "name": "dl-ionic",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }
