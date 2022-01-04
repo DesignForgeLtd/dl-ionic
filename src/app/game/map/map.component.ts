@@ -117,21 +117,28 @@ export class MapComponent implements OnInit {
   loop() {// The game loop
 
     window.requestAnimationFrame(() => this.loop());
-
     const currentFrameTime = Date.now();
 
-    this.height = document.documentElement.clientHeight; // HERE
-    this.width  = document.documentElement.clientWidth; // HERE
+    this.height = document.documentElement.clientHeight;
+    this.width  = document.documentElement.clientWidth;
 
     /* Resize canvas on every frame */
     this.context.canvas.height = this.height;
     this.context.canvas.width  = this.width;
+    // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
 
-//          this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
-//console.log([hero_path, player.pos_x, scaledSize, player.pos_x * scaledSize,  player.x, player.pos_x * scaledSize == player.x]);
+    this.tryMoveHero();
+    this.infolocationUpdate();
 
+    this.player.repositionTo(this.player.pos_x, this.player.pos_y);
+    this.viewport.scrollTo(this.player.x, this.player.y);
 
-    // when movement stops for the current step
+    this.drawTerrain();
+
+    this.drawHero(currentFrameTime);
+  }
+
+  tryMoveHero(){
     // TODO:
     if (this.player.pos_x * this.scaledSize === this.player.x
       && this.player.pos_y * this.scaledSize === this.player.y)
@@ -147,13 +154,15 @@ export class MapComponent implements OnInit {
         this.player.stop();
       }
     }
+  }
 
-    this.infolocationUpdate();
+  infolocationUpdate(){
+    document.getElementById('infolokacja').innerHTML =
+      this.world.infolokacja(this.player.pos_x + this.player.pos_y * 200)
+      + ' ('+this.player.pos_x+','+this.player.pos_y+')';
+  }
 
-    this.player.repositionTo(this.player.pos_x, this.player.pos_y);
-    //player.moveTo(pointer.x, pointer.y);
-    this.viewport.scrollTo(this.player.x, this.player.y);
-
+  drawTerrain(){
     /* Get the min and max column and row in the map to draw. For the min
     column and row (x and y) we use floor to round down and for the max we
     use ceil to round up. We want to get the rows and columns under the borders
@@ -179,36 +188,6 @@ export class MapComponent implements OnInit {
         this.drawTileInViewport(x, y);
       }
     }
-
-    /* This bit of code gets the this.player's position in the world in terms of
-    columns and rows and converts it to an index in the map array */
-    // let this.player_index =
-    //   Math.floor((this.player.y + this.scaledSize * 0.5) / this.scaledSize) * columns
-    //   + Math.floor((this.player.x + this.scaledSize * 0.5) / this.scaledSize);
-
-    /* If the this.player is standing on a grass tile, make it a short grass tile */
-    // if (pole[this.player_index] == 2) pole[this.player_index] = 1;
-
-    /* Draw the this.player. Remember to offset by the viewport position and
-    center screen position. */
-    this.drawHero(currentFrameTime);
-
-
-    /* Draw the viewport rectangle. */
-    this.context.strokeStyle = '#ffffff';
-    this.context.rect(
-      this.width * 0.5 - this.viewport.w * 0.5,
-      this.height * 0.5 - this.viewport.h * 0.5,
-      this.viewport.w,
-      this.viewport.h
-    );
-    this.context.stroke();
-  }
-
-  infolocationUpdate(){
-    document.getElementById('infolokacja').innerHTML =
-      this.world.infolokacja(this.player.pos_x + this.player.pos_y * 200)
-      + ' ('+this.player.pos_x+','+this.player.pos_y+')';
   }
 
   drawTileInViewport(x, y){
@@ -246,23 +225,20 @@ export class MapComponent implements OnInit {
       this.scaledSize,
       this.scaledSize
     );
-
-    // console.log([parseInt(bckpoz[1], 10),
-    // parseInt(bckpoz[0], 10),
-    // this.spriteSize,
-    // this.spriteSize,
-    // tileX,
-    // tileY,
-    // this.scaledSize,
-    // this.scaledSize]);
   }
 
+  /* Draw the this.player. Remember to offset by the viewport position and
+    center screen position. (???) */
   drawHero(currentFrameTime){
 
-    // eslint-disable-next-line no-var
-    var sheetOffsetX = 0;
-    // eslint-disable-next-line no-var
-    var sheetOffsetY = 0;
+ /* This bit of code gets the this.player's position in the world in terms of
+    columns and rows and converts it to an index in the map array */
+    // let this.player_index =
+    //   Math.floor((this.player.y + this.scaledSize * 0.5) / this.scaledSize) * columns
+    //   + Math.floor((this.player.x + this.scaledSize * 0.5) / this.scaledSize); // ????
+
+    let sheetOffsetX = 0;
+    let sheetOffsetY = 0;
 
     const milisec = currentFrameTime % 1000;
     const currentFrame = Math.floor(milisec / 130) + 1;
