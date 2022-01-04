@@ -59,8 +59,17 @@ export class MapComponent implements OnInit {
     this.heroImage.src = '../assets/graphics/postacie/professor_walk_cycle_no_hat.png';
     //this.tileSheet.addEventListener('load', (event) => { this.loop(); });
 
+    //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
+    this.viewport = new Viewport(0, 0, this.width, this.height);
+
+    this.loadGameMap();
+    this.loadPlayerData();
     //this.monsters = loadMonsters();
 
+    this.addCanvasClickListener();
+  }
+
+  loadGameMap(){
     this.world = new World();
     this.http.get(
       'assets/detailedMap1.txt',
@@ -69,7 +78,9 @@ export class MapComponent implements OnInit {
     .subscribe(data => {
         this.world.populateMap(data);
     });
+  }
 
+  loadPlayerData(){
     const API_ENDPOINT = 'http://dl-api.devel';
     this.http.get<{'id': string;'position': number}>(
       API_ENDPOINT + '/player/getEssentialData',
@@ -79,13 +90,9 @@ export class MapComponent implements OnInit {
         this.player = new Player(data.position % 200, Math.floor(data.position / 200), this.world, this.scaledSize);
         this.loop();
     });
+  }
 
-
-
-    //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
-    this.viewport = new Viewport(0, 0, this.width, this.height);
-
-
+  addCanvasClickListener(){
     this.context.canvas.addEventListener('click', (event) => {
 
       this.pointer.x =
