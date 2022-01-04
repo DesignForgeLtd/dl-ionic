@@ -145,9 +145,6 @@ export class AppComponent implements OnInit {
       {
         // proceed with next step
         this.player.moveHeroStep();
-        document.getElementById('infolokacja').innerHTML =
-          this.world.infolokacja(this.player.pos_x + this.player.pos_y * 200)
-          + ' ('+this.player.pos_x+','+this.player.pos_y+')';
       }
       else
       {
@@ -155,6 +152,10 @@ export class AppComponent implements OnInit {
         this.player.stop();
       }
     }
+
+    document.getElementById('infolokacja').innerHTML =
+          this.world.infolokacja(this.player.pos_x + this.player.pos_y * 200)
+          + ' ('+this.player.pos_x+','+this.player.pos_y+')';
 
 
     this.player.repositionTo(this.player.pos_x, this.player.pos_y);

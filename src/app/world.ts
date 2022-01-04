@@ -181,7 +181,7 @@ export class World{
 								return 'jesteś w chacie zielarza';     //
 								break;
 							case 14625:
-								return 'jesteś u rybak';     //
+								return 'jesteś u rybaka';     //
 								break;
 							case 22656:
 								return 'jesteś w piekarni';     //

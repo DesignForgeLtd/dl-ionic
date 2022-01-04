@@ -7,6 +7,7 @@ export class Player {
 
   public x: number;
   public y: number;
+  public position: number;
   public scaled_size: number;
   public direction: string;
   public prev_direction: string;
@@ -21,6 +22,7 @@ export class Player {
     this.world = world;
     this.x = this.pos_x * this.scaled_size; // pixels
     this.y = this.pos_y * this.scaled_size;
+    this.position = this.pos_x + this.pos_y * 200;
     this.direction = null;
     this.prev_direction = 'down';
   };
@@ -48,6 +50,8 @@ export class Player {
         this.direction='left';
         break;
     }
+
+    this.position = this.pos_x + this.pos_y * 200;
     console.log('before');
     //$.post({url: url = 'api/player/move/'+((this.pos_y*200)+this.pos_x)}).done(function(data){
       // $('#stats').html(data);
