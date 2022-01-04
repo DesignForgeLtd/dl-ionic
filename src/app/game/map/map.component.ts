@@ -40,8 +40,8 @@ export class MapComponent implements OnInit {
   viewport: Viewport;
   world: World;
 
-  tile_sheet: any;
-  hero_image: any;
+  tile_sheet: HTMLImageElement;
+  hero_image: HTMLImageElement;
 
   private context: CanvasRenderingContext2D;
 
@@ -147,6 +147,7 @@ export class MapComponent implements OnInit {
       }
     }
 
+    this.infolocationUpdate();
 
     this.player.repositionTo(this.player.pos_x, this.player.pos_y);
     //player.moveTo(pointer.x, pointer.y);
@@ -201,6 +202,12 @@ export class MapComponent implements OnInit {
       this.viewport.h
     );
     this.context.stroke();
+  }
+
+  infolocationUpdate(){
+    document.getElementById('infolokacja').innerHTML =
+      this.world.infolokacja(this.player.pos_x + this.player.pos_y * 200)
+      + ' ('+this.player.pos_x+','+this.player.pos_y+')';
   }
 
   drawTileInViewport(x, y){

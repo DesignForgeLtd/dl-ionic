@@ -1,14 +1,14 @@
 #infolokacja {
   position: absolute;
-  top: 110px;
-  right: 100px;
-  height: 18px;
+  top: 70px;
+  right: 0px;
+  height: 22px;
   display: block;
   z-index: 100000;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0,0,0,0.6);
   padding: 2px 7px;
-  font-size: 13px;
-  color: #ccc;
+  font-size: 15px;
+  color: #eee;
 }
 
 canvas { border: none }
