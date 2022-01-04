@@ -1,0 +1,24 @@
+<<<<<<< HEAD
+=======
+#infolokacja {
+  position: absolute;
+  top: 110px;
+  right: 100px;
+  height: 18px;
+  z-index: 100000;
+  background-color: rgba(0,0,0,0.3);
+  padding: 2px 7px;
+  font-size: 13px;
+  color: #ccc;
+}
+
+#container {
+  position: relative;
+}
+#container canvas, #infolokacja {
+  position: absolute;
+}
+canvas {
+  border: 0;
+}
+>>>>>>> master
