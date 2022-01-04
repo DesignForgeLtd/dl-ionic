@@ -28,8 +28,6 @@ export class MapComponent implements OnInit {
   // from session
   gamemapSize = '17x11';
   kraina = 1;
-  player_x = 36;
-  player_y = 69;
 
   height: number;
   width: number;
@@ -40,14 +38,14 @@ export class MapComponent implements OnInit {
   viewport: Viewport;
   world: World;
 
-  tile_sheet: HTMLImageElement;
-  hero_image: HTMLImageElement;
+  tileSheet: HTMLImageElement;
+  heroImage: HTMLImageElement;
 
   private context: CanvasRenderingContext2D;
 
   constructor(private http: HttpClient) {
-    this.tile_sheet = new Image();
-    this.hero_image = new Image();
+    this.tileSheet = new Image();
+    this.heroImage = new Image();
   }
 
   ngOnInit(): void {
@@ -57,12 +55,21 @@ export class MapComponent implements OnInit {
     this.height = document.documentElement.clientHeight;
     this.width  = document.documentElement.clientWidth;
 
-    this.tile_sheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
-    this.hero_image.src = '../assets/graphics/postacie/professor_walk_cycle_no_hat.png';
-    //this.tile_sheet.addEventListener('load', (event) => { this.loop(); });
+    this.tileSheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
+    this.heroImage.src = '../assets/graphics/postacie/professor_walk_cycle_no_hat.png';
+    //this.tileSheet.addEventListener('load', (event) => { this.loop(); });
 
+    //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
+    this.viewport = new Viewport(0, 0, this.width, this.height);
+
+    this.loadGameMap();
+    this.loadPlayerData();
     //this.monsters = loadMonsters();
 
+    this.addCanvasClickListener();
+  }
+
+  loadGameMap(){
     this.world = new World();
     this.http.get(
       'assets/detailedMap1.txt',
@@ -71,27 +78,21 @@ export class MapComponent implements OnInit {
     .subscribe(data => {
         this.world.populateMap(data);
     });
+  }
 
+  loadPlayerData(){
     const API_ENDPOINT = 'http://dl-api.devel';
     this.http.get<{'id': string;'position': number}>(
       API_ENDPOINT + '/player/getEssentialData',
       {responseType: 'json'}
     )
     .subscribe(data => {
-        console.log(data);
-        this.player_x = data.position % 200;
-        this.player_y = Math.floor(data.position / 200);
-
-        this.player = new Player(this.player_x, this.player_y, this.world, this.scaledSize);
+        this.player = new Player(data.position % 200, Math.floor(data.position / 200), this.world, this.scaledSize);
         this.loop();
     });
+  }
 
-
-
-    //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
-    this.viewport = new Viewport(0, 0, this.width, this.height);
-
-
+  addCanvasClickListener(){
     this.context.canvas.addEventListener('click', (event) => {
 
       this.pointer.x =
@@ -116,21 +117,28 @@ export class MapComponent implements OnInit {
   loop() {// The game loop
 
     window.requestAnimationFrame(() => this.loop());
-
     const currentFrameTime = Date.now();
 
-    this.height = document.documentElement.clientHeight; // HERE
-    this.width  = document.documentElement.clientWidth; // HERE
+    this.height = document.documentElement.clientHeight;
+    this.width  = document.documentElement.clientWidth;
 
     /* Resize canvas on every frame */
     this.context.canvas.height = this.height;
     this.context.canvas.width  = this.width;
+    // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
 
-//          this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
-//console.log([hero_path, player.pos_x, scaledSize, player.pos_x * scaledSize,  player.x, player.pos_x * scaledSize == player.x]);
+    this.tryMoveHero();
+    this.infolocationUpdate();
 
+    this.player.repositionTo(this.player.pos_x, this.player.pos_y);
+    this.viewport.scrollTo(this.player.x, this.player.y);
 
-    // when movement stops for the current step
+    this.drawTerrain();
+
+    this.drawHero(currentFrameTime);
+  }
+
+  tryMoveHero(){
     // TODO:
     if (this.player.pos_x * this.scaledSize === this.player.x
       && this.player.pos_y * this.scaledSize === this.player.y)
@@ -146,68 +154,40 @@ export class MapComponent implements OnInit {
         this.player.stop();
       }
     }
-
-    this.infolocationUpdate();
-
-    this.player.repositionTo(this.player.pos_x, this.player.pos_y);
-    //player.moveTo(pointer.x, pointer.y);
-    this.viewport.scrollTo(this.player.x, this.player.y);
-
-    /* Get the min and max column and row in the map to draw. For the min
-    column and row (x and y) we use floor to round down and for the max we
-    use ceil to round up. We want to get the rows and columns under the borders
-    of the viewport rectangle. This is visualized by the white square in the example. */
-    //console.log(this.player);
-    let x_min = Math.floor(this.viewport.x / this.scaledSize);
-    let y_min = Math.floor(this.viewport.y / this.scaledSize);
-    let x_max = Math.ceil((this.viewport.x + this.viewport.w) / this.scaledSize);
-    let y_max = Math.ceil((this.viewport.y + this.viewport.h) / this.scaledSize);
-
-    /* the min and max column and row values cannot go beyond the boundaries
-    of the map. Those values are 0 and the number of columns and rows in the map. */
-    if (x_min < 0) { x_min = 0; }
-    if (y_min < 0) { y_min = 0; }
-    if (x_max > this.columns) { x_max = this.columns; }
-    if (y_max > this.rows) { y_max = this.rows; }
-
-    /* Now we loop through the tiles in the map, but only between the min
-    and max columns and rows that the this.viewport is over. To do this we use two
-    for loops, one for the columns (x) and one for the rows (y) of the map. */
-    for (let x = x_min; x < x_max; x ++) {
-      for (let y = y_min; y < y_max; y ++) {
-        this.drawTileInViewport(x, y);
-      }
-    }
-
-    /* This bit of code gets the this.player's position in the world in terms of
-    columns and rows and converts it to an index in the map array */
-    // let this.player_index =
-    //   Math.floor((this.player.y + this.scaledSize * 0.5) / this.scaledSize) * columns
-    //   + Math.floor((this.player.x + this.scaledSize * 0.5) / this.scaledSize);
-
-    /* If the this.player is standing on a grass tile, make it a short grass tile */
-    // if (pole[this.player_index] == 2) pole[this.player_index] = 1;
-
-    /* Draw the this.player. Remember to offset by the viewport position and
-    center screen position. */
-    this.drawHero(currentFrameTime);
-
-
-    /* Draw the viewport rectangle. */
-    this.context.strokeStyle = '#ffffff';
-    this.context.rect(
-      this.width * 0.5 - this.viewport.w * 0.5,
-      this.height * 0.5 - this.viewport.h * 0.5,
-      this.viewport.w,
-      this.viewport.h
-    );
-    this.context.stroke();
   }
 
   infolocationUpdate(){
     document.getElementById('infolokacja').innerHTML =
       this.world.infolokacja(this.player.pos_x + this.player.pos_y * 200)
       + ' ('+this.player.pos_x+','+this.player.pos_y+')';
+  }
+
+  drawTerrain(){
+    /* Get the min and max column and row in the map to draw. For the min
+    column and row (x and y) we use floor to round down and for the max we
+    use ceil to round up. We want to get the rows and columns under the borders
+    of the viewport rectangle. This is visualized by the white square in the example. */
+    //console.log(this.player);
+    let xMin = Math.floor(this.viewport.x / this.scaledSize);
+    let yMin = Math.floor(this.viewport.y / this.scaledSize);
+    let xMax = Math.ceil((this.viewport.x + this.viewport.w) / this.scaledSize);
+    let yMax = Math.ceil((this.viewport.y + this.viewport.h) / this.scaledSize);
+
+    /* the min and max column and row values cannot go beyond the boundaries
+    of the map. Those values are 0 and the number of columns and rows in the map. */
+    if (xMin < 0) { xMin = 0; }
+    if (yMin < 0) { yMin = 0; }
+    if (xMax > this.columns) { xMax = this.columns; }
+    if (yMax > this.rows) { yMax = this.rows; }
+
+    /* Now we loop through the tiles in the map, but only between the min
+    and max columns and rows that the this.viewport is over. To do this we use two
+    for loops, one for the columns (x) and one for the rows (y) of the map. */
+    for (let x = xMin; x < xMax; x ++) {
+      for (let y = yMin; y < yMax; y ++) {
+        this.drawTileInViewport(x, y);
+      }
+    }
   }
 
   drawTileInViewport(x, y){
@@ -226,42 +206,39 @@ export class MapComponent implements OnInit {
      // x= 12, y= 6, ppp= 1212, poleLinkOpis= 490|294|1,woda
 
     // Tile x destination for drawing
-    const tile_x = Math.floor(x * this.scaledSize - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5);
+    const tileX = Math.floor(x * this.scaledSize - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5);
     // Tile y destination for
-    const tile_y = Math.floor(y * this.scaledSize - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5);
+    const tileY = Math.floor(y * this.scaledSize - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5);
 
-    // let tile_x = Math.floor(x * this.scaledSize) - viewport.x;
-    // let tile_y = Math.floor(y * this.scaledSize) - viewport.y;
+    // let tileX = Math.floor(x * this.scaledSize) - viewport.x;
+    // let tileY = Math.floor(y * this.scaledSize) - viewport.y;
 
-    // Draw tile from tile_sheet
+    // Draw tile from tileSheet
     this.context.drawImage(
-      this.tile_sheet,
+      this.tileSheet,
       parseInt(bckpoz[1], 10),
       parseInt(bckpoz[0], 10),
       this.spriteSize,
       this.spriteSize,
-      tile_x,
-      tile_y,
+      tileX,
+      tileY,
       this.scaledSize,
       this.scaledSize
     );
-
-    // console.log([parseInt(bckpoz[1], 10),
-    // parseInt(bckpoz[0], 10),
-    // this.spriteSize,
-    // this.spriteSize,
-    // tile_x,
-    // tile_y,
-    // this.scaledSize,
-    // this.scaledSize]);
   }
 
+  /* Draw the this.player. Remember to offset by the viewport position and
+    center screen position. (???) */
   drawHero(currentFrameTime){
 
-    // eslint-disable-next-line no-var
-    var sheet_offset_x = 0;
-    // eslint-disable-next-line no-var
-    var sheet_offset_y = 0;
+ /* This bit of code gets the this.player's position in the world in terms of
+    columns and rows and converts it to an index in the map array */
+    // let this.player_index =
+    //   Math.floor((this.player.y + this.scaledSize * 0.5) / this.scaledSize) * columns
+    //   + Math.floor((this.player.x + this.scaledSize * 0.5) / this.scaledSize); // ????
+
+    let sheetOffsetX = 0;
+    let sheetOffsetY = 0;
 
     const milisec = currentFrameTime % 1000;
     const currentFrame = Math.floor(milisec / 130) + 1;
@@ -269,45 +246,45 @@ export class MapComponent implements OnInit {
     switch(this.player.direction)
     {
       case 'up':
-          sheet_offset_y = 0;
-          sheet_offset_x = currentFrame * this.playerScaledSize;
+          sheetOffsetY = 0;
+          sheetOffsetX = currentFrame * this.playerScaledSize;
         break;
       case 'down':
-          sheet_offset_y = 2 * this.playerScaledSize;
-          sheet_offset_x = currentFrame * this.playerScaledSize;
+          sheetOffsetY = 2 * this.playerScaledSize;
+          sheetOffsetX = currentFrame * this.playerScaledSize;
         break;
       case 'right':
-          sheet_offset_y = 3 * this.playerScaledSize;
-          sheet_offset_x = currentFrame * this.playerScaledSize;
+          sheetOffsetY = 3 * this.playerScaledSize;
+          sheetOffsetX = currentFrame * this.playerScaledSize;
         break;
       case 'left':
-          sheet_offset_y = 1 * this.playerScaledSize;
-          sheet_offset_x = currentFrame * this.playerScaledSize;
+          sheetOffsetY = 1 * this.playerScaledSize;
+          sheetOffsetX = currentFrame * this.playerScaledSize;
         break;
       default:
           switch(this.player.prev_direction)
           {
             case 'up':
-                sheet_offset_y = 0;
+                sheetOffsetY = 0;
               break;
             case 'down':
-                sheet_offset_y = 2 * this.playerScaledSize;
+                sheetOffsetY = 2 * this.playerScaledSize;
               break;
             case 'right':
-                sheet_offset_y = 3 * this.playerScaledSize;
+                sheetOffsetY = 3 * this.playerScaledSize;
               break;
             case 'left':
-                sheet_offset_y = 1 * this.playerScaledSize;
+                sheetOffsetY = 1 * this.playerScaledSize;
               break;
           }
-          sheet_offset_x = 0;
+          sheetOffsetX = 0;
     }
 
 
     this.context.drawImage(
-      this.hero_image,
-      sheet_offset_x,
-      sheet_offset_y,
+      this.heroImage,
+      sheetOffsetX,
+      sheetOffsetY,
       this.playerSize,
       this.playerSize,
       Math.round(this.player.x - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5),
