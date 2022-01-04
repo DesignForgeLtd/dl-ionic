@@ -16,8 +16,7 @@ import { World } from './world';
   styles: ['canvas { border: none }']
 })
 export class AppComponent implements OnInit {
-  @ViewChild('canvas', { static: true })
-  canvas: ElementRef<HTMLCanvasElement>;
+  @ViewChild('canvas', { static: true }) canvas: ElementRef<HTMLCanvasElement>;
 
 
   scaledSize = 76;
@@ -44,14 +43,16 @@ export class AppComponent implements OnInit {
   viewport: Viewport;
   world: World;
 
-  tile_sheet: any;
-  hero_image: any;
+  tile_sheet: HTMLImageElement;
+  hero_image: HTMLImageElement;
+  icons_image: HTMLImageElement;
 
   private context: CanvasRenderingContext2D;
 
   constructor(private http: HttpClient) {
     this.tile_sheet = new Image();
     this.hero_image = new Image();
+    this.icons_image = new Image();
   }
 
   ngOnInit(): void {
@@ -63,6 +64,7 @@ export class AppComponent implements OnInit {
 
     this.tile_sheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
     this.hero_image.src = '../assets/graphics/postacie/professor_walk_cycle_no_hat.png';
+    this.icons_image.src = '../assets/graphics/layout/game/plachta_buttony.jpg';
     //this.tile_sheet.addEventListener('load', (event) => { this.loop(); });
 
     //this.monsters = loadMonsters();
@@ -123,7 +125,7 @@ export class AppComponent implements OnInit {
 
     const currentFrameTime = Date.now();
 
-    this.height = document.documentElement.clientHeight; // HERE
+    this.height = document.documentElement.clientHeight - 22; // HERE
     this.width  = document.documentElement.clientWidth; // HERE
 
     /* Resize canvas on every frame */
@@ -143,6 +145,9 @@ export class AppComponent implements OnInit {
       {
         // proceed with next step
         this.player.moveHeroStep();
+        document.getElementById('infolokacja').innerHTML =
+          this.world.infolokacja(this.player.pos_x + this.player.pos_y * 200)
+          + ' ('+this.player.pos_x+','+this.player.pos_y+')';
       }
       else
       {
