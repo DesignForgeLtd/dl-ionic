@@ -7,8 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameComponent implements OnInit {
 
+
+
+  public loadedFeature = '';
+
   constructor() { }
 
   ngOnInit() {}
+
+  onNavigate(feature: string) {
+    this.loadedFeature = feature;
+  }
 
 }

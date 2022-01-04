@@ -1,3 +1,6 @@
 
-<app-menu></app-menu>
+<app-menu (openMenu)="onNavigate($event)"></app-menu>
+
+<app-mailbox *ngIf="loadedFeature === 'mailbox'" (closeMenu)="loadedFeature = ''"></app-mailbox>
+
 <app-map></app-map>
