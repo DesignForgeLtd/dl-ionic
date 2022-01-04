@@ -9,9 +9,10 @@ import { World } from './world';
 
 @Component({
   selector: 'app-root',
-  template: `
-    <canvas #canvas></canvas>
-  `,
+  // template: `
+  //   <canvas #canvas></canvas>
+  // `,
+  templateUrl: './app.component.html',
   styles: ['canvas { border: none }']
 })
 export class AppComponent implements OnInit {
@@ -75,8 +76,9 @@ export class AppComponent implements OnInit {
         this.world.populateMap(data);
     });
 
-    this.http.get<{'id': string, 'position': number}>(
-      'http://dl-api.devel/player/getEssentialData',
+    const API_ENDPOINT = 'http://dl-api.devel';
+    this.http.get<{'id': string;'position': number}>(
+      API_ENDPOINT + '/player/getEssentialData',
       {responseType: 'json'}
     )
     .subscribe(data => {
@@ -92,15 +94,6 @@ export class AppComponent implements OnInit {
 
     //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
     this.viewport = new Viewport(0, 0, this.width, this.height);
-
-    // window.setTimeout(
-    //   function(){
-    //     this.loop();
-    //   },
-    //   200
-    // );
-
-
 
 
     this.context.canvas.addEventListener('click', (event) => {

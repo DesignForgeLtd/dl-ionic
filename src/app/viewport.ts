@@ -16,7 +16,7 @@ export class Viewport {
     this.x = x - this.w * 0.5;// Rigid scrolling
     this.y = y - this.h * 0.5;
 
-    // Smooth scrolling (forgot to put this in the video)
+    // Smooth scrolling
     //this.x += (x - this.x - this.w * 0.5) * 0.05;
     //this.y += (y - this.y - this.h * 0.5) * 0.05;
   }
