@@ -11,6 +11,8 @@ import { GameComponent } from './game/game.component';
 import { MapComponent } from './game/map/map.component';
 import { MenuComponent } from './game/menu/menu.component';
 import { MailboxComponent } from './game/mailbox/mailbox.component';
+import { AuthComponent } from './auth/auth.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,10 +20,11 @@ import { MailboxComponent } from './game/mailbox/mailbox.component';
     GameComponent,
     MapComponent,
     MenuComponent,
-    MailboxComponent
+    MailboxComponent,
+    AuthComponent
   ],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
