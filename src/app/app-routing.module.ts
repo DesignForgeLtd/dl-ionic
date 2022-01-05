@@ -10,7 +10,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'game',
+    redirectTo: 'auth',
     pathMatch: 'full'
   },
   { path: 'game', component: GameComponent },

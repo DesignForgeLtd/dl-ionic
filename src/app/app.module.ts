@@ -11,6 +11,7 @@ import { GameComponent } from './game/game.component';
 import { MapComponent } from './game/map/map.component';
 import { MenuComponent } from './game/menu/menu.component';
 import { AuthComponent } from './auth/auth.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,10 +19,10 @@ import { AuthComponent } from './auth/auth.component';
     GameComponent,
     MapComponent,
     MenuComponent,
-    AuthComponent
+    AuthComponent,
   ],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })

@@ -7,6 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuthComponent implements OnInit {
 
+  public name;
+  public email;
+  public password;
+  public confirmPassword;
+
   constructor() { }
 
   ngOnInit() {}
@@ -14,6 +19,10 @@ export class AuthComponent implements OnInit {
   register(form){
     console.log('registration data: ');
     console.log(form);
+  }
+
+  onSubmit(){
+
   }
 
 }
