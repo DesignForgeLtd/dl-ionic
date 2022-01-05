@@ -18,12 +18,12 @@
 
     <ion-item>
       <ion-label position="floating">Password</ion-label>
-      <ion-input [(ngModel)]="password" name="password" type="text" required minlength="6"></ion-input>
+      <ion-input [(ngModel)]="password" name="password" type="password" required minlength="6"></ion-input>
     </ion-item>
 
     <ion-item *ngIf="! isLoginMode">
       <ion-label position="floating">Confirm Password</ion-label>
-      <ion-input [(ngModel)]="confirmPassword" name="confirmPassword" type="text" required></ion-input>
+      <ion-input [(ngModel)]="confirmPassword" name="confirmPassword" type="password" required></ion-input>
     </ion-item>
 
     <ion-button class="ion-margin-top" type="submit" expand="block" color="light" (click)="onSubmit(authForm)" [disabled]="! authForm.valid">

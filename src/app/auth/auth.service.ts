@@ -15,10 +15,21 @@ interface AuthResponseData{
 export class AuthService {
   constructor(private http: HttpClient){}
 
-  register(email: string, password: string){
+  login(email: string, password: string){
+    return this.http.post<AuthResponseData>(
+      AppSettings.API_ENDPOINT + '/auth/login',
+      {
+        email,
+        password
+      }
+    );
+  }
+
+  register(name: string, email: string, password: string){
     return this.http.post<AuthResponseData>(
       AppSettings.API_ENDPOINT + '/auth/register',
       {
+        name,
         email,
         password
       }
