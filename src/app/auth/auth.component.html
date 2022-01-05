@@ -5,35 +5,37 @@
 </ion-header>
 
 <ion-content>
-  <ion-item *ngIf="! isLoginMode">
-    <ion-label position="floating">Name</ion-label>
-    <ion-input [(ngModel)]="name" type="text" required></ion-input>
-  </ion-item>
+  <form #authForm="ngForm">
+    <ion-item *ngIf="! isLoginMode">
+      <ion-label position="floating">Name</ion-label>
+      <ion-input [(ngModel)]="name" name="name" type="text" required></ion-input>
+    </ion-item>
 
-  <ion-item>
-    <ion-label position="floating">Email</ion-label>
-    <ion-input [(ngModel)]="email" type="text" required></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input [(ngModel)]="email" name="email" type="text" required email></ion-input>
+    </ion-item>
 
-  <ion-item>
-    <ion-label position="floating">Password</ion-label>
-    <ion-input [(ngModel)]="password" type="text" required></ion-input>
-  </ion-item>
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input [(ngModel)]="password" name="password" type="text" required minlength="6"></ion-input>
+    </ion-item>
 
-  <ion-item *ngIf="! isLoginMode">
-    <ion-label position="floating">Confirm Password</ion-label>
-    <ion-input [(ngModel)]="confirmPassword" type="text" required></ion-input>
-  </ion-item>
+    <ion-item *ngIf="! isLoginMode">
+      <ion-label position="floating">Confirm Password</ion-label>
+      <ion-input [(ngModel)]="confirmPassword" name="confirmPassword" type="text" required></ion-input>
+    </ion-item>
 
-  <ion-button class="ion-margin-top" type="submit" expand="block" color="light" (click)="onSubmit()">
-    {{ isLoginMode ? 'Login' : 'Create Account' }}
-  </ion-button>
+    <ion-button class="ion-margin-top" type="submit" expand="block" color="light" (click)="onSubmit(authForm)" [disabled]="! authForm.valid">
+      {{ isLoginMode ? 'Login' : 'Create Account' }}
+    </ion-button>
 
-  <ion-item class="ion-text-center">
-    <ion-label>Or</ion-label>
-  </ion-item>
+    <ion-item class="ion-text-center">
+      <ion-label>Or</ion-label>
+    </ion-item>
 
-  <ion-button type="submit" expand="block" color="light" (click)="onSwitchMode()">
-    {{ ! isLoginMode ? 'Login' : 'Create Account' }}
-  </ion-button>
+    <ion-button type="submit" expand="block" color="light" (click)="onSwitchMode()">
+      {{ ! isLoginMode ? 'Login' : 'Create Account' }}
+    </ion-button>
+  </form>
 </ion-content>
