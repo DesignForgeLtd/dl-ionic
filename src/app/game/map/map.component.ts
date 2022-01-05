@@ -88,10 +88,7 @@ export class MapComponent implements OnInit {
   }
 
   loadPlayerData(){
-    this.http.get<{'id': string;'position': number}>(
-      AppSettings.API_ENDPOINT + '/player/getEssentialData',
-      {responseType: 'json'}
-    )
+    this.mapService.loadPlayerData()
     .subscribe(data => {
         this.player = new Player(data.position % 200, Math.floor(data.position / 200), this.world, this.scaledSize);
         this.playerPosition = this.player.position;

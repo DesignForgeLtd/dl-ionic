@@ -6,13 +6,20 @@ import { AppSettings } from 'src/app/AppSettings';
 export class MapService {
   constructor(private http: HttpClient){}
 
+  loadPlayerData(){
+    return this.http.get<{'id': string;'position': number}>(
+      AppSettings.API_ENDPOINT + '/player/getEssentialData',
+      {responseType: 'json'}
+    );
+  }
 
   updateActualPosition(playerPosition){
     this.http.post(
       AppSettings.API_ENDPOINT + '/player/move/' + playerPosition,
-      {responseType: 'json'}
+      {}
     )
     .subscribe(data => {
     });
   }
+
 }
