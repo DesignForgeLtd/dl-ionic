@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AppSettings } from '../../AppSettings';
 
 import { Player } from './map-scripts/player';
 import { Viewport } from './map-scripts/viewport';
@@ -81,9 +82,8 @@ export class MapComponent implements OnInit {
   }
 
   loadPlayerData(){
-    const API_ENDPOINT = 'http://dl-api.devel';
     this.http.get<{'id': string;'position': number}>(
-      API_ENDPOINT + '/player/getEssentialData',
+      AppSettings.API_ENDPOINT + '/player/getEssentialData',
       {responseType: 'json'}
     )
     .subscribe(data => {
