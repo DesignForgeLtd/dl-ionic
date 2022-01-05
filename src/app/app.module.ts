@@ -10,13 +10,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { GameComponent } from './game/game.component';
 import { MapComponent } from './game/map/map.component';
 import { MenuComponent } from './game/menu/menu.component';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameComponent,
     MapComponent,
-    MenuComponent
+    MenuComponent,
+    AuthComponent
   ],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],

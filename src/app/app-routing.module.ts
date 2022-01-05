@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthComponent } from './auth/auth.component';
+import { GameComponent } from './game/game.component';
 
 const routes: Routes = [
   {
@@ -8,9 +10,11 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'game',
     pathMatch: 'full'
   },
+  { path: 'game', component: GameComponent },
+  { path: 'auth', component: AuthComponent }
 ];
 
 @NgModule({
