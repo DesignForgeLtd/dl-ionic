@@ -52,12 +52,6 @@ export class Player {
     }
 
     this.position = this.pos_x + this.pos_y * 200;
-    console.log('before');
-    //$.post({url: url = 'api/player/move/'+((this.pos_y*200)+this.pos_x)}).done(function(data){
-      // $('#stats').html(data);
-      // console.log('done');
-    // });
-
   }
 
   stop(){

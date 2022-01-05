@@ -5,6 +5,7 @@ import { AppSettings } from '../../AppSettings';
 import { Player } from './map-scripts/player';
 import { Viewport } from './map-scripts/viewport';
 import { World } from './map-scripts/world';
+import { MapService } from './map.service';
 
 @Component({
   selector: 'app-map',
@@ -33,6 +34,8 @@ export class MapComponent implements OnInit {
   height: number;
   width: number;
 
+  playerPosition: number;
+
   pointer = { x:100, y:100 };// The adjusted mouse position
 
   player: Player;
@@ -44,7 +47,10 @@ export class MapComponent implements OnInit {
 
   private context: CanvasRenderingContext2D;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private mapService: MapService
+  ) {
     this.tileSheet = new Image();
     this.heroImage = new Image();
   }
@@ -88,6 +94,7 @@ export class MapComponent implements OnInit {
     )
     .subscribe(data => {
         this.player = new Player(data.position % 200, Math.floor(data.position / 200), this.world, this.scaledSize);
+        this.playerPosition = this.player.position;
         this.loop();
     });
   }
@@ -153,6 +160,12 @@ export class MapComponent implements OnInit {
         // or make hero stand still
         this.player.stop();
       }
+    }
+
+    if (this.playerPosition !== this.player.position)
+    {
+      this.playerPosition = this.player.position;
+      this.mapService.updateActualPosition(this.playerPosition);
     }
   }
 
