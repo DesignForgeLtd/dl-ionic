@@ -12,6 +12,8 @@ export class AuthComponent implements OnInit {
   public password;
   public confirmPassword;
 
+  isLoginMode = true;
+
   constructor() { }
 
   ngOnInit() {}
@@ -23,6 +25,10 @@ export class AuthComponent implements OnInit {
 
   onSubmit(){
 
+  }
+
+  onSwitchMode(){
+    this.isLoginMode = ! this.isLoginMode;
   }
 
 }
