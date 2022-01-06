@@ -9,6 +9,8 @@ export class MailboxComponent implements OnInit {
 
   @Output() closeMenu = new EventEmitter<string>();
 
+  public mailbox = 'inbox';
+
   constructor() { }
 
   ngOnInit() {}

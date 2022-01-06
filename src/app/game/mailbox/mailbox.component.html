@@ -26,7 +26,11 @@
     </ion-toolbar>
   </ion-card-header>
   <ion-card-content>
-    mailbox content
+
+    <app-inbox *ngIf="mailbox === 'inbox'"></app-inbox>
+    <app-outbox *ngIf="mailbox === 'outbox'"></app-outbox>
+    <app-create-msg *ngIf="mailbox === 'create'"></app-create-msg>
+
   </ion-card-content>
 </ion-card>
 </div>
