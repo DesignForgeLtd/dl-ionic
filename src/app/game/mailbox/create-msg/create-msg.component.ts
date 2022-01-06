@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MailboxService } from '../mailbox.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-create-msg',
@@ -7,8 +9,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateMsgComponent implements OnInit {
 
-  constructor() { }
+  public users;
+  public userId;
+  public subject;
+  public message;
 
-  ngOnInit() {}
+  constructor(private mailboxService: MailboxService) { }
+
+  ngOnInit() {
+    this.users = this.mailboxService.loadRecipients();
+    // console.log(this.users);
+  }
+
+  sendMsg() {
+    const clbk = this.mailboxService.send(this.userId, this.subject, this.message);
+    console.log(clbk);
+    // console.log(this.userId);
+  }
 
 }

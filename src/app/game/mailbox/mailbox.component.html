@@ -5,13 +5,13 @@
   <ion-card-header>
     <ion-toolbar>
       <ion-buttons>
-        <ion-button color="primary">
+        <ion-button color="primary" (click)="mailbox = 'inbox'">
           Inbox
         </ion-button>
-        <ion-button color="primary">
+        <ion-button color="primary" (click)="mailbox = 'outbox'">
           Outbox
         </ion-button>
-        <ion-button color="primary">
+        <ion-button color="primary" (click)="mailbox = 'create'">
           Create
         </ion-button>
       </ion-buttons>
