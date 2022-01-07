@@ -14,7 +14,7 @@ export class MailboxService {
 
   loadRecipients(){
     return this.http.get<{'id': string;'position': number}>(
-      AppSettings.API_ENDPOINT + '/users/get_all',
+      AppSettings.API_ENDPOINT + '/user/getAll',
       {responseType: 'json'}
     );
   }

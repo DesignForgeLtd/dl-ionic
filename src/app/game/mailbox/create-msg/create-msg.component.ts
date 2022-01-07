@@ -19,7 +19,6 @@ export class CreateMsgComponent implements OnInit {
   ngOnInit() {
     this.mailboxService.loadRecipients().subscribe(data => {
       this.users = data;
-      console.log(this.users);
     });
 
   }

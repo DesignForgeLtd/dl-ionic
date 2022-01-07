@@ -21,7 +21,7 @@ export class MenuComponent implements OnInit {
   ngOnInit() {}
 
   onOpenMenu(feature: string) {
-    console.log('open mailbox pls');
+    //console.log('open mailbox pls');
     this.openMenu.emit(feature);
   }
 
