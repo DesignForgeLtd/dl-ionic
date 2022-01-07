@@ -17,8 +17,11 @@ export class CreateMsgComponent implements OnInit {
   constructor(private mailboxService: MailboxService) { }
 
   ngOnInit() {
-    this.users = this.mailboxService.loadRecipients();
-    // console.log(this.users);
+    this.mailboxService.loadRecipients().subscribe(data => {
+      this.users = data;
+      console.log(this.users);
+    });
+
   }
 
   sendMsg() {

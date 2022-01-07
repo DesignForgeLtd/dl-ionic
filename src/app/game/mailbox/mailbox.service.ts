@@ -13,7 +13,10 @@ export class MailboxService {
   constructor(private http: HttpClient){}
 
   loadRecipients(){
-    return this.recipients;
+    return this.http.get<{'id': string;'position': number}>(
+      AppSettings.API_ENDPOINT + '/users/get_all',
+      {responseType: 'json'}
+    );
   }
 
   send(recipientId: number, subject: string, message: string){
