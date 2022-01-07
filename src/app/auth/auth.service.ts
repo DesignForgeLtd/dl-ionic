@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -9,11 +10,11 @@ import { User } from './user.model';
 interface AuthResponseData{
   status: string;
   data: {
-    token: string;
-    email: string;
-    id: number;
-    expiresIn: number;
-    name: string;
+    access_token: string;
+    token_type: string;
+    user_id: number;
+    user_name: string;
+    expires_in: number;
   };
 }
 
@@ -31,7 +32,10 @@ export class AuthService {
         email,
         password
       }
-    );
+    )
+    .pipe(tap(response => { // catchError(this.handleError),
+      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in);
+    }));
   }
 
   register(name: string, email: string, password: string){
@@ -44,12 +48,18 @@ export class AuthService {
       }
     )
     .pipe(tap(response => { // catchError(this.handleError),
-      const tokenExpirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
-      const user = new User(response.data.email, response.data.id, response.data.token, tokenExpirationDate);
+      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in);
     }));
   }
 
-  handleError(){
+  // handleError(){
 
+  // }
+
+  private handleAuth(name: string, userId: number, token: string, expiresIn: number){
+    const tokenExpirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+    const user = new User(name, userId, token, tokenExpirationDate);
+
+    this.user.next(user);
   }
 }

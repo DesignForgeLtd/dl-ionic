@@ -14,6 +14,7 @@ import { AuthComponent } from './auth/auth.component';
 import { FormsModule } from '@angular/forms';
 
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
     MapComponent,
     MenuComponent,
     AuthComponent,
+    LoadingSpinnerComponent
   ],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule],

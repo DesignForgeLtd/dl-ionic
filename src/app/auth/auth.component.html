@@ -7,7 +7,12 @@
 <ion-content>
   <ion-button *ngIf="registrationSuccessful" expand="full" color="success">Registration successful! You can now log in.</ion-button>
   <ion-button *ngIf="registrationUnsuccessful" expand="full" color="danger">Sorry, there was a problem creating your account...</ion-button>
-  <form #authForm="ngForm">
+
+  <div *ngIf="isLoading" style="text-align: center;">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <form #authForm="ngForm" *ngIf=" ! isLoading">
     <ion-item *ngIf="! isLoginMode">
       <ion-label position="floating">Name</ion-label>
       <ion-input [(ngModel)]="name" name="name" type="text" required></ion-input>
