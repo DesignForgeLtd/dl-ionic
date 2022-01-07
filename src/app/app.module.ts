@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouteReuseStrategy } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
@@ -17,6 +17,10 @@ import { InboxComponent } from './game/mailbox/inbox/inbox.component';
 import { OutboxComponent } from './game/mailbox/outbox/outbox.component';
 import { CreateMsgComponent } from './game/mailbox/create-msg/create-msg.component';
 
+import { AuthInterceptor } from './auth/auth.interceptor';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,11 +31,22 @@ import { CreateMsgComponent } from './game/mailbox/create-msg/create-msg.compone
     MailboxComponent,
     InboxComponent,
     OutboxComponent,
-    CreateMsgComponent
+    CreateMsgComponent,
+    LoadingSpinnerComponent
   ],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [
+    {
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

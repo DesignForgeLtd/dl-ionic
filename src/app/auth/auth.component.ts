@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from './auth.service';
+import { TokenService } from './token.service';
+import { AuthStateService } from './auth-state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -15,8 +18,17 @@ export class AuthComponent implements OnInit {
   public confirmPassword;
 
   isLoginMode = true;
+  isLoading = false;
 
-  constructor(private authService: AuthService) { }
+  registrationSuccessful = false;
+  registrationUnsuccessful = false;
+
+  constructor(
+    private authService: AuthService,
+    private tokenService: TokenService,
+    private authStateService: AuthStateService,
+    private router: Router
+  ) { }
 
   ngOnInit() {}
 
@@ -25,6 +37,7 @@ export class AuthComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
     if (this.isLoginMode){
       this.login(form);
     } else {
@@ -37,12 +50,16 @@ export class AuthComponent implements OnInit {
     const password = form.value.password;
 
     this.authService.login(email, password).subscribe(
-    response => {
-      console.log(response);
-    },
-    error => {
-      console.log(error);
-    });
+      response => {
+        console.log(response);
+        this.router.navigate(['/game']);
+        this.isLoading = false;
+      },
+      error => {
+        console.log(error);
+        this.isLoading = false;
+      }
+    );
   }
 
   register(form: NgForm){
@@ -52,13 +69,22 @@ export class AuthComponent implements OnInit {
     const confirmPassword = form.value.confirmPassword;
 
     this.authService.register(name, email, password).subscribe(
-    response => {
-      console.log(response);
-    },
-    error => {
-      console.log(error);
-    });
+      response => {
+        console.log(response);
+        if (response.status === 'success'){
+          this.isLoginMode = true;
+          this.registrationSuccessful = true;
+          form.reset();
+        }
+        this.isLoading = false;
+      },
+      error => {
+        console.log(error);
+        this.isLoading = false;
+      }
+    );
   }
+
 
   onSwitchMode(){
     this.isLoginMode = ! this.isLoginMode;
