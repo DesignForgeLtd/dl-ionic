@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from './auth.service';
+import { TokenService } from './token.service';
+import { AuthStateService } from './auth-state.service';
 
 @Component({
   selector: 'app-auth',
@@ -15,8 +17,14 @@ export class AuthComponent implements OnInit {
   public confirmPassword;
 
   isLoginMode = true;
+  registrationSuccessful = false;
+  registrationUnsuccessful = false;
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private tokenService: TokenService,
+    private authStateService: AuthStateService
+  ) { }
 
   ngOnInit() {}
 
@@ -54,11 +62,17 @@ export class AuthComponent implements OnInit {
     this.authService.register(name, email, password).subscribe(
     response => {
       console.log(response);
+      if (response.status === 'success'){
+        this.isLoginMode = true;
+        this.registrationSuccessful = true;
+        form.reset();
+      }
     },
     error => {
       console.log(error);
     });
   }
+
 
   onSwitchMode(){
     this.isLoginMode = ! this.isLoginMode;

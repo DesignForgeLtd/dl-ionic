@@ -1,10 +1,12 @@
 <ion-header>
-  <ion-toolbar color="{{ isLoginMode ? 'primary' : 'danger' }}">
+  <ion-toolbar color="{{ isLoginMode ? 'primary' : 'primary' }}">
     <ion-title>{{ isLoginMode ? 'Login' : 'Create new account' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-button *ngIf="registrationSuccessful" expand="full" color="success">Registration successful! You can now log in.</ion-button>
+  <ion-button *ngIf="registrationUnsuccessful" expand="full" color="danger">Sorry, there was a problem creating your account...</ion-button>
   <form #authForm="ngForm">
     <ion-item *ngIf="! isLoginMode">
       <ion-label position="floating">Name</ion-label>

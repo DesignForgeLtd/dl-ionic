@@ -1,18 +1,27 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { AppSettings } from 'src/app/AppSettings';
+import { User } from './user.model';
+
 
 interface AuthResponseData{
-  kind: string;
-  idToken: string;
-  email: string;
-  refreshToken: string;
-  expiresIn: string;
-  localId: string;
+  status: string;
+  data: {
+    token: string;
+    email: string;
+    id: number;
+    expiresIn: number;
+    name: string;
+  };
 }
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
+
+  user = new Subject<User>();
+
   constructor(private http: HttpClient){}
 
   login(email: string, password: string){
@@ -33,6 +42,14 @@ export class AuthService {
         email,
         password
       }
-    );
+    )
+    .pipe(tap(response => { // catchError(this.handleError),
+      const tokenExpirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+      const user = new User(response.data.email, response.data.id, response.data.token, tokenExpirationDate);
+    }));
+  }
+
+  handleError(){
+
   }
 }

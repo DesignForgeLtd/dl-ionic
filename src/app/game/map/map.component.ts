@@ -1,6 +1,6 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AppSettings } from '../../AppSettings';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+
 
 import { Player } from './map-scripts/player';
 import { Viewport } from './map-scripts/viewport';
