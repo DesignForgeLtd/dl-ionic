@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AppSettings } from 'src/app/AppSettings';
 import { User } from './user.model';
@@ -55,6 +55,7 @@ export class AuthService {
   // handleError(){
 
   // }
+
 
   private handleAuth(name: string, userId: number, token: string, expiresIn: number){
     const tokenExpirationDate = new Date(new Date().getTime() + expiresIn * 1000);

@@ -19,6 +19,7 @@ export class AuthComponent implements OnInit {
 
   isLoginMode = true;
   isLoading = false;
+  error: string = null;
 
   registrationSuccessful = false;
   registrationUnsuccessful = false;
@@ -57,6 +58,7 @@ export class AuthComponent implements OnInit {
       },
       error => {
         console.log(error);
+        this.error = error;
         this.isLoading = false;
       }
     );
@@ -80,6 +82,7 @@ export class AuthComponent implements OnInit {
       },
       error => {
         console.log(error);
+        this.error = error;
         this.isLoading = false;
       }
     );
