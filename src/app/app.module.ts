@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 import { RouteReuseStrategy } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -11,7 +12,10 @@ import { GameComponent } from './game/game.component';
 import { MapComponent } from './game/map/map.component';
 import { MenuComponent } from './game/menu/menu.component';
 import { AuthComponent } from './auth/auth.component';
-import { FormsModule } from '@angular/forms';
+import { MailboxComponent } from './game/mailbox/mailbox.component';
+import { InboxComponent } from './game/mailbox/inbox/inbox.component';
+import { OutboxComponent } from './game/mailbox/outbox/outbox.component';
+import { CreateMsgComponent } from './game/mailbox/create-msg/create-msg.component';
 
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
@@ -24,6 +28,10 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     MapComponent,
     MenuComponent,
     AuthComponent,
+    MailboxComponent,
+    InboxComponent,
+    OutboxComponent,
+    CreateMsgComponent,
     LoadingSpinnerComponent
   ],
   entryComponents: [],
