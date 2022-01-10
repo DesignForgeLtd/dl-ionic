@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -63,12 +64,40 @@ export class AuthService {
 
   logout(){
     this.user.next(null);
+    localStorage.removeItem('userData');
     this.router.navigate(['/auth']);
+  }
+
+  autoLogin(){
+    const userData: {
+      email: string;
+      id: number;
+      _token: string;
+      _tokenExpirationDate: string;
+    } = JSON.parse(localStorage.getItem('userData'));
+console.log('userData');
+console.log(userData);
+    if ( ! userData){
+      return;
+    }
+
+    const loadedUser = new User(
+      userData.email,
+      userData.id,
+      userData._token,
+      new Date(userData._tokenExpirationDate)
+    );
+
+    if (loadedUser.token){
+      this.user.next(loadedUser);
+    }
+
   }
 
   private handleAuth(name: string, userId: number, token: string, expiresIn: number){
     const tokenExpirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(name, userId, token, tokenExpirationDate);
+    localStorage.setItem('userData', JSON.stringify(user));
 
     this.user.next(user);
   }
