@@ -13,7 +13,7 @@
     <app-loading-spinner></app-loading-spinner>
   </div>
 
-  <form #authForm="ngForm" *ngIf=" ! isLoading">
+  <form #authForm="ngForm" *ngIf=" ! isLoading" (ngSubmit)="onSubmit(authForm)">
     <ion-item *ngIf="! isLoginMode">
       <ion-label position="floating">Name</ion-label>
       <ion-input [(ngModel)]="name" name="name" type="text" required></ion-input>
@@ -34,7 +34,7 @@
       <ion-input [(ngModel)]="confirmPassword" name="confirmPassword" type="password" required></ion-input>
     </ion-item>
 
-    <ion-button class="ion-margin-top" type="submit" expand="block" color="light" (click)="onSubmit(authForm)" [disabled]="! authForm.valid">
+    <ion-button class="ion-margin-top" type="submit" expand="block" color="light" [disabled]="! authForm.valid">
       {{ isLoginMode ? 'Login' : 'Create Account' }}
     </ion-button>
 

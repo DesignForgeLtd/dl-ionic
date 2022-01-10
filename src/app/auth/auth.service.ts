@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject, throwError } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AppSettings } from 'src/app/AppSettings';
 import { User } from './user.model';
@@ -9,6 +9,7 @@ import { User } from './user.model';
 
 interface AuthResponseData{
   status: string;
+  error: any;
   data: {
     access_token: string;
     token_type: string;
@@ -21,7 +22,7 @@ interface AuthResponseData{
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
-  user = new Subject<User>();
+  user = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient){}
 

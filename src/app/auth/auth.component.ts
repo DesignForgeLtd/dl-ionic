@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from './auth.service';
-import { TokenService } from './token.service';
 import { AuthStateService } from './auth-state.service';
 import { Router } from '@angular/router';
 
@@ -26,7 +25,6 @@ export class AuthComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private tokenService: TokenService,
     private authStateService: AuthStateService,
     private router: Router
   ) { }
@@ -77,6 +75,10 @@ export class AuthComponent implements OnInit {
           this.isLoginMode = true;
           this.registrationSuccessful = true;
           form.reset();
+        } else {
+          if (response.error){
+            this.error = response.error.email;
+          }
         }
         this.isLoading = false;
       },
