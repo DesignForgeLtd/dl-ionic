@@ -30,4 +30,8 @@ export class MenuComponent implements OnInit {
     this.openMenu.emit(feature);
   }
 
+  onLogout(){
+    this.authService.logout();
+  }
+
 }

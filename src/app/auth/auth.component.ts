@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from './auth.service';
-import { AuthStateService } from './auth-state.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,7 +24,6 @@ export class AuthComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private authStateService: AuthStateService,
     private router: Router
   ) { }
 

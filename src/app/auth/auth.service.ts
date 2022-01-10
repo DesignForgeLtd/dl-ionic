@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AppSettings } from 'src/app/AppSettings';
@@ -24,7 +25,10 @@ export class AuthService {
 
   user = new BehaviorSubject<User>(null);
 
-  constructor(private http: HttpClient){}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ){}
 
   login(email: string, password: string){
     return this.http.post<AuthResponseData>(
@@ -57,6 +61,10 @@ export class AuthService {
 
   // }
 
+  logout(){
+    this.user.next(null);
+    this.router.navigate(['/auth']);
+  }
 
   private handleAuth(name: string, userId: number, token: string, expiresIn: number){
     const tokenExpirationDate = new Date(new Date().getTime() + expiresIn * 1000);
@@ -64,4 +72,5 @@ export class AuthService {
 
     this.user.next(user);
   }
+
 }
