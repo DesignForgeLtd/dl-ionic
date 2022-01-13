@@ -14,6 +14,8 @@ export class CreateMsgComponent implements OnInit {
   public subject;
   public message;
 
+  public clbck;
+
   constructor(private mailboxService: MailboxService) { }
 
   ngOnInit() {
@@ -24,8 +26,11 @@ export class CreateMsgComponent implements OnInit {
   }
 
   sendMsg() {
-    const clbk = this.mailboxService.send(this.userId, this.subject, this.message);
-    console.log(clbk);
+    this.mailboxService.send(this.userId, this.subject, this.message).subscribe(data => {
+      this.clbck = data;
+      console.log(this.clbck);
+    });
+    console.log(this.clbck);
     // console.log(this.userId);
   }
 

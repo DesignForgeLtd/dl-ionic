@@ -13,18 +13,15 @@ export class MailboxService {
   constructor(private http: HttpClient){}
 
   loadRecipients(){
-    return this.http.get<{'id': string;'position': number}>(
+    return this.http.get<{'id': number; 'name': string}>(
       AppSettings.API_ENDPOINT + '/user/getAll',
       {responseType: 'json'}
     );
   }
 
   send(recipientId: number, subject: string, message: string){
-    console.log(recipientId);
-    console.log(subject);
-    console.log(message);
     return this.http.post<{result: string}>(
-      AppSettings.API_ENDPOINT + '/mailbox/send',
+      AppSettings.API_ENDPOINT + '/message/create',
       {
         recipientId,
         subject,
