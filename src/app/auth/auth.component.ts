@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from './auth.service';
-import { TokenService } from './token.service';
-import { AuthStateService } from './auth-state.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,18 +17,23 @@ export class AuthComponent implements OnInit {
 
   isLoginMode = true;
   isLoading = false;
+  error: string = null;
 
   registrationSuccessful = false;
   registrationUnsuccessful = false;
 
   constructor(
     private authService: AuthService,
-    private tokenService: TokenService,
-    private authStateService: AuthStateService,
     private router: Router
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('this.authService.user.value');
+    console.log(this.authService.user.value);
+    if (this.authService.user.value){
+      this.router.navigate(['/game']);
+    }
+  }
 
   onSubmit(form: NgForm){
     if ( ! form.valid){
@@ -57,6 +60,7 @@ export class AuthComponent implements OnInit {
       },
       error => {
         console.log(error);
+        this.error = error;
         this.isLoading = false;
       }
     );
@@ -75,11 +79,16 @@ export class AuthComponent implements OnInit {
           this.isLoginMode = true;
           this.registrationSuccessful = true;
           form.reset();
+        } else {
+          if (response.error){
+            this.error = response.error.email;
+          }
         }
         this.isLoading = false;
       },
       error => {
         console.log(error);
+        this.error = error;
         this.isLoading = false;
       }
     );

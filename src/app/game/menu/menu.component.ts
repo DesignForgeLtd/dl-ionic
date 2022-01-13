@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -14,15 +15,23 @@ export class MenuComponent implements OnInit {
 
   //public menuMailImg = 'assets/graphics/layout/game/plachta_buttony.jpg';
 
+  loggedIn = true; // change to `false` later
 
+  constructor(private authService: AuthService) { }
 
-  constructor() { }
-
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.authService.user !== null){
+      this.loggedIn = true;
+    }
+  }
 
   onOpenMenu(feature: string) {
     //console.log('open mailbox pls');
     this.openMenu.emit(feature);
+  }
+
+  onLogout(){
+    this.authService.logout();
   }
 
 }

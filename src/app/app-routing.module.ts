@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './auth/auth.guard';
 import { GameComponent } from './game/game.component';
 
 const routes: Routes = [
@@ -10,10 +11,14 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'game',
+    redirectTo: 'auth',
     pathMatch: 'full'
   },
-  { path: 'game', component: GameComponent },
+  {
+    path: 'game',
+    canActivate: [AuthGuard],
+    component: GameComponent
+  },
   { path: 'auth', component: AuthComponent }
 ];
 

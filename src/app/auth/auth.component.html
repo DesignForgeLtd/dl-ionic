@@ -7,12 +7,13 @@
 <ion-content>
   <ion-button *ngIf="registrationSuccessful" expand="full" color="success">Registration successful! You can now log in.</ion-button>
   <ion-button *ngIf="registrationUnsuccessful" expand="full" color="danger">Sorry, there was a problem creating your account...</ion-button>
+  <ion-button *ngIf="error" expand="full" color="danger">{{ error }}</ion-button>
 
   <div *ngIf="isLoading" style="text-align: center;">
     <app-loading-spinner></app-loading-spinner>
   </div>
 
-  <form #authForm="ngForm" *ngIf=" ! isLoading">
+  <form #authForm="ngForm" *ngIf=" ! isLoading" (ngSubmit)="onSubmit(authForm)">
     <ion-item *ngIf="! isLoginMode">
       <ion-label position="floating">Name</ion-label>
       <ion-input [(ngModel)]="name" name="name" type="text" required></ion-input>
@@ -33,7 +34,7 @@
       <ion-input [(ngModel)]="confirmPassword" name="confirmPassword" type="password" required></ion-input>
     </ion-item>
 
-    <ion-button class="ion-margin-top" type="submit" expand="block" color="light" (click)="onSubmit(authForm)" [disabled]="! authForm.valid">
+    <ion-button class="ion-margin-top" type="submit" expand="block" color="light" [disabled]="! authForm.valid">
       {{ isLoginMode ? 'Login' : 'Create Account' }}
     </ion-button>
 

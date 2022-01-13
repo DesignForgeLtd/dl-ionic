@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 
 
 import { Player } from './map-scripts/player';
@@ -12,7 +12,7 @@ import { MapService } from './map.service';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnDestroy {
 
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
@@ -47,6 +47,8 @@ export class MapComponent implements OnInit {
 
   private context: CanvasRenderingContext2D;
 
+  private animationFrame;
+
   constructor(
     private http: HttpClient,
     private mapService: MapService
@@ -76,6 +78,10 @@ export class MapComponent implements OnInit {
     this.addCanvasClickListener();
   }
 
+  ngOnDestroy(): void {
+    cancelAnimationFrame(this.animationFrame);
+  }
+
   loadGameMap(){
     this.world = new World();
     this.http.get(
@@ -93,6 +99,7 @@ export class MapComponent implements OnInit {
         this.player = new Player(data.position % 200, Math.floor(data.position / 200), this.world, this.scaledSize);
         this.playerPosition = this.player.position;
         this.loop();
+        this.animationFrame = window.requestAnimationFrame(() => this.loop());
     });
   }
 
@@ -120,7 +127,7 @@ export class MapComponent implements OnInit {
 
   loop() {// The game loop
 
-    window.requestAnimationFrame(() => this.loop());
+    this.animationFrame = window.requestAnimationFrame(() => this.loop());
     const currentFrameTime = Date.now();
 
     this.height = document.documentElement.clientHeight;
