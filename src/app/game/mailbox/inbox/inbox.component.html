@@ -1,3 +1,13 @@
-<p>
-  inbox works!
-</p>
+
+
+<div *ngIf="isLoading" style="text-align: center;">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+
+<ion-card *ngFor="let thread of threads">
+  <ion-card-header>
+    <ion-item>
+      {{thread.subject}}
+    </ion-item>
+  </ion-card-header>
+</ion-card>

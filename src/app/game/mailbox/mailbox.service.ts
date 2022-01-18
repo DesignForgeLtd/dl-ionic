@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
 
+interface MessageResponseData{
+  status: string;
+  error: any;
+  data: string;
+}
+
 @Injectable({providedIn: 'root'})
 export class MailboxService {
-  //temporary
-  private recipients = [
-    {id: 1, name: 'MarrQ'},
-    {id: 2, name: 'Sachem'}
-  ];
 
   constructor(private http: HttpClient){}
 
@@ -19,14 +20,21 @@ export class MailboxService {
     );
   }
 
-  send(recipientId: number, subject: string, message: string){
-    return this.http.post<{result: string}>(
+  sendNewMessage(recipientId: number, subject: string, message: string){
+    return this.http.post<MessageResponseData>(
       AppSettings.API_ENDPOINT + '/message/create',
       {
         recipientId,
         subject,
         message
       }
+    );
+  }
+
+  loadThreads() {
+    return this.http.get<{'id': number; 'name': string}>(
+      AppSettings.API_ENDPOINT + '/message/threads',
+      {responseType: 'json'}
     );
   }
 

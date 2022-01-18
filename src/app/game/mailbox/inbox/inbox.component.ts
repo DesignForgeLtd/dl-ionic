@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MailboxService } from '../mailbox.service';
 
 @Component({
   selector: 'app-inbox',
@@ -7,8 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InboxComponent implements OnInit {
 
-  constructor() { }
+  public isLoading = true;
+  public threads;
 
-  ngOnInit() {}
+  constructor(private mailboxService: MailboxService) { }
+
+  ngOnInit() {
+    this.mailboxService.loadThreads().subscribe(data => {
+      this.threads = data;
+      this.isLoading = false;
+      console.log(data);
+    });
+  }
 
 }

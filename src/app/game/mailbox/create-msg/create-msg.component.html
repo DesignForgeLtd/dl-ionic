@@ -1,30 +1,43 @@
-
-
-<ion-card>
-  <ion-card-header>
-    <ion-item>
-      <ion-label>Choose Recipient</ion-label>
-      <ion-select interface="popover" [(ngModel)]="userId">
-        <ion-select-option *ngFor="let user of users" value="{{user.id}}">
-          {{user.name}}
-        </ion-select-option>
-      </ion-select>
+<ion-card *ngIf="status">
+  <ion-header>
+    <ion-item color="{{status}}">
+      {{response}}
     </ion-item>
-  </ion-card-header>
-  <ion-card-header>
-    <ion-item>
-      <ion-label position="floating">Thread Title</ion-label>
-      <ion-input [(ngModel)]="subject"></ion-input>
-    </ion-item>
-  </ion-card-header>
-
-  <ion-card-content>
-    <ion-item>
-      <ion-textarea [(ngModel)]="message"></ion-textarea>
-    </ion-item>
-    <ion-item>
-      <ion-button (click)="sendMsg()">Send</ion-button>
-    </ion-item>
-  </ion-card-content>
+  </ion-header>
 </ion-card>
-{{ clbck }}
+
+<div *ngIf="isLoading" style="text-align: center;">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+
+<form #createMessageForm="ngForm" *ngIf=" ! isLoading" (ngSubmit)="onSubmit(createMessageForm)">
+  <ion-card>
+    <ion-card-header>
+      <ion-item>
+        <ion-label>Choose Recipient</ion-label>
+        <ion-select interface="popover" [(ngModel)]="userId" name="userId" required>
+          <ion-select-option *ngFor="let user of users" value="{{user.id}}">
+            {{user.name}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card-header>
+    <ion-card-header>
+      <ion-item>
+        <ion-label position="floating">Thread Title</ion-label>
+        <ion-input [(ngModel)]="subject" name="subject" type="text" required></ion-input>
+      </ion-item>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-textarea [(ngModel)]="message" name="message" required></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-button class="ion-margin-top" type="submit" expand="block" color="light" [disabled]="! createMessageForm.valid">
+          Send
+        </ion-button>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</form>

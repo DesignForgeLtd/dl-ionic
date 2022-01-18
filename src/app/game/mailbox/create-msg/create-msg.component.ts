@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MailboxService } from '../mailbox.service';
-import { FormsModule } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-create-msg',
@@ -14,7 +14,11 @@ export class CreateMsgComponent implements OnInit {
   public subject;
   public message;
 
-  public clbck;
+  public isLoading = false;
+
+  public status;
+  public response;
+  public error;
 
   constructor(private mailboxService: MailboxService) { }
 
@@ -22,16 +26,29 @@ export class CreateMsgComponent implements OnInit {
     this.mailboxService.loadRecipients().subscribe(data => {
       this.users = data;
     });
-
   }
 
-  sendMsg() {
-    this.mailboxService.send(this.userId, this.subject, this.message).subscribe(data => {
-      this.clbck = data;
-      console.log(this.clbck);
-    });
-    console.log(this.clbck);
-    // console.log(this.userId);
+  onSubmit(form: NgForm) {
+    if ( ! form.valid){
+      return;
+    }
+    this.isLoading = true;
+    this.sendNewMessage(form);
+  }
+
+  sendNewMessage(form: NgForm) {
+    this.mailboxService.sendNewMessage(form.value.userId, form.value.subject, form.value.message).subscribe(
+      response => {
+        form.reset();
+        this.status = response.status;
+        this.response = response.data;
+        this.isLoading = false;
+        console.log(response);
+        if(this.status === 'success') {
+          //form.reset();
+        }
+      }
+    );
   }
 
 }
