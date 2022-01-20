@@ -10,14 +10,24 @@ export class InboxComponent implements OnInit {
 
   public isLoading = true;
   public threads;
+  public page = 1;
 
   constructor(private mailboxService: MailboxService) { }
 
   ngOnInit() {
-    this.mailboxService.loadThreads().subscribe(data => {
-      this.threads = data;
+    this.mailboxService.loadThreads(this.page).subscribe(result => {
+      this.threads = result.data;
       this.isLoading = false;
-      console.log(data);
+      console.log(result.data);
+    });
+  }
+
+  onNextPage() {
+    this.page++;
+    this.mailboxService.loadThreads(this.page).subscribe(result => {
+      this.threads = result.data;
+      this.isLoading = false;
+      console.log(result);
     });
   }
 

@@ -31,9 +31,9 @@ export class MailboxService {
     );
   }
 
-  loadThreads() {
-    return this.http.get<{'id': number; 'name': string}>(
-      AppSettings.API_ENDPOINT + '/message/threads',
+  loadThreads(page: number) {
+    return this.http.get<{'id': number; 'subject': string; 'data': []}>(
+      AppSettings.API_ENDPOINT + '/message/threads?page=' + page,
       {responseType: 'json'}
     );
   }
