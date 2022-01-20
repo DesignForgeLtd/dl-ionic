@@ -11,24 +11,39 @@ export class InboxComponent implements OnInit {
   public isLoading = true;
   public threads;
   public page = 1;
+  public lastPage: number;
+  public links: {
+    active: boolean;
+    label: string;
+  }[];
 
   constructor(private mailboxService: MailboxService) { }
 
   ngOnInit() {
-    this.mailboxService.loadThreads(this.page).subscribe(result => {
+    this.onLoadThreads(this.page);
+  }
+
+  onLoadThreads(page) {
+    this.mailboxService.loadThreads(page).subscribe(result => {
       this.threads = result.data;
       this.isLoading = false;
-      console.log(result.data);
+
+      this.page = result.current_page;
+      this.lastPage = result.last_page;
+      this.page = result.current_page;
+      this.links = result.links;
+
+      //remove prev and next from array
+      this.links.forEach((element, index) => {
+        if(element.label === 'pagination.previous' || element.label === 'pagination.next') {
+          this.links.splice(index,1);
+        }
+      });
     });
   }
 
-  onNextPage() {
-    this.page++;
-    this.mailboxService.loadThreads(this.page).subscribe(result => {
-      this.threads = result.data;
-      this.isLoading = false;
-      console.log(result);
-    });
+  onChangePage(page) {
+    this.onLoadThreads(page);
   }
 
 }

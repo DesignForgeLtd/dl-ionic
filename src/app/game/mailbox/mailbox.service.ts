@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
@@ -6,6 +7,16 @@ interface MessageResponseData{
   status: string;
   error: any;
   data: string;
+}
+
+interface MessageThreadsData{
+  data: string;
+  current_page: number;
+  last_page: number;
+  links: {
+    active: boolean;
+    label: string;
+  }[];
 }
 
 @Injectable({providedIn: 'root'})
@@ -32,7 +43,7 @@ export class MailboxService {
   }
 
   loadThreads(page: number) {
-    return this.http.get<{'id': number; 'subject': string; 'data': []}>(
+    return this.http.get<MessageThreadsData>(
       AppSettings.API_ENDPOINT + '/message/threads?page=' + page,
       {responseType: 'json'}
     );

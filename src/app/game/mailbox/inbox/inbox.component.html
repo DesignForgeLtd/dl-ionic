@@ -12,4 +12,6 @@
   </ion-card-header>
 </ion-card>
 
-<ion-button (click)="onNextPage()"></ion-button>
+<ion-button *ngFor="let link of links" [disabled]="link.active" (click)="onChangePage(link.label)">
+  {{link.label}}
+</ion-button>
