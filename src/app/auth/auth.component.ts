@@ -28,8 +28,6 @@ export class AuthComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('this.authService.user.value');
-    console.log(this.authService.user.value);
     if (this.authService.user.value){
       this.router.navigate(['/game']);
     }

@@ -122,12 +122,22 @@ export class Player {
 
   moveHero(move_x, move_y)
 	{
-		console.log(
-      'Going from ('+ this.pos_x+', '+ this.pos_y + ')='+(this.pos_x + this.pos_y *200)
-      +' to ('+ move_x+', '+ move_y + ')='+(move_x + move_y *200)+'');
-
 		if (this.hero_path == null)
 		{
+      console.log(
+        'Going from ('+ this.pos_x+', '+ this.pos_y + ')='+(this.pos_x + this.pos_y *200)
+        +' to ('+ move_x+', '+ move_y + ')='+(move_x + move_y *200)+'');
+
+      const destination = move_x + move_y*200;
+
+
+      const positionAccessible = this.world.positionAccessible(destination);
+      if (positionAccessible !== true)
+      {
+        // eslint-disable-next-line @typescript-eslint/quotes
+        return "You can't walk into " + positionAccessible;
+      }
+
 			const pathfinder = new HeroPath(this.world, this.pos_x, this.pos_y, move_x, move_y);
 			this.hero_path = pathfinder.findSteps();
 
@@ -145,12 +155,13 @@ export class Player {
 			{
 				//nieruszyLoad('brak_sciezki-0');
 			}
-
 		}
 		else
 		{
 			this.moveHeroStep();
 		}
+
+    return true;
 	}
 
   moveHeroStep()
