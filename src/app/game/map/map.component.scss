@@ -1,4 +1,4 @@
-#infolokacja {
+#location-info {
   position: absolute;
   top: 70px;
   right: 0px;
@@ -8,6 +8,36 @@
   background-color: rgba(0,0,0,0.6);
   padding: 2px 7px;
   font-size: 15px;
+  color: #eee;
+}
+
+#player-info {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  height: 22px;
+  width: 100%;
+  display: block;
+  //z-index: 100000;
+  background-color: rgba(0,0,0,0.6);
+  padding: 2px 7px;
+  font-size: 15px;
+  color: #eee;
+}
+
+#error-info {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: auto;
+  width: 50%;
+  display: none;
+  z-index: 100100;
+  background-color: rgba(240, 0, 0, 0.6);
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 20px;
   color: #eee;
 }
 

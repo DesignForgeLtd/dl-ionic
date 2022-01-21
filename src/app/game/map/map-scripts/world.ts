@@ -1,25 +1,43 @@
 
 export class World{
 
-  public pole: any;
+  public tiles: any;
 
   constructor() {
 
-    this.pole = new Array(120000);
+    this.tiles = new Array(120000);
   }
 
-  populateMap(pole){
-    this.pole = pole;
+  populateMap(tiles){
+    this.tiles = tiles;
   }
 
+  positionAccessible(position) {
 
-	infolokacja(pozycja)
+    position *= 3; // because each tile map is described with 3 bytes (where 1st stands for the type of terrain)
+
+    if (this.tiles[position] === 'w') { // water
+      return 'the sea';
+    }
+    if (this.tiles[position] === 'g') { // mountains
+      return 'the mountains';
+    }
+    if (this.tiles[position] === '8') { // city walls
+      return 'city walls';
+    }
+
+    //|| this.world.tiles[position] === 'm' // city gate
+
+    return true;
+  }
+
+	locationInfo(position)
 	{
     const kraina = 1;
 
 		if (kraina === 1)
 		{
-			switch(this.pole[pozycja*3])
+			switch(this.tiles[position*3])
 			{
 
 
@@ -37,7 +55,7 @@ export class World{
 						return 'jesteś w  chacie zielarza';
 						break;
 					case '3':
-						switch(pozycja)
+						switch(position)
 						{
 							case 26259:
 								return 'jesteś przy hebanowcu';
@@ -142,7 +160,7 @@ export class World{
 						return 'jesteś na drodze';
 						break;
 					case 'e': // lokacje produkcyjne
-						switch(pozycja)
+						switch(position)
 						{
 							case 28693:
 								return 'jesteś w kuźni';     // kowal
@@ -267,7 +285,7 @@ export class World{
 						 return 'jesteś w rupieciarni';
 						 break;
 					case 's':
-						switch(pozycja)
+						switch(position)
 						{
 							case 5028:
 							case 13559:
@@ -379,14 +397,14 @@ export class World{
 						return 'jesteś na polu zboża';
 						break;
 
-					default:      //this.pole
+					default:      //this.tiles
 						return '';
 						 break;
 			}
 		}
 		else if (kraina > 1)
 		{
-			switch(this.pole[pozycja*3])
+			switch(this.tiles[position*3])
 			{
 				case '0':
 					return 'jesteś w miejscu zgonu monstrum';
@@ -409,7 +427,7 @@ export class World{
 	}
 
 
-rysujPole(i)
+drawTile(i)
 {
 
   const kraina = 1;
@@ -423,90 +441,90 @@ rysujPole(i)
 
 	if (kraina === 1)
 	{
-		switch(this.pole[i])
+		switch(this.tiles[i])
 		{
 			default:
-			case 'p':                                        //this.pole
+			case 'p':                                        //this.tiles
 
-				link = (2 * szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+				link = (2 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 
 				link += '|||łąka';
 			 break;
 			case 'd':                                     // droga
 
-				if (this.pole[i+1] === 'a')
+				if (this.tiles[i+1] === 'a')
 				{
           // taki zabieg bo nie zmieściły się drogi w tym samym rzędzie.
-					link = (szerokoscPola)+'|'+(80+Number(this.pole[i+2])) * szerokoscPola;
+					link = (szerokoscPola)+'|'+(80+Number(this.tiles[i+2])) * szerokoscPola;
 				}
 				else
 				{
-					link = '0|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+					link = '0|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 				}
 
 				link += '|||droga';
 			 break;
 			case 'w':
-				link = (10 * szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+				link = (10 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 
-				link += '|1'; // info ze nie mozna wejsc na to this.pole
+				link += '|1'; // info ze nie mozna wejsc na to this.tiles
 
 				link += '|||woda';
 			 break;
 			case 'l':
 
-				link = (7 * szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+				link = (7 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 
 				link += '|||las';
 			 break;
 			case 'g':
 
-				link = (6 * szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+				link = (6 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 
-				link += '|1'; // info ze nie mozna wejsc na to this.pole
+				link += '|1'; // info ze nie mozna wejsc na to this.tiles
 
 				link += '|||góry';
 			break;
 
 			case 'b':
 
-				link = (5 * szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+				link = (5 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 
 				link += '|||bagno';
 			break;
 
 			case 'n':
 
-				link = (3 * szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+				link = (3 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 
 				link += '|||wyżyna';
 			 break;
 			 case 'r':                                     // rzeka
 
-				 link = (szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+				 link = (szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 
 					link += '|||rzeka';
 			break;
 			 case '6':                                     // pustynia
 
-				 link = (4 * szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+				 link = (4 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 
 					link += '|||pustynia';
 				break;
 			 case 'm':										// brama miasta
 			 case '8':                                     // mury
 
-				 link = (3 * szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+				 link = (3 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 
-				 link += '|1'; // info ze nie mozna wejsc na to this.pole
+				 link += '|1'; // info ze nie mozna wejsc na to this.tiles
 
-				 if (this.pole[i] === '8'.toString())
+				 if (this.tiles[i] === '8'.toString())
 					{link += '|||mury miejskie';}
 				else
 					{link += '|||brama miasta';}
 			 break;
 			case '0': // monstrum
-				link = (11 * szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola + '|||monster';
+				link = (11 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola + '|||monster';
 				//alert(link);
 
 			 break;
@@ -540,10 +558,10 @@ rysujPole(i)
 							link = (9 * szerokoscPola)+'|'+(27 * szerokoscPola) + '|||kopalnia złota';
 							break;
 						case 30083:
-							link = (9 * szerokoscPola)+'|'+(78 * szerokoscPola) + '|||this.pole kapusty';
+							link = (9 * szerokoscPola)+'|'+(78 * szerokoscPola) + '|||this.tiles kapusty';
 							break;
 						case 25960:
-							link = (9 * szerokoscPola)+'|'+(79 * szerokoscPola) + '|||this.pole buraków';
+							link = (9 * szerokoscPola)+'|'+(79 * szerokoscPola) + '|||this.tiles buraków';
 							break;
 						case 21526:
 							link = (9 * szerokoscPola)+'|'+(24 * szerokoscPola) + '|||uprawy lnu';
@@ -567,7 +585,7 @@ rysujPole(i)
 							link = (9 * szerokoscPola)+'|'+(42 * szerokoscPola) + '|||osuwisko';
 							break;
 						case 12832:
-							link = (9 * szerokoscPola)+'|'+(41 * szerokoscPola) + '|||this.pole zboża';
+							link = (9 * szerokoscPola)+'|'+(41 * szerokoscPola) + '|||this.tiles zboża';
 							break;
 						case 18780:
 							link = (9 * szerokoscPola)+'|'+(77 * szerokoscPola) + '|||olchowy zagajnik';
@@ -779,16 +797,16 @@ rysujPole(i)
 			 break;
 			case 't':
         let nrpolaportu;
-				if ((this.pole[i-3])==='p' || (this.pole[i-3])==='d')       //  port prawy
+				if ((this.tiles[i-3])==='p' || (this.tiles[i-3])==='d')       //  port prawy
 					{nrpolaportu = 56;}
 				  else
-				if ((this.pole[i+3])==='p' || (this.pole[i+3])==='d')       //  port lewy
+				if ((this.tiles[i+3])==='p' || (this.tiles[i+3])==='d')       //  port lewy
 					{nrpolaportu = 54;}
 				  else
-				if ((this.pole[i-300])==='p' || (this.pole[i-300])==='d')       //  port dolny
+				if ((this.tiles[i-300])==='p' || (this.tiles[i-300])==='d')       //  port dolny
 					{nrpolaportu = 55;}
 				  else
-				if ((this.pole[i+300])==='p' || (this.pole[i+300])==='d')       //  port górny
+				if ((this.tiles[i+300])==='p' || (this.tiles[i+300])==='d')       //  port górny
 					{nrpolaportu = 57;}
 					else
 						{nrpolaportu = 57;}
@@ -861,7 +879,7 @@ rysujPole(i)
 	}
 	else if (kraina > 1)
 	{
-		switch(this.pole[i])
+		switch(this.tiles[i])
 		{
 
 			case 'w': // ściana
@@ -871,7 +889,7 @@ rysujPole(i)
 			 break;
 			case 'p':                                        //chodnik
 
-				link = (8 * szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+				link = (8 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 
 				link += '|||chodnik';
 			 break;
@@ -882,13 +900,13 @@ rysujPole(i)
 			 break;
  			case 'u':// wyjście z  podziemi
 
-				link = (8 * szerokoscPola)+'|'+Number(this.pole[i+2]) * szerokoscPola;
+				link = (8 * szerokoscPola)+'|'+Number(this.tiles[i+2]) * szerokoscPola;
 				link += '|||wyjście z podziemi';
 
 				break;
  			case 'd':// zejscie na kolejny poziom  podziemi
 
-				link = (8 * szerokoscPola)+'|'+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola;
+				link = (8 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola;
 				link += '|||zejście na kolejny poziom podziemi';
 
 				break;
@@ -901,12 +919,12 @@ rysujPole(i)
 
 
 
-drawMonster(pozycja)
+drawMonster(position)
 {
 	return '';
-	// var i = pozycja * 3;
-	//  return (4 * szerokoscPola)+"|"+(Number(this.pole[i+1])*10+Number(this.pole[i+2])) * szerokoscPola += "|||pustynia";
-	// //console.log(pozycja);
+	// var i = position * 3;
+	//  return (4 * szerokoscPola)+"|"+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola += "|||pustynia";
+	// //console.log(position);
 	//console.log(monsters);
 
 	// switch ($row[6])

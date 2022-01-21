@@ -88,11 +88,8 @@ export class HeroPath
 
 				this.neighbours = new Object();
 
-				if (this.world.pole[this.current_node_position*3] === 'w'
-					|| this.world.pole[this.current_node_position*3] === 'g'
-					//|| this.world.pole[this.current_node_position*3] === 'm'
-					|| this.world.pole[this.current_node_position*3] === '8'
-					)
+        const positionAccessible = this.world.positionAccessible(this.current_node_position);
+				if (positionAccessible !== true)
 				{
 					continue;
 				}
@@ -139,10 +136,10 @@ export class HeroPath
 	{
 		const adjacent_node_position = this.current_node_position + offset;
 
-		if (this.world.pole[adjacent_node_position*3] !== 'w'
-			&& this.world.pole[adjacent_node_position*3] !== 'g'
-			//&& this.world.pole[adjacent_node_position*3] !== 'm'
-			&& this.world.pole[adjacent_node_position*3] !== '8'
+		if (this.world.tiles[adjacent_node_position*3] !== 'w'
+			&& this.world.tiles[adjacent_node_position*3] !== 'g'
+			//&& this.world.tiles[adjacent_node_position*3] !== 'm'
+			&& this.world.tiles[adjacent_node_position*3] !== '8'
 			)
 		{
 			let key = adjacent_node_position;
@@ -163,7 +160,7 @@ export class HeroPath
 
 	getNodeWeight(node_position)
 	{
-		switch(this.world.pole[node_position*3])
+		switch(this.world.tiles[node_position*3])
 		{
 			case 'd':               // droga
 				return 1;

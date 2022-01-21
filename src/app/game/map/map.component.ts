@@ -79,6 +79,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    console.log('Map component destroyed');
     cancelAnimationFrame(this.animationFrame);
   }
 
@@ -96,8 +97,11 @@ export class MapComponent implements OnInit, OnDestroy {
   loadPlayerData(){
     this.mapService.loadPlayerData()
     .subscribe(data => {
+      console.log('Loaded: ');
+      console.log(data);
         this.player = new Player(data.position % 200, Math.floor(data.position / 200), this.world, this.scaledSize);
         this.playerPosition = this.player.position;
+        this.playerInfoUpdate(data);
         this.loop();
         this.animationFrame = window.requestAnimationFrame(() => this.loop());
     });
@@ -117,10 +121,15 @@ export class MapComponent implements OnInit, OnDestroy {
         - this.height * 0.5
         + this.viewport.h * 0.5;
 
-      this.player.moveHero(
+      const result = this.player.moveHero(
         Math.floor(this.pointer.x / this.scaledSize),
         Math.floor(this.pointer.y / this.scaledSize)
       );
+
+      if (result !== true)
+      {
+        this.showError(result);
+      }
 
     });
   }
@@ -169,14 +178,26 @@ export class MapComponent implements OnInit, OnDestroy {
     if (this.playerPosition !== this.player.position)
     {
       this.playerPosition = this.player.position;
-      this.mapService.updateActualPosition(this.playerPosition);
+      this.mapService.updateActualPosition(this.playerPosition).subscribe(data => {
+        this.playerInfoUpdate(data.playerData);
+      });
     }
   }
 
   infolocationUpdate(){
-    document.getElementById('infolokacja').innerHTML =
-      this.world.infolokacja(this.player.pos_x + this.player.pos_y * 200)
+    document.getElementById('location-info').innerHTML =
+      this.world.locationInfo(this.player.pos_x + this.player.pos_y * 200)
       + ' ('+this.player.pos_x+','+this.player.pos_y+')';
+  }
+
+  playerInfoUpdate(playerInfo){
+    console.log(playerInfo);
+    document.getElementById('player-info').innerHTML =
+      '<b>' + playerInfo.name + '</b> (ID: ' + playerInfo.id + ')'
+      + ', Energy: ' + playerInfo.energy
+      + ', Stamina: ' + playerInfo.stamina
+      + ', Health: ' + playerInfo.health
+      + ', Position: ' + playerInfo.position + ' ('+this.player.pos_x+','+this.player.pos_y+')';
   }
 
   drawTerrain(){
@@ -212,7 +233,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     const ppp = x + y * this.columns;
 
-    const poleLinkOpis = this.world.rysujPole(ppp*3).split('|||');
+    const poleLinkOpis = this.world.drawTile(ppp*3).split('|||');
 
     const plo0 = poleLinkOpis[0];
     const bckpoz = plo0.split('|');
@@ -309,6 +330,13 @@ export class MapComponent implements OnInit, OnDestroy {
       this.playerScaledSize,
       this.playerScaledSize
     );
+  }
+
+  showError(errorMessage){
+    document.getElementById('error-info').innerHTML = errorMessage;
+    document.getElementById('error-info').style.display = 'block';
+
+    setTimeout(() => document.getElementById('error-info').style.display = 'none', 3000);
   }
 
 }

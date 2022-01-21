@@ -14,12 +14,10 @@ export class MapService {
   }
 
   updateActualPosition(playerPosition){
-    this.http.post(
+    return this.http.post<{'playerData': string; 'foundLocation': string}>(
       AppSettings.API_ENDPOINT + '/player/move/' + playerPosition,
       {}
-    )
-    .subscribe(data => {
-    });
+    );
   }
 
 }
