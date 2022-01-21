@@ -4,12 +4,10 @@
   <app-loading-spinner></app-loading-spinner>
 </div>
 
-<ion-card *ngFor="let thread of threads">
-  <ion-card-header>
-    <ion-item>
-      {{thread.subject}}
-    </ion-item>
-  </ion-card-header>
+<ion-card *ngFor="let thread of threads" (click)="onThreadSelected(thread.id)">
+  <ion-item>
+    {{thread.subject}}
+  </ion-item>
 </ion-card>
 
 <ion-button *ngFor="let link of links" [disabled]="link.active" (click)="onChangePage(link.label)">

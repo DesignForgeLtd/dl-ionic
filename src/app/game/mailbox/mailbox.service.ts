@@ -49,4 +49,22 @@ export class MailboxService {
     );
   }
 
+  showMessages(threadId: number) {
+    return this.http.get<any>(
+      AppSettings.API_ENDPOINT + '/message/read/' + threadId,
+      {responseType: 'json'}
+    );
+  }
+
+  sendMessage(threadId: number, recipientId: number, message: string) {
+    return this.http.post<any>(
+      AppSettings.API_ENDPOINT + '/message/send',
+      {
+        threadId,
+        recipientId,
+        message
+      }
+    );
+  }
+
 }

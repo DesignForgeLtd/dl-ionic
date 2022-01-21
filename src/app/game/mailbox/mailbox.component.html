@@ -8,7 +8,7 @@
         <ion-button color="primary" (click)="mailbox = 'inbox'">
           Inbox
         </ion-button>
-        <ion-button color="primary" (click)="mailbox = 'outbox'">
+        <ion-button color="primary" (click)="mailbox = 'thread'">
           Outbox
         </ion-button>
         <ion-button color="primary" (click)="mailbox = 'create'">
@@ -27,8 +27,8 @@
   </ion-card-header>
   <ion-card-content>
 
-    <app-inbox *ngIf="mailbox === 'inbox'"></app-inbox>
-    <app-outbox *ngIf="mailbox === 'outbox'"></app-outbox>
+    <app-inbox *ngIf="mailbox === 'inbox'" (chooseThread)="onChooseThread($event)"></app-inbox>
+    <app-msg-thread *ngIf="mailbox === 'thread'" [threadId]="threadId"></app-msg-thread>
     <app-create-msg *ngIf="mailbox === 'create'"></app-create-msg>
 
   </ion-card-content>

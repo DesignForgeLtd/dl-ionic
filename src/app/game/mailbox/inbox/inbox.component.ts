@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MailboxService } from '../mailbox.service';
 
 @Component({
@@ -8,13 +8,15 @@ import { MailboxService } from '../mailbox.service';
 })
 export class InboxComponent implements OnInit {
 
+  @Output() chooseThread = new EventEmitter<number>();
+
   public isLoading = true;
   public threads;
   public page = 1;
   public lastPage: number;
   public links: {
     active: boolean;
-    label: string;
+    label: any;
   }[];
 
   constructor(private mailboxService: MailboxService) { }
@@ -23,7 +25,7 @@ export class InboxComponent implements OnInit {
     this.onLoadThreads(this.page);
   }
 
-  onLoadThreads(page) {
+  onLoadThreads(page: number) {
     this.mailboxService.loadThreads(page).subscribe(result => {
       this.threads = result.data;
       this.isLoading = false;
@@ -38,12 +40,18 @@ export class InboxComponent implements OnInit {
         if(element.label === 'pagination.previous' || element.label === 'pagination.next') {
           this.links.splice(index,1);
         }
+        //change string type to number type for page numbers
+        element.label = parseInt(element.label, 10);
       });
     });
   }
 
-  onChangePage(page) {
+  onChangePage(page: number) {
     this.onLoadThreads(page);
+  }
+
+  onThreadSelected(threadId: number) {
+    this.chooseThread.emit(threadId);
   }
 
 }

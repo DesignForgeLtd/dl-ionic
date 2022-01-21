@@ -9,22 +9,22 @@ import { NgForm } from '@angular/forms';
 })
 export class CreateMsgComponent implements OnInit {
 
-  public users;
-  public userId;
-  public subject;
-  public message;
+  public users: any;
+  public userId: number;
+  public subject: string;
+  public message: string;
 
   public isLoading = false;
 
-  public status;
-  public response;
-  public error;
+  public status: string;
+  public response: string;
 
   constructor(private mailboxService: MailboxService) { }
 
   ngOnInit() {
     this.mailboxService.loadRecipients().subscribe(data => {
       this.users = data;
+      console.log(data);
     });
   }
 
