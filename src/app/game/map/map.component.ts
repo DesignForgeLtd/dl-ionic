@@ -180,6 +180,8 @@ export class MapComponent implements OnInit, OnDestroy {
       this.playerPosition = this.player.position;
       this.mapService.updateActualPosition(this.playerPosition).subscribe(data => {
         this.playerInfoUpdate(data.playerData);
+
+        console.log(data.success);
       });
     }
   }

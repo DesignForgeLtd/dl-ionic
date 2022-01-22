@@ -27,41 +27,6 @@ export class Player {
     this.prev_direction = 'down';
   };
 
-  go(direction){
-
-    this.prev_direction=this.direction;
-
-    switch (direction)
-    {
-      case 'up':
-        this.pos_y--;
-        this.direction='up';
-        break;
-      case 'down':
-        this.pos_y++;
-        this.direction='down';
-        break;
-      case 'right':
-        this.pos_x++;
-        this.direction='right';
-        break;
-      case 'left':
-        this.pos_x--;
-        this.direction='left';
-        break;
-    }
-
-    this.position = this.pos_x + this.pos_y * 200;
-  }
-
-  stop(){
-    if (this.direction!=null)
-    {
-      this.prev_direction=this.direction;
-      this.direction=null;
-    }
-  }
-
   repositionTo(x, y) {
 
     /* change the (X, Y) coords of the player */
@@ -76,19 +41,19 @@ export class Player {
     /* Gradually moves the player closer to x, y every time moveTo is called. */
     if (x < this.x)
     {
-      this.x-=2;
+      this.x-=1;
     }
     else if (x > this.x)
     {
-      this.x+=2;
+      this.x+=1;
     }
     if (y < this.y)
     {
-      this.y-=2;
+      this.y-=1;
     }
     else if (y > this.y)
     {
-      this.y+=2;
+      this.y+=1;
     }
     //this.x += (x - this.x - scaled_size * 0.0) * 0.05;
     //this.y += (y - this.y - scaled_size * 0.4) * 0.05;
@@ -122,6 +87,8 @@ export class Player {
 
   moveHero(move_x, move_y)
 	{
+    console.log('this.hero_path: ');
+    console.log(this.hero_path);
 		if (this.hero_path == null)
 		{
       console.log(
@@ -142,6 +109,8 @@ export class Player {
 			this.hero_path = pathfinder.findSteps();
 
 			let hero_path_string = '';
+      console.log('this.hero_path: ');
+    console.log(this.hero_path);
 			if (this.hero_path != null)
 			{
 				for (const hero_step of this.hero_path)
@@ -153,7 +122,8 @@ export class Player {
 			}
 			else
 			{
-				//nieruszyLoad('brak_sciezki-0');
+        // eslint-disable-next-line @typescript-eslint/quotes
+        return "I can't find a way...";
 			}
 		}
 		else
@@ -201,5 +171,40 @@ export class Player {
 
 		//rysujPostaciNaMapie('tylko_ja');
 	}
+
+  go(direction){
+
+    this.prev_direction=this.direction;
+
+    switch (direction)
+    {
+      case 'up':
+        this.pos_y--;
+        this.direction='up';
+        break;
+      case 'down':
+        this.pos_y++;
+        this.direction='down';
+        break;
+      case 'right':
+        this.pos_x++;
+        this.direction='right';
+        break;
+      case 'left':
+        this.pos_x--;
+        this.direction='left';
+        break;
+    }
+
+    this.position = this.pos_x + this.pos_y * 200;
+  }
+
+  stop(){
+    if (this.direction!=null)
+    {
+      this.prev_direction=this.direction;
+      this.direction=null;
+    }
+  }
 
 }
