@@ -4,11 +4,21 @@
   <app-loading-spinner></app-loading-spinner>
 </div>
 
-<ion-card *ngFor="let message of threadData">
-  <ion-item>
-    {{message.content}}
-  </ion-item>
-</ion-card>
+
+<ion-row *ngFor="let message of threadData">
+  <ion-col size="11" [offset]="(message.sender_id === 1) ? 1 : 0">
+    <ion-card [class]="(message.sender_id === 1) ? 'ion-text-end': 'ion-text-start'"
+        [color]="(message.recipient_id === 1 && message.delivered === null) ? 'primary': ''">
+      <ion-card-subtitle class="ion-padding-start ion-padding-end">
+        {{message.sender_name}}
+      </ion-card-subtitle>
+      <ion-card-content>
+        {{message.content}}
+      </ion-card-content>
+    </ion-card>
+  </ion-col>
+</ion-row>
+
 
 <form #sendMessageForm="ngForm" *ngIf=" ! isLoading" (ngSubmit)="onSubmit(sendMessageForm)">
   <ion-card>

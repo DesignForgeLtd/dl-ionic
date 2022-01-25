@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Component, Input, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MailboxService } from '../mailbox.service';
@@ -12,6 +13,10 @@ export class MsgThreadComponent implements OnInit {
 
   public isLoading = true;
   public threadData: {
+    sender_id: number;
+    sender_name: string;
+    recipient_id: number;
+    delivered: string;
     content: string;
   }[];
   public recipientId: number;
