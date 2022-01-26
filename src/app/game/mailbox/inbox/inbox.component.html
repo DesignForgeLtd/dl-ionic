@@ -5,7 +5,7 @@
 </div>
 
 <ion-card *ngFor="let thread of threads" (click)="onThreadSelected(thread.id)"
-    [color]="( ! thread.delivered_to_sender && thread.sender_id === 1 ) || ( ! thread.delivered_to_recipient && thread.recipient_id === 1 ) ? 'primary' : ''">
+    [color]="( ! thread.delivered_to_sender && thread.sender_id === myID ) || ( ! thread.delivered_to_recipient && thread.recipient_id === myID ) ? 'primary' : ''">
   <ion-card-subtitle class="ion-padding-start">
     <b>{{thread.sender_name}}</b> to <b>{{thread.recipient_name}}</b>
   </ion-card-subtitle>

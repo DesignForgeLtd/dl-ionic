@@ -11,6 +11,7 @@ import { MailboxService } from '../mailbox.service';
 export class MsgThreadComponent implements OnInit {
   @Input() threadId: number;
 
+  public myID = 1; // take it from storage
   public isLoading = true;
   public threadData: {
     sender_id: number;
@@ -33,12 +34,10 @@ export class MsgThreadComponent implements OnInit {
       this.isLoading = false;
       this.threadData = result;
       this.recipientId = result[0].recipient_id;
-      console.log(result);
     });
   }
 
   onSubmit(form: NgForm) {
-    console.log(this.threadId);
     this.mailboxService.sendMessage(this.threadId, this.recipientId, form.value.message).subscribe(
       response => {
         form.reset();

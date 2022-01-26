@@ -10,6 +10,7 @@ export class InboxComponent implements OnInit {
 
   @Output() chooseThread = new EventEmitter<number>();
 
+  public myID = 1; // take it from storage
   public isLoading = true;
   public threads;
   public page = 1;

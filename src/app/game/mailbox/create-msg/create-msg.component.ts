@@ -24,7 +24,6 @@ export class CreateMsgComponent implements OnInit {
   ngOnInit() {
     this.mailboxService.loadRecipients().subscribe(data => {
       this.users = data;
-      console.log(data);
     });
   }
 
@@ -43,9 +42,8 @@ export class CreateMsgComponent implements OnInit {
         this.status = response.status;
         this.response = response.data;
         this.isLoading = false;
-        console.log(response);
         if(this.status === 'success') {
-          //form.reset();
+          form.reset();
         }
       }
     );
