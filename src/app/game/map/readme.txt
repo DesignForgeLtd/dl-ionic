@@ -1,14 +1,31 @@
+Class responsibilities
+=============================
+1. MapComponent:
+  - I/O (user input, output to screen)
+  - render World, render Hero
+  - animation (moves Hero on the screen, 1 pixel at a time)
+  - sends Request to API when new move (step is initiated)
+  - receives Response from API to update Hero stats and correct Hero position (if illegal move)
+
+
+
+
 In map component there are numerous calls to Player class:
 
 Attributes:
 1. player.direction - is used only in my Map component to animate player
+2. coord_x and coord_y - hold player location as saved in DB (0..199, 0..199)
+2. pixel_x and pixel_y - hold player location in pixels, used for animation to know exatly where to display hero
 
 
 Methods:
 1. ON CLICK ON THE MAP
 this.player.moveHero(move_x, move_y) - move_x and move_y are both (0..199) = coords on the world map
 
-2. INSIDE LOOP() via this.tryMoveHero(); -
+  - find this.hero_path  for the hero to follow
+  - proceeds with the fist step of this path (this.player.moveHeroStep())
+
+2. INSIDE LOOP() via this.tryHeroNextStep(); -
 
 PURPOSE: change player coords, send this info to server
 
@@ -34,15 +51,14 @@ PURPOSE: change player coords, send this info to server
         this.go('up');
 
       - sets player.direction
-      - changes pos_x OR pos_y (+1 OR -1) to reflect new coords
+      - changes coord_x OR coord_y (+1 OR -1) to reflect new coords
 
 
     b) this.player.stop();
       sets player.direction to NULL
 
-3. INSIDE LOOP() via this.player.repositionTo(this.player.pos_x, this.player.pos_y);
+3. INSIDE LOOP() via this.player.animate();
 
 PURPOSE: change hero actual position (in pixels) for animation
 
-    - sets player.pos_x and player.pos_y (coords)
-    - fires player.moveTo(x, y) (pixels)
+    - changes this.pixel_x or this.pixel_y (+1 OR -1) to move hero closer to next step coords
