@@ -33,17 +33,22 @@ export class CreateMsgComponent implements OnInit {
     }
     this.isLoading = true;
     this.sendNewMessage(form);
+    //form.reset(); //here is working, but wrong place
   }
 
   sendNewMessage(form: NgForm) {
-    this.mailboxService.sendNewMessage(form.value.userId, form.value.subject, form.value.message).subscribe(
+    const userId = form.value.userId;
+    const subject = form.value.subject;
+    const message = form.value.message;
+    this.mailboxService.sendNewMessage(userId, subject, message).subscribe(
       response => {
-        form.reset();
+        //form.reset(); //not working
         this.status = response.status;
         this.response = response.data;
+        console.log(this.response);
         this.isLoading = false;
         if(this.status === 'success') {
-          form.reset();
+          form.resetForm(); //not working
         }
       }
     );
