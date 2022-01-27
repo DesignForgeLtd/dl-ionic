@@ -1,33 +1,67 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
 
+interface MessageResponseData{
+  status: string;
+  error: any;
+  data: string;
+}
+
+interface MessageThreadsData{
+  data: string;
+  current_page: number;
+  last_page: number;
+  links: {
+    active: boolean;
+    label: string;
+  }[];
+}
+
 @Injectable({providedIn: 'root'})
 export class MailboxService {
-  //temporary
-  private recipients = [
-    {id: 1, name: 'MarrQ'},
-    {id: 2, name: 'Sachem'}
-  ];
 
   constructor(private http: HttpClient){}
 
   loadRecipients(){
-    return this.http.get<{'id': string;'position': number}>(
+    return this.http.get<{'id': number; 'name': string}>(
       AppSettings.API_ENDPOINT + '/user/getAll',
       {responseType: 'json'}
     );
   }
 
-  send(recipientId: number, subject: string, message: string){
-    console.log(recipientId);
-    console.log(subject);
-    console.log(message);
-    return this.http.post<{result: string}>(
-      AppSettings.API_ENDPOINT + '/mailbox/send',
+  sendNewMessage(recipientId: number, subject: string, message: string){
+    return this.http.post<MessageResponseData>(
+      AppSettings.API_ENDPOINT + '/message/create',
       {
         recipientId,
         subject,
+        message
+      }
+    );
+  }
+
+  loadThreads(page: number) {
+    return this.http.get<MessageThreadsData>(
+      AppSettings.API_ENDPOINT + '/message/threads?page=' + page,
+      {responseType: 'json'}
+    );
+  }
+
+  showMessages(threadId: number) {
+    return this.http.get<any>(
+      AppSettings.API_ENDPOINT + '/message/read/' + threadId,
+      {responseType: 'json'}
+    );
+  }
+
+  sendMessage(threadId: number, recipientId: number, message: string) {
+    return this.http.post<any>(
+      AppSettings.API_ENDPOINT + '/message/send',
+      {
+        threadId,
+        recipientId,
         message
       }
     );

@@ -14,7 +14,7 @@ import { MenuComponent } from './game/menu/menu.component';
 import { AuthComponent } from './auth/auth.component';
 import { MailboxComponent } from './game/mailbox/mailbox.component';
 import { InboxComponent } from './game/mailbox/inbox/inbox.component';
-import { OutboxComponent } from './game/mailbox/outbox/outbox.component';
+import { MsgThreadComponent } from './game/mailbox/msg-thread/msg-thread.component';
 import { CreateMsgComponent } from './game/mailbox/create-msg/create-msg.component';
 
 import { AuthInterceptor } from './auth/auth.interceptor';
@@ -30,7 +30,7 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     AuthComponent,
     MailboxComponent,
     InboxComponent,
-    OutboxComponent,
+    MsgThreadComponent,
     CreateMsgComponent,
     LoadingSpinnerComponent
   ],
