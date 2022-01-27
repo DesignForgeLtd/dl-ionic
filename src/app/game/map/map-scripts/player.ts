@@ -82,7 +82,7 @@ export class Player {
     // TODO: add "queued-up" move (change destination before reaching current; after current step; (2) in flow chart)
 		if (this.hero_path !== null)
 		{
-      return;
+      return false;
     }
 
     console.log(
@@ -133,7 +133,6 @@ export class Player {
   clearMovementParams(){
     this.hero_path_step = 0;
     this.hero_path = null;
-    this.direction = null;
   }
 
   revertHeroLastStep(){
@@ -184,7 +183,7 @@ export class Player {
 
     this.prev_direction=this.direction;
 
-    console.log('go ' + direction);
+    //console.log('go ' + direction);
     switch (direction)
     {
       case 'up':
@@ -213,7 +212,7 @@ export class Player {
     {
       this.prev_direction=this.direction;
       this.direction=null;
-      console.log('stop');
+      //console.log('stop');
     }
   }
 
