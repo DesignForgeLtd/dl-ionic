@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { MailboxService } from '../mailbox.service';
 
 @Component({
   selector: 'app-inbox',
@@ -7,8 +8,51 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InboxComponent implements OnInit {
 
-  constructor() { }
+  @Output() chooseThread = new EventEmitter<number>();
 
-  ngOnInit() {}
+  public myID = 1; // take it from storage
+  public isLoading = true;
+  public threads;
+  public page = 1;
+  public lastPage: number;
+  public links: {
+    active: boolean;
+    label: any;
+  }[];
+
+  constructor(private mailboxService: MailboxService) { }
+
+  ngOnInit() {
+    this.onLoadThreads(this.page);
+  }
+
+  onLoadThreads(page: number) {
+    this.mailboxService.loadThreads(page).subscribe(result => {
+      this.threads = result.data;
+      this.isLoading = false;
+
+      this.page = result.current_page;
+      this.lastPage = result.last_page;
+      this.page = result.current_page;
+      this.links = result.links;
+
+      //remove prev and next from array
+      this.links.forEach((element, index) => {
+        if(element.label === 'pagination.previous' || element.label === 'pagination.next') {
+          this.links.splice(index,1);
+        }
+        //change string type to number type for page numbers
+        element.label = parseInt(element.label, 10);
+      });
+    });
+  }
+
+  onChangePage(page: number) {
+    this.onLoadThreads(page);
+  }
+
+  onThreadSelected(threadId: number) {
+    this.chooseThread.emit(threadId);
+  }
 
 }
