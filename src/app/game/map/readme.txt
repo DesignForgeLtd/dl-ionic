@@ -7,6 +7,18 @@ Class responsibilities
   - sends Request to API when new move (step is initiated)
   - receives Response from API to update Hero stats and correct Hero position (if illegal move)
 
+2. Player
+  - stores Hero path, direction, current step in that path
+  - stores Hero exact position in terms of pixels
+
+3. HeroPath
+  - responsible for calculating hero path based on current position and requested destination
+
+4. World
+  - stores information about the whole world's terrain (map)
+  - determines if a position is reachable (used by: HeroPath)
+  - USED BY: MapComponent, Player and HeroPath
+
 
 
 
