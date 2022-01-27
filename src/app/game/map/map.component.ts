@@ -148,8 +148,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.context.canvas.width  = this.width;
     // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
 
-    this.tryAnimateHero();
-    this.tryHeroNextStep();
+    this.heroLoop();
+
     this.trySendApiRequest();
     this.infolocationUpdate();
 
@@ -159,34 +159,34 @@ export class MapComponent implements OnInit, OnDestroy {
     this.drawHero(currentFrameTime);
   }
 
-  tryAnimateHero(){
-    if (this.player.coord_x * this.scaledSize !== this.player.pixel_x
-      || this.player.coord_y * this.scaledSize !== this.player.pixel_y)
+  heroLoop(){
+    // if animation of the current step complete
+    if (this.player.coord_x * this.scaledSize === this.player.pixel_x
+      && this.player.coord_y * this.scaledSize === this.player.pixel_y)
+    {
+      if (this.serverSavedNewPosition === true){
+        this.tryHeroNextStep();
+      }
+    }
+    else
     {
       this.player.animate();
     }
   }
 
   tryHeroNextStep(){
-    // if animation of the current step complete
-    if (this.player.coord_x * this.scaledSize === this.player.pixel_x
-      && this.player.coord_y * this.scaledSize === this.player.pixel_y
-      && this.serverSavedNewPosition === true)
+    if (this.player.hero_path != null)
     {
-      if (this.player.hero_path != null)
-      {
-        console.log('this.player.hero_path_step: '+this.player.hero_path_step);
-        // proceed with next step
-        this.setServerSavedNewPositionToFalse();
-        this.player.moveHeroStep();
-        this.player.animate();
-      }
-      else
-      {
-        // or make hero stand still
-        this.player.stop();
-      }
-
+      console.log('this.player.hero_path_step: '+this.player.hero_path_step);
+      // proceed with next step
+      this.setServerSavedNewPositionToFalse();
+      this.player.moveHeroStep();
+      this.player.animate();
+    }
+    else
+    {
+      // or make hero stand still
+      this.player.stop();
     }
   }
 
