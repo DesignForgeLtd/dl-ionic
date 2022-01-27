@@ -34,7 +34,7 @@ export class MapComponent implements OnInit, OnDestroy {
   height: number;
   width: number;
 
-  playerPosition: number;
+  playerSavedPosition: number;
 
   pointer = { x:100, y:100 };// The adjusted mouse position
 
@@ -48,6 +48,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private context: CanvasRenderingContext2D;
 
   private animationFrame;
+  private serverSavedNewPosition = true;
 
   constructor(
     private http: HttpClient,
@@ -100,7 +101,7 @@ export class MapComponent implements OnInit, OnDestroy {
       console.log('Loaded: ');
       console.log(data);
         this.player = new Player(data.position % 200, Math.floor(data.position / 200), this.world, this.scaledSize);
-        this.playerPosition = this.player.position;
+        this.playerSavedPosition = this.player.position;
         this.playerInfoUpdate(data);
         this.loop();
         this.animationFrame = window.requestAnimationFrame(() => this.loop());
@@ -147,57 +148,94 @@ export class MapComponent implements OnInit, OnDestroy {
     this.context.canvas.width  = this.width;
     // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
 
-    this.tryMoveHero();
+    this.heroLoop();
+
+    this.trySendApiRequest();
     this.infolocationUpdate();
 
-    this.player.repositionTo(this.player.pos_x, this.player.pos_y);
-    this.viewport.scrollTo(this.player.x, this.player.y);
+    this.viewport.scrollTo(this.player.pixel_x, this.player.pixel_y);
 
     this.drawTerrain();
-
     this.drawHero(currentFrameTime);
   }
 
-  tryMoveHero(){
-    // TODO:
-    if (this.player.pos_x * this.scaledSize === this.player.x
-      && this.player.pos_y * this.scaledSize === this.player.y)
+  heroLoop(){
+    // if animation of the current step complete
+    if (this.player.coord_x * this.scaledSize === this.player.pixel_x
+      && this.player.coord_y * this.scaledSize === this.player.pixel_y)
     {
-      if (this.player.hero_path != null)
-      {
-        // proceed with next step
-        this.player.moveHeroStep();
+      if (this.serverSavedNewPosition === true){
+        this.tryHeroNextStep();
       }
-      else
-      {
-        // or make hero stand still
-        this.player.stop();
+      else{
+        // TODO: after 5s (?) of API not responding, player.revertHeroLastStep()
       }
     }
-
-    if (this.playerPosition !== this.player.position)
+    else
     {
-      this.playerPosition = this.player.position;
-      this.mapService.updateActualPosition(this.playerPosition).subscribe(data => {
+      this.player.animate();
+    }
+  }
+
+  tryHeroNextStep(){
+    if (this.player.hero_path != null)
+    {
+      console.log('this.player.hero_path_step: '+this.player.hero_path_step);
+      // proceed with next step
+      this.setServerSavedNewPositionToFalse();
+      this.player.moveHeroStep();
+      this.player.animate();
+    }
+    else
+    {
+      // or make hero stand still
+      this.player.stop();
+    }
+  }
+
+  trySendApiRequest(){
+    // send info about player's new coords to the server
+    if (this.playerSavedPosition !== this.player.position)
+    {
+      this.playerSavedPosition = this.player.position;
+      this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
+        if (data.success === true){
+          this.setServerSavedNewPosition();
+          this.player.incrementHeroStep();
+        }
+        else {
+          this.showError(data.errorMessage);
+          this.player.revertHeroLastStep();
+        }
+
         this.playerInfoUpdate(data.playerData);
       });
     }
   }
 
+  setServerSavedNewPosition(){
+    this.serverSavedNewPosition = true;
+    console.log('this.serverSavedNewPosition = true;');
+  }
+
+  setServerSavedNewPositionToFalse(){
+    this.serverSavedNewPosition = false;
+    console.log('this.serverSavedNewPosition = false;');
+  }
+
   infolocationUpdate(){
     document.getElementById('location-info').innerHTML =
-      this.world.locationInfo(this.player.pos_x + this.player.pos_y * 200)
-      + ' ('+this.player.pos_x+','+this.player.pos_y+')';
+      this.world.locationInfo(this.player.coord_x + this.player.coord_y * 200)
+      + ' ('+this.player.coord_x+','+this.player.coord_y+')';
   }
 
   playerInfoUpdate(playerInfo){
-    console.log(playerInfo);
     document.getElementById('player-info').innerHTML =
       '<b>' + playerInfo.name + '</b> (ID: ' + playerInfo.id + ')'
       + ', Energy: ' + playerInfo.energy
       + ', Stamina: ' + playerInfo.stamina
       + ', Health: ' + playerInfo.health
-      + ', Position: ' + playerInfo.position + ' ('+this.player.pos_x+','+this.player.pos_y+')';
+      + ', Position: ' + playerInfo.position + ' ('+this.player.coord_x+','+this.player.coord_y+')';
   }
 
   drawTerrain(){
@@ -272,8 +310,8 @@ export class MapComponent implements OnInit, OnDestroy {
  /* This bit of code gets the this.player's position in the world in terms of
     columns and rows and converts it to an index in the map array */
     // let this.player_index =
-    //   Math.floor((this.player.y + this.scaledSize * 0.5) / this.scaledSize) * columns
-    //   + Math.floor((this.player.x + this.scaledSize * 0.5) / this.scaledSize); // ????
+    //   Math.floor((this.player.pixel_y + this.scaledSize * 0.5) / this.scaledSize) * columns
+    //   + Math.floor((this.player.pixel_x + this.scaledSize * 0.5) / this.scaledSize); // ????
 
     let sheetOffsetX = 0;
     let sheetOffsetY = 0;
@@ -325,8 +363,8 @@ export class MapComponent implements OnInit, OnDestroy {
       sheetOffsetY,
       this.playerSize,
       this.playerSize,
-      Math.round(this.player.x - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5),
-      Math.round(this.player.y - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5),
+      Math.round(this.player.pixel_x - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5),
+      Math.round(this.player.pixel_y - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5),
       this.playerScaledSize,
       this.playerScaledSize
     );
