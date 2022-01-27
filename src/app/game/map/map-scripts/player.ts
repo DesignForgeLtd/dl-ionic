@@ -15,8 +15,6 @@ export class Player {
   public hero_path = null;
   public hero_path_step = 0;
 
-  public serverSavedNewPosition = true;
-
   private world: World;
 
   constructor(public coord_x: number, public coord_y: number, world, scaled_size) {
@@ -28,16 +26,6 @@ export class Player {
     this.direction = null;
     this.prev_direction = 'down';
   };
-
-  setServerSavedNewPosition(){
-    this.serverSavedNewPosition = true;
-    console.log('this.serverSavedNewPosition = true;');
-  }
-
-  setServerSavedNewPositionToFalse(){
-    this.serverSavedNewPosition = false;
-    console.log('this.serverSavedNewPosition = false;');
-  }
 
   animate() {
 
@@ -91,6 +79,7 @@ export class Player {
 	{
     // TODO: check if have EN, HP, KO... otherwise return with error msg
 
+    // TODO: add "queued-up" move (change destination before reaching current; after current step; (2) in flow chart)
 		if (this.hero_path !== null)
 		{
       return;
@@ -122,10 +111,6 @@ export class Player {
         hero_path_string += hero_step + ';';
       }
       console.log('Path to reach this destination is: '+hero_path_string);
-
-      this.moveHeroStep();
-      this.animate();
-      this.setServerSavedNewPositionToFalse();
     }
     else // means we got empty array in this.hero_path
     {
@@ -137,10 +122,20 @@ export class Player {
     return true;
 	}
 
-  moveHeroStep()
-	{
-		//wymazPostaciZMapy();
-		//pozycja += hero_path[hero_path_step];
+  incrementHeroStep(){
+    this.hero_path_step++;
+
+    if (this.hero_path_step >= this.hero_path.length){
+			this.hero_path_step = 0;
+			this.hero_path = null;
+      return;
+		}
+  }
+
+  moveHeroStep(){
+    if (this.hero_path == null){
+      return;
+    }
 
 		switch(this.hero_path[this.hero_path_step])
 		{
@@ -157,28 +152,11 @@ export class Player {
 				this.go('up');
 				break;
 		}
-
-		this.hero_path_step++;
-
-		if (this.hero_path_step >= this.hero_path.length)
-		{
-			//wymazPostaciZMapy();
-			//rysujPostaciNaMapie();
-
-			//rysujPostaciNaMapie();
-			//akcjeAjax(akcjeAjaxData);
-
-			this.hero_path_step = 0;
-			this.hero_path = null;
-		}
-
-		//rysujPostaciNaMapie('tylko_ja');
 	}
 
   go(direction){
 
     this.prev_direction=this.direction;
-    this.setServerSavedNewPositionToFalse();
 
     console.log('go ' + direction);
     switch (direction)
@@ -209,7 +187,6 @@ export class Player {
     {
       this.prev_direction=this.direction;
       this.direction=null;
-      this.setServerSavedNewPositionToFalse();
       console.log('stop');
     }
   }

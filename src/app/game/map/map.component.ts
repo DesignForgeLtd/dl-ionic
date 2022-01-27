@@ -48,6 +48,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private context: CanvasRenderingContext2D;
 
   private animationFrame;
+  private serverSavedNewPosition = true;
 
   constructor(
     private http: HttpClient,
@@ -149,6 +150,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.tryAnimateHero();
     this.tryHeroNextStep();
+    this.trySendApiRequest();
     this.infolocationUpdate();
 
     this.viewport.scrollTo(this.player.pixel_x, this.player.pixel_y);
@@ -158,16 +160,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   tryAnimateHero(){
-    // if ((
-    //     (this.player.coord_x * this.scaledSize !== this.player.pixel_x
-    //     || this.player.coord_y * this.scaledSize !== this.player.pixel_y)
-    //     && this.player.serverSavedNewPosition
-    //   )
-    //   ||
-    //   (
-    //     this.player.coord_x * this.scaledSize === this.player.pixel_x
-    //     && this.player.coord_y * this.scaledSize === this.player.pixel_y
-    //   ))
     if (this.player.coord_x * this.scaledSize !== this.player.pixel_x
       || this.player.coord_y * this.scaledSize !== this.player.pixel_y)
     {
@@ -178,16 +170,14 @@ export class MapComponent implements OnInit, OnDestroy {
   tryHeroNextStep(){
     // if animation of the current step complete
     if (this.player.coord_x * this.scaledSize === this.player.pixel_x
-      && this.player.coord_y * this.scaledSize === this.player.pixel_y)
+      && this.player.coord_y * this.scaledSize === this.player.pixel_y
+      && this.serverSavedNewPosition === true)
     {
       if (this.player.hero_path != null)
       {
         console.log('this.player.hero_path_step: '+this.player.hero_path_step);
         // proceed with next step
-        if (this.player.hero_path_step !== 0){
-          this.player.setServerSavedNewPositionToFalse();
-        }
-
+        this.setServerSavedNewPositionToFalse();
         this.player.moveHeroStep();
         this.player.animate();
       }
@@ -196,18 +186,32 @@ export class MapComponent implements OnInit, OnDestroy {
         // or make hero stand still
         this.player.stop();
       }
-    }
 
-    // send info about new player coords to the server
+    }
+  }
+
+  trySendApiRequest(){
+    // send info about player's new coords to the server
     if (this.playerSavedPosition !== this.player.position)
     {
       this.playerSavedPosition = this.player.position;
       this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
         this.playerInfoUpdate(data.playerData);
 
-        this.player.setServerSavedNewPosition();
+        this.setServerSavedNewPosition();
+        this.player.incrementHeroStep();
       });
     }
+  }
+
+  setServerSavedNewPosition(){
+    this.serverSavedNewPosition = true;
+    console.log('this.serverSavedNewPosition = true;');
+  }
+
+  setServerSavedNewPositionToFalse(){
+    this.serverSavedNewPosition = false;
+    console.log('this.serverSavedNewPosition = false;');
   }
 
   infolocationUpdate(){
