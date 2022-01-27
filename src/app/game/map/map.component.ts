@@ -127,7 +127,7 @@ export class MapComponent implements OnInit, OnDestroy {
         Math.floor(this.pointer.y / this.scaledSize)
       );
 
-      if (result !== true)
+      if (result !== true && result !== false)
       {
         this.showError(result);
       }
@@ -149,9 +149,8 @@ export class MapComponent implements OnInit, OnDestroy {
     // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
 
     this.heroLoop();
+    //this.trySendApiRequest();
 
-    this.trySendApiRequest();
-    this.infolocationUpdate();
 
     this.viewport.scrollTo(this.player.pixel_x, this.player.pixel_y);
 
@@ -169,6 +168,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
       else{
         // TODO: after 5s (?) of API not responding, player.revertHeroLastStep()
+        // keep in mind, hero might simply not be moving (no lag)... do not revert then
       }
     }
     else
@@ -180,11 +180,12 @@ export class MapComponent implements OnInit, OnDestroy {
   tryHeroNextStep(){
     if (this.player.hero_path != null)
     {
-      console.log('this.player.hero_path_step: '+this.player.hero_path_step);
+      //console.log('this.player.hero_path_step: '+this.player.hero_path_step);
       // proceed with next step
       this.setServerSavedNewPositionToFalse();
       this.player.moveHeroStep();
       this.player.animate();
+      this.sendApiRequest();
     }
     else
     {
@@ -193,10 +194,9 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  trySendApiRequest(){
+  sendApiRequest(){
     // send info about player's new coords to the server
-    if (this.playerSavedPosition !== this.player.position)
-    {
+
       this.playerSavedPosition = this.player.position;
       this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
         if (data.success === true){
@@ -209,18 +209,18 @@ export class MapComponent implements OnInit, OnDestroy {
         }
 
         this.playerInfoUpdate(data.playerData);
+        this.infolocationUpdate();
       });
-    }
   }
 
   setServerSavedNewPosition(){
     this.serverSavedNewPosition = true;
-    console.log('this.serverSavedNewPosition = true;');
+    //console.log('this.serverSavedNewPosition = true;');
   }
 
   setServerSavedNewPositionToFalse(){
     this.serverSavedNewPosition = false;
-    console.log('this.serverSavedNewPosition = false;');
+    //console.log('this.serverSavedNewPosition = false;');
   }
 
   infolocationUpdate(){
