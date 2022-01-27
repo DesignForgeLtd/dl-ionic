@@ -167,6 +167,9 @@ export class MapComponent implements OnInit, OnDestroy {
       if (this.serverSavedNewPosition === true){
         this.tryHeroNextStep();
       }
+      else{
+        // TODO: after 5s (?) of API not responding, player.revertHeroLastStep()
+      }
     }
     else
     {
@@ -196,10 +199,16 @@ export class MapComponent implements OnInit, OnDestroy {
     {
       this.playerSavedPosition = this.player.position;
       this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
-        this.playerInfoUpdate(data.playerData);
+        if (data.success === true){
+          this.setServerSavedNewPosition();
+          this.player.incrementHeroStep();
+        }
+        else {
+          this.showError(data.errorMessage);
+          this.player.revertHeroLastStep();
+        }
 
-        this.setServerSavedNewPosition();
-        this.player.incrementHeroStep();
+        this.playerInfoUpdate(data.playerData);
       });
     }
   }

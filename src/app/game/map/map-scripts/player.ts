@@ -126,10 +126,36 @@ export class Player {
     this.hero_path_step++;
 
     if (this.hero_path_step >= this.hero_path.length){
-			this.hero_path_step = 0;
-			this.hero_path = null;
-      return;
+			this.clearMovementParams();
 		}
+  }
+
+  clearMovementParams(){
+    this.hero_path_step = 0;
+    this.hero_path = null;
+    this.direction = null;
+  }
+
+  revertHeroLastStep(){
+    switch(this.direction)
+		{
+			case 'right':
+        this.coord_x--;
+				break;
+			case 'left':
+				this.coord_x++;
+				break;
+			case 'down':
+        this.coord_y--;
+				break;
+			case 'up':
+				this.coord_y++;
+				break;
+		}
+
+    this.position = this.coord_x + this.coord_y * 200;
+
+    this.clearMovementParams();
   }
 
   moveHeroStep(){
