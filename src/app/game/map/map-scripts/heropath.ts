@@ -213,7 +213,15 @@ export class HeroPath
 				prev_posi = this.start_position;
 			}
 
-			steps.push(posi - prev_posi);
+      const difference = posi - prev_posi;
+      if (difference === 1
+        || difference === -1
+        || difference === 200
+        || difference === -200
+        )
+      {
+			  steps.push(difference);
+      }
 
 			// possible elements:
 	 		// this.steps.push(1); // right

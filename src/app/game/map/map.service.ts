@@ -14,7 +14,7 @@ export class MapService {
   }
 
   updateActualPosition(playerPosition){
-    return this.http.post<{'playerData': string; 'foundLocation': string}>(
+    return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': string; 'foundLocation': string}>(
       AppSettings.API_ENDPOINT + '/player/move/' + playerPosition,
       {}
     );
