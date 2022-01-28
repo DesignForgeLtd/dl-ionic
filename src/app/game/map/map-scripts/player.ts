@@ -5,8 +5,8 @@ import { World } from './world';
 
 export class Player {
 
-  public x: number;
-  public y: number;
+  public pixel_x: number;
+  public pixel_y: number;
   public position: number;
   public scaled_size: number;
   public direction: string;
@@ -17,81 +17,40 @@ export class Player {
 
   private world: World;
 
-  constructor(public pos_x: number, public pos_y: number, world, scaled_size) {
+  constructor(public coord_x: number, public coord_y: number, world, scaled_size) {
     this.scaled_size = scaled_size;
     this.world = world;
-    this.x = this.pos_x * this.scaled_size; // pixels
-    this.y = this.pos_y * this.scaled_size;
-    this.position = this.pos_x + this.pos_y * 200;
+    this.pixel_x = this.coord_x * this.scaled_size; // pixels
+    this.pixel_y = this.coord_y * this.scaled_size;
+    this.position = this.coord_x + this.coord_y * 200;
     this.direction = null;
     this.prev_direction = 'down';
   };
 
-  go(direction){
+  animate() {
 
-    this.prev_direction=this.direction;
+    const x = this.coord_x * this.scaled_size;
+    const y = this.coord_y * this.scaled_size;
 
-    switch (direction)
+    /* Gradually moves the player closer to x, y every time animate() is called. */
+    if (x < this.pixel_x)
     {
-      case 'up':
-        this.pos_y--;
-        this.direction='up';
-        break;
-      case 'down':
-        this.pos_y++;
-        this.direction='down';
-        break;
-      case 'right':
-        this.pos_x++;
-        this.direction='right';
-        break;
-      case 'left':
-        this.pos_x--;
-        this.direction='left';
-        break;
+      this.pixel_x-=1;
     }
-
-    this.position = this.pos_x + this.pos_y * 200;
-  }
-
-  stop(){
-    if (this.direction!=null)
+    else if (x > this.pixel_x)
     {
-      this.prev_direction=this.direction;
-      this.direction=null;
+      this.pixel_x+=1;
     }
-  }
-
-  repositionTo(x, y) {
-
-    /* change the (X, Y) coords of the player */
-    this.pos_x = x;
-    this.pos_y = y;
-
-    this.moveTo(x * this.scaled_size, y * this.scaled_size);
-  }
-
-  moveTo(x, y) {
-
-    /* Gradually moves the player closer to x, y every time moveTo is called. */
-    if (x < this.x)
+    if (y < this.pixel_y)
     {
-      this.x-=2;
+      this.pixel_y-=1;
     }
-    else if (x > this.x)
+    else if (y > this.pixel_y)
     {
-      this.x+=2;
+      this.pixel_y+=1;
     }
-    if (y < this.y)
-    {
-      this.y-=2;
-    }
-    else if (y > this.y)
-    {
-      this.y+=2;
-    }
-    //this.x += (x - this.x - scaled_size * 0.0) * 0.05;
-    //this.y += (y - this.y - scaled_size * 0.4) * 0.05;
+    //this.pixel_x += (x - this.pixel_x - scaled_size * 0.0) * 0.05;
+    //this.pixel_y += (y - this.pixel_y - scaled_size * 0.4) * 0.05;
 
   }
 
@@ -100,74 +59,108 @@ export class Player {
   // function logKey(e) {
   //   if (`${e.code}` == 'ArrowRight')
   //   {
-  //     player.repositionTo(++player.pos_x, player.pos_y);
+  //     player.repositionTo(++player.coord_x, player.coord_y);
   //   }
   //   if (`${e.code}` == 'ArrowDown')
   //   {
-  //     player.repositionTo(player.pos_x, ++player.pos_y);
+  //     player.repositionTo(player.coord_x, ++player.coord_y);
   //   }
   //   if (`${e.code}` == 'ArrowLeft')
   //   {
-  //     player.repositionTo(--player.pos_x, player.pos_y);
+  //     player.repositionTo(--player.coord_x, player.coord_y);
   //   }
   //   if (`${e.code}` == 'ArrowUp')
   //   {
-  //     player.repositionTo(player.pos_x, --player.pos_y);
-  //   }
-  //   if (`${e.code}` == 'Space')
-  //   {
-  //     moveHero(1,1);
+  //     player.repositionTo(player.coord_x, --player.coord_y);
   //   }
   // }
 
   moveHero(move_x, move_y)
 	{
-		if (this.hero_path == null)
+    // TODO: check if have EN, HP, KO... otherwise return with error msg
+
+    // TODO: add "queued-up" move (change destination before reaching current; after current step; (2) in flow chart)
+		if (this.hero_path !== null)
 		{
-      console.log(
-        'Going from ('+ this.pos_x+', '+ this.pos_y + ')='+(this.pos_x + this.pos_y *200)
-        +' to ('+ move_x+', '+ move_y + ')='+(move_x + move_y *200)+'');
+      return false;
+    }
 
-      const destination = move_x + move_y*200;
+    console.log(
+      'Going from ('+ this.coord_x+', '+ this.coord_y + ')='+(this.coord_x + this.coord_y *200)
+      +' to ('+ move_x+', '+ move_y + ')='+(move_x + move_y *200)+'');
 
+    const destination = move_x + move_y*200;
 
-      const positionAccessible = this.world.positionAccessible(destination);
-      if (positionAccessible !== true)
+    const positionAccessible = this.world.positionAccessible(destination);
+    if (positionAccessible !== true)
+    {
+      // eslint-disable-next-line @typescript-eslint/quotes
+      return "You can't walk into " + positionAccessible;
+    }
+
+    const pathfinder = new HeroPath(this.world, this.coord_x, this.coord_y, move_x, move_y);
+    this.hero_path = pathfinder.findSteps();
+
+    let hero_path_string = '';
+    this.hero_path_step = 0;
+
+    if (this.hero_path.length > 0)
+    {
+      for (const hero_step of this.hero_path)
       {
-        // eslint-disable-next-line @typescript-eslint/quotes
-        return "You can't walk into " + positionAccessible;
+        hero_path_string += hero_step + ';';
       }
-
-			const pathfinder = new HeroPath(this.world, this.pos_x, this.pos_y, move_x, move_y);
-			this.hero_path = pathfinder.findSteps();
-
-			let hero_path_string = '';
-			if (this.hero_path != null)
-			{
-				for (const hero_step of this.hero_path)
-				{
-					hero_path_string += hero_step + ';';
-				}
-
-				this.moveHeroStep();
-			}
-			else
-			{
-				//nieruszyLoad('brak_sciezki-0');
-			}
-		}
-		else
-		{
-			this.moveHeroStep();
-		}
+      console.log('Path to reach this destination is: '+hero_path_string);
+    }
+    else // means we got empty array in this.hero_path
+    {
+      this.hero_path = null;
+      // eslint-disable-next-line @typescript-eslint/quotes
+      return "I can't find a way...";
+    }
 
     return true;
 	}
 
-  moveHeroStep()
-	{
-		//wymazPostaciZMapy();
-		//pozycja += hero_path[hero_path_step];
+  incrementHeroStep(){
+    this.hero_path_step++;
+
+    if (this.hero_path_step >= this.hero_path.length){
+			this.clearMovementParams();
+		}
+  }
+
+  clearMovementParams(){
+    this.hero_path_step = 0;
+    this.hero_path = null;
+  }
+
+  revertHeroLastStep(){
+    switch(this.direction)
+		{
+			case 'right':
+        this.coord_x--;
+				break;
+			case 'left':
+				this.coord_x++;
+				break;
+			case 'down':
+        this.coord_y--;
+				break;
+			case 'up':
+				this.coord_y++;
+				break;
+		}
+
+    this.position = this.coord_x + this.coord_y * 200;
+
+    this.clearMovementParams();
+  }
+
+  moveHeroStep(){
+    if (this.hero_path == null){
+      return;
+    }
 
 		switch(this.hero_path[this.hero_path_step])
 		{
@@ -184,22 +177,43 @@ export class Player {
 				this.go('up');
 				break;
 		}
-
-		this.hero_path_step++;
-
-		if (this.hero_path_step === this.hero_path.length)
-		{
-			//wymazPostaciZMapy();
-			//rysujPostaciNaMapie();
-
-			//rysujPostaciNaMapie();
-			//akcjeAjax(akcjeAjaxData);
-
-			this.hero_path_step = 0;
-			this.hero_path = null;
-		}
-
-		//rysujPostaciNaMapie('tylko_ja');
 	}
+
+  go(direction){
+
+    this.prev_direction=this.direction;
+
+    //console.log('go ' + direction);
+    switch (direction)
+    {
+      case 'up':
+        this.coord_y--;
+        this.direction='up';
+        break;
+      case 'down':
+        this.coord_y++;
+        this.direction='down';
+        break;
+      case 'right':
+        this.coord_x++;
+        this.direction='right';
+        break;
+      case 'left':
+        this.coord_x--;
+        this.direction='left';
+        break;
+    }
+
+    this.position = this.coord_x + this.coord_y * 200;
+  }
+
+  stop(){
+    if (this.direction!=null)
+    {
+      this.prev_direction=this.direction;
+      this.direction=null;
+      //console.log('stop');
+    }
+  }
 
 }
