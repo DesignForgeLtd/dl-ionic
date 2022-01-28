@@ -10,8 +10,9 @@ import { MailboxService } from '../mailbox.service';
 })
 export class MsgThreadComponent implements OnInit {
   @Input() threadId: number;
+  @Input() threadTitle: string;
 
-  public myID = 1; // take it from storage
+  public myID = JSON.parse(localStorage.getItem('userData')).id;
   public isLoading = true;
   public threadData: {
     sender_id: number;
@@ -19,6 +20,7 @@ export class MsgThreadComponent implements OnInit {
     recipient_id: number;
     delivered: string;
     content: string;
+    sent_at: Date;
   }[];
   public recipientId: number;
   public message: string;
