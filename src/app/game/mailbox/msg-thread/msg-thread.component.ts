@@ -10,6 +10,7 @@ import { MailboxService } from '../mailbox.service';
 })
 export class MsgThreadComponent implements OnInit {
   @Input() threadId: number;
+  @Input() threadTitle: string;
 
   public myID = 1; // take it from storage
   public isLoading = true;
@@ -19,6 +20,7 @@ export class MsgThreadComponent implements OnInit {
     recipient_id: number;
     delivered: string;
     content: string;
+    sent_at: Date;
   }[];
   public recipientId: number;
   public message: string;
@@ -34,6 +36,7 @@ export class MsgThreadComponent implements OnInit {
       this.isLoading = false;
       this.threadData = result;
       this.recipientId = result[0].recipient_id;
+      console.log(this.threadData);
     });
   }
 

@@ -5,10 +5,16 @@
   <ion-card-header>
     <ion-toolbar>
       <ion-buttons>
-        <ion-button color="primary" (click)="mailbox = 'inbox'">
+        <ion-button [fill]="mailbox==='inbox' ? 'outline' : 'solid'"
+            [color]="mailbox==='inbox' ? 'secondary' : 'primary'"
+            [disabled]="mailbox==='inbox'"
+            (click)="mailbox='inbox'">
           Inbox
         </ion-button>
-        <ion-button color="primary" (click)="mailbox = 'create'">
+        <ion-button [fill]="mailbox==='create' ? 'outline' : 'solid'"
+            [color]="mailbox==='create' ? 'secondary' : 'primary'"
+            [disabled]="mailbox==='create'"
+            (click)="mailbox='create'">
           Create
         </ion-button>
       </ion-buttons>
@@ -25,7 +31,7 @@
   <ion-card-content>
 
     <app-inbox *ngIf="mailbox === 'inbox'" (chooseThread)="onChooseThread($event)"></app-inbox>
-    <app-msg-thread *ngIf="mailbox === 'thread'" [threadId]="threadId"></app-msg-thread>
+    <app-msg-thread *ngIf="mailbox === 'thread'" [threadId]="threadId" [threadTitle]="threadTitle"></app-msg-thread>
     <app-create-msg *ngIf="mailbox === 'create'"></app-create-msg>
 
   </ion-card-content>

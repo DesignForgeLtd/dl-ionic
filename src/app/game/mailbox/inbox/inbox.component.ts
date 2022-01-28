@@ -8,7 +8,7 @@ import { MailboxService } from '../mailbox.service';
 })
 export class InboxComponent implements OnInit {
 
-  @Output() chooseThread = new EventEmitter<number>();
+  @Output() chooseThread = new EventEmitter<{threadId: number; threadTitle: string}>();
 
   public myID = 1; // take it from storage
   public isLoading = true;
@@ -51,8 +51,8 @@ export class InboxComponent implements OnInit {
     this.onLoadThreads(page);
   }
 
-  onThreadSelected(threadId: number) {
-    this.chooseThread.emit(threadId);
+  onThreadSelected(threadId: number, threadTitle: string) {
+    this.chooseThread.emit({threadId, threadTitle});
   }
 
 }

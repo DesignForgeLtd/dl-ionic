@@ -11,6 +11,7 @@ export class MailboxComponent implements OnInit {
 
   public mailbox = 'inbox';
   public threadId: number;
+  public threadTitle: string;
 
   constructor() { }
 
@@ -20,9 +21,11 @@ export class MailboxComponent implements OnInit {
     this.closeMenu.emit();
   }
 
-  onChooseThread(threadId: number) {
+  onChooseThread(event) {
+    console.log(event);
     this.mailbox = 'thread';
-    this.threadId = threadId;
+    this.threadId = event.threadId;
+    this.threadTitle = event.threadTitle;
   }
 
 }
