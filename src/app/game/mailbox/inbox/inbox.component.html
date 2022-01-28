@@ -4,16 +4,27 @@
   <app-loading-spinner></app-loading-spinner>
 </div>
 
-<ion-card *ngFor="let thread of threads" (click)="onThreadSelected(thread.id)"
-    [color]="( ! thread.delivered_to_sender && thread.sender_id === myID ) || ( ! thread.delivered_to_recipient && thread.recipient_id === myID ) ? 'primary' : ''">
-  <ion-card-subtitle class="ion-padding-start">
-    <b>{{thread.sender_name}}</b> to <b>{{thread.recipient_name}}</b>
-  </ion-card-subtitle>
-  <ion-card-content>
-    {{thread.subject}}
-  </ion-card-content>
-</ion-card>
+  <ion-card *ngFor="let thread of threads" (click)="onThreadSelected(thread.id, thread.subject)"
+      [color]="( ! thread.delivered_to_sender && thread.sender_id === myID ) || ( ! thread.delivered_to_recipient && thread.recipient_id === myID ) ? 'primary' : ''">
+    <ion-card-subtitle class="ion-padding-start">
+      <b>{{thread.sender_name}}</b> to <b>{{thread.recipient_name}}</b>
+    </ion-card-subtitle>
+    <ion-card-content>
+      {{thread.subject}}
+    </ion-card-content>
+    <ion-card-subtitle class="ion-padding-start">
+      <small>[{{thread.sent_at}}]</small>
+    </ion-card-subtitle>
+  </ion-card>
 
-<ion-button *ngFor="let link of links" [disabled]="link.active" (click)="onChangePage(link.label)">
-  {{link.label}}
-</ion-button>
+  <ion-card *ngIf="! showMessages">
+    <ion-item class="ion-text-center" color="warning">
+      There is no messages yet.
+    </ion-item>
+  </ion-card>
+
+<ng-template *ngIf="lastPage > 1">
+  <ion-button *ngFor="let link of links" [disabled]="link.active" (click)="onChangePage(link.label)">
+    {{link.label}}
+  </ion-button>
+</ng-template>

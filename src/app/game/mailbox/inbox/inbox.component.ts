@@ -8,11 +8,12 @@ import { MailboxService } from '../mailbox.service';
 })
 export class InboxComponent implements OnInit {
 
-  @Output() chooseThread = new EventEmitter<number>();
+  @Output() chooseThread = new EventEmitter<{threadId: number; threadTitle: string}>();
 
-  public myID = 1; // take it from storage
+  public myID = JSON.parse(localStorage.getItem('userData')).id;
   public isLoading = true;
-  public threads;
+  public showMessages = 1;
+  public threads: any;
   public page = 1;
   public lastPage: number;
   public links: {
@@ -29,13 +30,12 @@ export class InboxComponent implements OnInit {
   onLoadThreads(page: number) {
     this.mailboxService.loadThreads(page).subscribe(result => {
       this.threads = result.data;
+      this.showMessages = result.data.length;
       this.isLoading = false;
-
       this.page = result.current_page;
       this.lastPage = result.last_page;
       this.page = result.current_page;
       this.links = result.links;
-
       //remove prev and next from array
       this.links.forEach((element, index) => {
         if(element.label === 'pagination.previous' || element.label === 'pagination.next') {
@@ -51,8 +51,8 @@ export class InboxComponent implements OnInit {
     this.onLoadThreads(page);
   }
 
-  onThreadSelected(threadId: number) {
-    this.chooseThread.emit(threadId);
+  onThreadSelected(threadId: number, threadTitle: string) {
+    this.chooseThread.emit({threadId, threadTitle});
   }
 
 }
