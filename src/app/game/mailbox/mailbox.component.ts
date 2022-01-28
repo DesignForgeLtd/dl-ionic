@@ -21,8 +21,7 @@ export class MailboxComponent implements OnInit {
     this.closeMenu.emit();
   }
 
-  onChooseThread(event) {
-    console.log(event);
+  onChooseThread(event: { threadId: number; threadTitle: string }) {
     this.mailbox = 'thread';
     this.threadId = event.threadId;
     this.threadTitle = event.threadTitle;

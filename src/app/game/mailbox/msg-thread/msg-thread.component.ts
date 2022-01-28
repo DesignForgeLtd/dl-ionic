@@ -12,7 +12,7 @@ export class MsgThreadComponent implements OnInit {
   @Input() threadId: number;
   @Input() threadTitle: string;
 
-  public myID = 1; // take it from storage
+  public myID = JSON.parse(localStorage.getItem('userData')).id;
   public isLoading = true;
   public threadData: {
     sender_id: number;
@@ -36,7 +36,6 @@ export class MsgThreadComponent implements OnInit {
       this.isLoading = false;
       this.threadData = result;
       this.recipientId = result[0].recipient_id;
-      console.log(this.threadData);
     });
   }
 
