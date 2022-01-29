@@ -80,9 +80,10 @@ export class Player {
     // TODO: check if have EN, HP, KO... otherwise return with error msg
 
     // TODO: add "queued-up" move (change destination before reaching current; after current step; (2) in flow chart)
-		if (this.hero_path !== null)
+		let currentStep = false;
+    if (this.hero_path !== null)
 		{
-      return false;
+      currentStep = this.hero_path[this.hero_path_step];
     }
 
     console.log(
@@ -100,6 +101,12 @@ export class Player {
 
     const pathfinder = new HeroPath(this.world, this.coord_x, this.coord_y, move_x, move_y);
     this.hero_path = pathfinder.findSteps();
+
+    // if Hero was already moving, find new path, but add current step as first in the new path
+    if (currentStep !== false){
+      console.log('currentStep: ' + currentStep);
+      //this.hero_path.unshift(currentStep);
+    }
 
     let hero_path_string = '';
     this.hero_path_step = 0;
