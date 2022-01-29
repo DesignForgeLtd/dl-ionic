@@ -45,6 +45,8 @@ export class MapComponent implements OnInit, OnDestroy {
   tileSheet: HTMLImageElement;
   heroImage: HTMLImageElement;
 
+  monsters: any;
+
   private context: CanvasRenderingContext2D;
 
   private animationFrame;
@@ -74,7 +76,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.loadGameMap();
     this.loadPlayerData();
-    //this.monsters = loadMonsters();
+    this.loadMonsters();
 
     this.addCanvasClickListener();
   }
@@ -108,6 +110,13 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadMonsters(){
+    this.mapService.loadMonstersData()
+    .subscribe(data => {
+      this.monsters = data.monsters;
+    });
+  }
+
   addCanvasClickListener(){
     this.context.canvas.addEventListener('click', (event) => {
 
@@ -127,7 +136,7 @@ export class MapComponent implements OnInit, OnDestroy {
         Math.floor(this.pointer.y / this.scaledSize)
       );
 
-      if (result !== true && result !== false)
+      if (result !== true)
       {
         this.showError(result);
       }
@@ -149,9 +158,6 @@ export class MapComponent implements OnInit, OnDestroy {
     // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
 
     this.heroLoop();
-    //this.trySendApiRequest();
-
-
     this.viewport.scrollTo(this.player.pixel_x, this.player.pixel_y);
 
     this.drawTerrain();
@@ -180,7 +186,6 @@ export class MapComponent implements OnInit, OnDestroy {
   tryHeroNextStep(){
     if (this.player.hero_path != null)
     {
-      //console.log('this.player.hero_path_step: '+this.player.hero_path_step);
       // proceed with next step
       this.setServerSavedNewPositionToFalse();
       this.player.moveHeroStep();
@@ -273,8 +278,13 @@ export class MapComponent implements OnInit, OnDestroy {
 
     const poleLinkOpis = this.world.drawTile(ppp*3).split('|||');
 
-    const plo0 = poleLinkOpis[0];
+    let plo0 = poleLinkOpis[0];
+    if ( poleLinkOpis[1] === 'monster'){
+      plo0 = this.getMonsterImagePosition(ppp);
+    }
+
     const bckpoz = plo0.split('|');
+
     // if (bckpoz[1] != '0') bpx = '-'+bckpoz[1]+'px'; else bpx = '0';
     // if (bckpoz[0] != '0') bpy = '-'+bckpoz[0]+'px'; else bpy = '0';
 
@@ -301,6 +311,22 @@ export class MapComponent implements OnInit, OnDestroy {
       this.scaledSize,
       this.scaledSize
     );
+  }
+
+  getMonsterImagePosition(ppp){
+    // console.log('monster found at: ' + ppp);
+    // console.log('image pos: ' + this.monsters[ppp]);
+    let imagePosition = this.monsters[ppp];
+    if (imagePosition.includes(','))
+    {
+      imagePosition = imagePosition.split(',');
+      imagePosition = imagePosition[0]; // if alive
+
+      // TODO:
+      // imagePosition = imagePosition[1]; // if dead
+    }
+
+    return (11 * this.scaledSize)+'|'+(imagePosition * this.scaledSize);
   }
 
   /* Draw the this.player. Remember to offset by the viewport position and

@@ -525,7 +525,8 @@ drawTile(i)
 			 break;
 			case '0': // monstrum
 				link = (11 * szerokoscPola)+'|'+(Number(this.tiles[i+1])*10+Number(this.tiles[i+2])) * szerokoscPola + '|||monster';
-				//alert(link);
+				// console.log('i: ' + i);
+				// console.log(link);
 
 			 break;
 			/*
