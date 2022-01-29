@@ -10,12 +10,14 @@ export class MenuComponent implements OnInit {
 
   @Output() openMenu = new EventEmitter<string>();
 
-  public items = [{src : 'assets/graphics/layout/game/plachta_buttony.jpg'},
-  {src : 'assets/graphics/layout/game/plachta_buttony.jpg'}];
+  public items = [
+    {src : 'assets/graphics/layout/game/plachta_buttony.jpg'},
+    {src : 'assets/graphics/layout/game/plachta_buttony.jpg'}
+  ];
 
   //public menuMailImg = 'assets/graphics/layout/game/plachta_buttony.jpg';
 
-  loggedIn = true; // change to `false` later
+  loggedIn = false;
 
   constructor(private authService: AuthService) { }
 
@@ -26,7 +28,7 @@ export class MenuComponent implements OnInit {
   }
 
   onOpenMenu(feature: string) {
-    //console.log('open mailbox pls');
+    console.log('opening: '+feature);
     this.openMenu.emit(feature);
   }
 
