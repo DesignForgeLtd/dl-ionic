@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 
 
 import { Player } from './map-scripts/player';
@@ -13,6 +13,8 @@ import { MapService } from './map.service';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnDestroy {
+
+  @Output() openMenu = new EventEmitter<string>();
 
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
@@ -162,6 +164,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
     this.drawTerrain();
     this.drawHero(currentFrameTime);
+    this.infolocationUpdate();
   }
 
   heroLoop(){
@@ -207,6 +210,12 @@ export class MapComponent implements OnInit, OnDestroy {
         if (data.success === true){
           this.setServerSavedNewPosition();
           this.player.incrementHeroStep();
+
+          if (data.foundLocation !== null){
+            console.log('foundLocation: ');
+            console.log(data.foundLocation);
+            this.openMenu.emit('map-location');
+          }
         }
         else {
           this.showError(data.errorMessage);
@@ -214,7 +223,6 @@ export class MapComponent implements OnInit, OnDestroy {
         }
 
         this.playerInfoUpdate(data.playerData);
-        this.infolocationUpdate();
       });
   }
 

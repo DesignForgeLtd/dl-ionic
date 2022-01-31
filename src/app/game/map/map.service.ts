@@ -15,7 +15,7 @@ export class MapService {
 
   loadMonstersData(){
     return this.http.get<{'success': boolean; 'monsters': string}>(
-      AppSettings.API_ENDPOINT + '/map/getMonsterInfo',
+      AppSettings.API_ENDPOINT + '/map/getMonstersInfo',
       {responseType: 'json'}
     );
   }
