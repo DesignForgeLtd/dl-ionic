@@ -13,6 +13,13 @@ export class MapService {
     );
   }
 
+  loadMonstersData(){
+    return this.http.get<{'success': boolean; 'monsters': string}>(
+      AppSettings.API_ENDPOINT + '/map/getMonsterInfo',
+      {responseType: 'json'}
+    );
+  }
+
   updateActualPosition(playerPosition){
     return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': string; 'foundLocation': string}>(
       AppSettings.API_ENDPOINT + '/player/move/' + playerPosition,
