@@ -76,7 +76,6 @@ export class MapComponent implements OnInit, OnDestroy {
     //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
     this.viewport = new Viewport(0, 0, this.width, this.height);
 
-    this.loadGameMap();
     this.loadPlayerData();
     this.loadMonsters();
 
@@ -88,10 +87,9 @@ export class MapComponent implements OnInit, OnDestroy {
     cancelAnimationFrame(this.animationFrame);
   }
 
-  loadGameMap(){
-    this.world = new World();
+  loadGameMap(level: number){
     this.http.get(
-      'assets/detailedMap1.txt',
+      'assets/detailedMap'+(level+1)+'.txt',
       {responseType: 'text'}
     )
     .subscribe(data => {
@@ -104,11 +102,21 @@ export class MapComponent implements OnInit, OnDestroy {
     .subscribe(data => {
       console.log('Loaded: ');
       console.log(data);
-        this.player = new Player(data.position % 200, Math.floor(data.position / 200), this.world, this.scaledSize);
-        this.playerSavedPosition = this.player.position;
-        this.playerInfoUpdate(data);
-        this.loop();
-        this.animationFrame = window.requestAnimationFrame(() => this.loop());
+
+      this.world = new World(data.level);
+
+      this.player = new Player(
+        data.position % 200,
+        Math.floor(data.position / 200),
+        data.level,
+        this.world,
+        this.scaledSize
+      );
+      this.playerSavedPosition = this.player.position;
+      this.loadGameMap(this.player.level);
+      this.playerInfoUpdate(data);
+      this.loop();
+      this.animationFrame = window.requestAnimationFrame(() => this.loop());
     });
   }
 
@@ -248,7 +256,8 @@ export class MapComponent implements OnInit, OnDestroy {
       + ', Energy: ' + playerInfo.energy
       + ', Stamina: ' + playerInfo.stamina
       + ', Health: ' + playerInfo.health
-      + ', Position: ' + playerInfo.position + ' ('+this.player.coord_x+','+this.player.coord_y+')';
+      + ', Position: ' + playerInfo.position + ' ('+this.player.coord_x+','+this.player.coord_y+')'
+      + ', Level: ' + playerInfo.level;
   }
 
   drawTerrain(){
@@ -409,6 +418,10 @@ export class MapComponent implements OnInit, OnDestroy {
     document.getElementById('error-info').style.display = 'block';
 
     setTimeout(() => document.getElementById('error-info').style.display = 'none', 3000);
+  }
+
+  onGoLevelUp() {
+
   }
 
 }
