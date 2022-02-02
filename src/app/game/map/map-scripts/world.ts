@@ -10,6 +10,10 @@ export class World{
     //console.log('this.level: '+this.level);
   }
 
+  setLevel(level){
+    this.level = level;
+  }
+
   populateMap(tiles){
     this.tiles = tiles;
   }

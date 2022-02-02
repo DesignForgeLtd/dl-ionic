@@ -11,7 +11,10 @@
       </ion-toolbar>
     </ion-card-header>
     <ion-card-content>
-      <button (click)="goLevelUp()">Go level up</button>
+      <h1>{{ locationData.name }}</h1>
+
+      <button *ngIf="locationData.type === 10" (click)="goLevelUp()">Go level up</button>
+      <button *ngIf="locationData.type === 11" (click)="goLevelDown()">Go level down</button>
 
     </ion-card-content>
   </ion-card>
