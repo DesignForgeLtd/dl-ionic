@@ -14,7 +14,7 @@ import { MapService } from './map.service';
 })
 export class MapComponent implements OnInit, OnDestroy {
 
-  @Output() openMenu = new EventEmitter<string>();
+  @Output() openModal = new EventEmitter<string>();
 
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
@@ -43,6 +43,9 @@ export class MapComponent implements OnInit, OnDestroy {
   player: Player;
   viewport: Viewport;
   world: World;
+
+  openedModal = null;
+  specialLocationData = null;
 
   tileSheet: HTMLImageElement;
   heroImage: HTMLImageElement;
@@ -103,20 +106,32 @@ export class MapComponent implements OnInit, OnDestroy {
       console.log('Loaded: ');
       console.log(data);
 
-      this.world = new World(data.level);
+      const playerData = data.playerData;
+
+      this.world = new World(playerData.level);
 
       this.player = new Player(
-        data.position % 200,
-        Math.floor(data.position / 200),
-        data.level,
+        playerData.position % 200,
+        Math.floor(playerData.position / 200),
+        playerData.level,
         this.world,
         this.scaledSize
       );
       this.playerSavedPosition = this.player.position;
       this.loadGameMap(this.player.level);
-      this.playerInfoUpdate(data);
+      this.playerInfoUpdate(playerData);
       this.loop();
       this.animationFrame = window.requestAnimationFrame(() => this.loop());
+
+      if (data.foundLocation !== null){
+        console.log('foundLocation: ');
+        console.log(data.foundLocation);
+        this.specialLocationData = data.foundLocation;
+        this.openedModal = 'map-location';
+      }else{
+        this.specialLocationData = null;
+        this.openedModal = null;
+      }
     });
   }
 
@@ -222,7 +237,11 @@ export class MapComponent implements OnInit, OnDestroy {
           if (data.foundLocation !== null){
             console.log('foundLocation: ');
             console.log(data.foundLocation);
-            this.openMenu.emit('map-location');
+            this.specialLocationData = data.foundLocation;
+            this.openedModal = 'map-location';
+          }else{
+            this.specialLocationData = null;
+            this.openedModal = null;
           }
         }
         else {
@@ -420,8 +439,45 @@ export class MapComponent implements OnInit, OnDestroy {
     setTimeout(() => document.getElementById('error-info').style.display = 'none', 3000);
   }
 
-  onGoLevelUp() {
+  mapLocationAction(action) {
 
+    console.log('mapLocationAction in MapComponent: ' + action);
+
+    switch (action) {
+      case 'goLevelUp':
+        this.useSubway('up');
+        break;
+      case 'goLevelDown':
+        this.useSubway('down');
+        break;
+    }
+  }
+
+  useSubway(direction: string){
+    console.log('going level '+direction+'!');
+    this.mapService.useUndergroundPassage(direction).subscribe(data => {
+      if (data.success === true){
+        console.log(data);
+        this.playerInfoUpdate(data.playerData);
+        this.player.level = data.playerData.level;
+        this.world.setLevel(this.player.level);
+        this.loadGameMap(data.playerData.level);
+
+        if (data.foundLocation !== null){
+          console.log('foundLocation: ');
+          console.log(data.foundLocation);
+          this.specialLocationData = data.foundLocation;
+          this.openedModal = 'map-location';
+        }else{
+          this.specialLocationData = null;
+          this.openedModal = null;
+        }
+      }
+      else {
+        this.showError(data.errorMessage);
+      }
+
+    });
   }
 
 }

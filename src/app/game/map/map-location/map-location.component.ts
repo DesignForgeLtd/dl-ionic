@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-map-location',
@@ -7,13 +7,16 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class MapLocationComponent implements OnInit {
 
+  @Input() locationData = null;
+
   @Output() closeMenu = new EventEmitter();
   @Output() mapLocationAction = new EventEmitter<string>();
 
   constructor() { }
 
   ngOnInit() {
-    console.log('initialised map-location');
+    console.log('initialised map-location; locationData: ');
+    console.log(this.locationData);
   }
 
   closeFeature() {
@@ -22,6 +25,10 @@ export class MapLocationComponent implements OnInit {
 
   goLevelUp(){
     this.mapLocationAction.emit('goLevelUp');
+  }
+
+  goLevelDown(){
+    this.mapLocationAction.emit('goLevelDown');
   }
 
 }

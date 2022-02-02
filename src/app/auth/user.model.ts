@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-import { NULL_EXPR } from '@angular/compiler/src/output/output_ast';
 
 export class User{
   constructor(
