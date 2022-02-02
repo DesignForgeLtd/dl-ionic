@@ -8,6 +8,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class MapLocationComponent implements OnInit {
 
   @Output() closeMenu = new EventEmitter();
+  @Output() mapLocationAction = new EventEmitter<string>();
 
   constructor() { }
 
@@ -17,6 +18,10 @@ export class MapLocationComponent implements OnInit {
 
   closeFeature() {
     this.closeMenu.emit();
+  }
+
+  goLevelUp(){
+    this.mapLocationAction.emit('goLevelUp');
   }
 
 }

@@ -7,7 +7,7 @@ export class MapService {
   constructor(private http: HttpClient){}
 
   loadPlayerData(){
-    return this.http.get<{'id': string;'position': number}>(
+    return this.http.get<{'id': string;'position': number;'level': number}>(
       AppSettings.API_ENDPOINT + '/player/getEssentialData',
       {responseType: 'json'}
     );

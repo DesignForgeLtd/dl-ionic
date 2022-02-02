@@ -2,10 +2,12 @@
 export class World{
 
   public tiles: any;
+  private level: number;
 
-  constructor() {
-
+  constructor(level: number) {
     this.tiles = new Array(120000);
+    this.level = level;
+    //console.log('this.level: '+this.level);
   }
 
   populateMap(tiles){
@@ -33,9 +35,7 @@ export class World{
 
 	locationInfo(position)
 	{
-    const kraina = 1;
-
-		if (kraina === 1)
+		if (this.level === 0)
 		{
 			switch(this.tiles[position*3])
 			{
@@ -402,7 +402,7 @@ export class World{
 						 break;
 			}
 		}
-		else if (kraina > 1)
+		else if (this.level > 0)
 		{
 			switch(this.tiles[position*3])
 			{
@@ -429,8 +429,6 @@ export class World{
 
 drawTile(i)
 {
-
-  const kraina = 1;
 	const szerokoscPola = 76;
 
 
@@ -439,7 +437,7 @@ drawTile(i)
 
   let link = '';
 
-	if (kraina === 1)
+	if (this.level === 0)
 	{
 		switch(this.tiles[i])
 		{
@@ -878,7 +876,7 @@ drawTile(i)
 		}
 
 	}
-	else if (kraina > 1)
+	else if (this.level > 0)
 	{
 		switch(this.tiles[i])
 		{

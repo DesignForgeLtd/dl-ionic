@@ -36,4 +36,8 @@ export class MenuComponent implements OnInit {
     this.authService.logout();
   }
 
+  showLocation(){
+    this.openMenu.emit('showLocation');
+  }
+
 }
