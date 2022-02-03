@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GameUIService } from './game-ui.service';
 
 @Component({
   selector: 'app-game',
@@ -7,14 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GameComponent implements OnInit {
 
-  public loadedFeature = '';
+  public openedModal = null;
 
-  constructor() { }
+  constructor(private gameUIService: GameUIService) {
+    this.gameUIService.openedModal.subscribe(
+      (modal: string) => this.openedModal = modal
+    );
+  }
 
   ngOnInit() {}
 
-  onNavigate(feature: string) {
-    this.loadedFeature = feature;
+  closeModal(){
+    this.gameUIService.openedModal.emit(null);
   }
 
 }

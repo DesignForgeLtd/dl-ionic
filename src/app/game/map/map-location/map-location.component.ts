@@ -19,7 +19,7 @@ export class MapLocationComponent implements OnInit {
     console.log(this.locationData);
   }
 
-  closeFeature() {
+  closeModal() {
     this.closeMenu.emit();
   }
 

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
+import { GameUIService } from '../game-ui.service';
 
 @Component({
   selector: 'app-menu',
@@ -19,7 +20,9 @@ export class MenuComponent implements OnInit {
 
   loggedIn = false;
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private gameUIService: GameUIService) { }
 
   ngOnInit() {
     if (this.authService.user !== null){
@@ -29,7 +32,7 @@ export class MenuComponent implements OnInit {
 
   onOpenMenu(feature: string) {
     console.log('opening: '+feature);
-    this.openMenu.emit(feature);
+    this.gameUIService.openedModal.emit(feature);
   }
 
   onLogout(){
@@ -37,7 +40,7 @@ export class MenuComponent implements OnInit {
   }
 
   showLocation(){
-    this.openMenu.emit('showLocation');
+    this.gameUIService.openedModal.emit('map-location');
   }
 
 }
