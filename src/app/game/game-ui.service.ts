@@ -1,7 +1,9 @@
+import { EventEmitter, Injectable } from '@angular/core';
 
+@Injectable({providedIn: 'root'})
 export class GameUIService {
 
-  private openedModal = null;
+  openedModal = new EventEmitter<string>();
 
 
 }

@@ -1,8 +1,8 @@
 
 <app-map></app-map>
 
-<app-menu (openMenu)="onNavigate($event)"></app-menu>
+<app-menu></app-menu>
 
-<app-mailbox *ngIf="loadedFeature === 'mailbox'" (closeMenu)="loadedFeature = ''"></app-mailbox>
+<app-mailbox *ngIf="openedModal === 'mailbox'" (click)="closeModal()"></app-mailbox>
 
 

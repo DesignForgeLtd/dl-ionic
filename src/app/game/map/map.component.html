@@ -10,5 +10,5 @@
   *ngIf="openedModal === 'map-location'"
   [locationData]="specialLocationData"
   (mapLocationAction)="mapLocationAction($event)"
-  (closeMenu)="openedModal = ''"
+  (click)="closeModal()"
 ></app-map-location>

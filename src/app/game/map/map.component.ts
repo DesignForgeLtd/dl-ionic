@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { GameUIService } from '../game-ui.service';
 
 
 import { Player } from './map-scripts/player';
@@ -59,10 +60,15 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(
     private http: HttpClient,
-    private mapService: MapService
+    private mapService: MapService,
+    private gameUIService: GameUIService
   ) {
     this.tileSheet = new Image();
     this.heroImage = new Image();
+
+    this.gameUIService.openedModal.subscribe(
+      (modal: string) => this.openedModal = modal
+    );
   }
 
   ngOnInit(): void {
@@ -127,10 +133,10 @@ export class MapComponent implements OnInit, OnDestroy {
         console.log('foundLocation: ');
         console.log(data.foundLocation);
         this.specialLocationData = data.foundLocation;
-        this.openedModal = 'map-location';
+        this.gameUIService.openedModal.emit('map-location');
       }else{
         this.specialLocationData = null;
-        this.openedModal = null;
+        this.gameUIService.openedModal.emit(null);
       }
     });
   }
@@ -238,10 +244,10 @@ export class MapComponent implements OnInit, OnDestroy {
             console.log('foundLocation: ');
             console.log(data.foundLocation);
             this.specialLocationData = data.foundLocation;
-            this.openedModal = 'map-location';
+            this.gameUIService.openedModal.emit('map-location');
           }else{
             this.specialLocationData = null;
-            this.openedModal = null;
+            this.gameUIService.openedModal.emit(null);
           }
         }
         else {
@@ -467,10 +473,10 @@ export class MapComponent implements OnInit, OnDestroy {
           console.log('foundLocation: ');
           console.log(data.foundLocation);
           this.specialLocationData = data.foundLocation;
-          this.openedModal = 'map-location';
+          this.gameUIService.openedModal.emit('map-location');
         }else{
           this.specialLocationData = null;
-          this.openedModal = null;
+          this.gameUIService.openedModal.emit(null);
         }
       }
       else {
@@ -480,4 +486,7 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
+  closeModal(){
+    this.gameUIService.openedModal.emit(null);
+  }
 }
