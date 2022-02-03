@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { GameUIService } from '../game-ui.service';
 
@@ -8,8 +8,6 @@ import { GameUIService } from '../game-ui.service';
   styleUrls: ['./menu.component.scss'],
 })
 export class MenuComponent implements OnInit {
-
-  @Output() openMenu = new EventEmitter<string>();
 
   public items = [
     {src : 'assets/graphics/layout/game/plachta_buttony.jpg'},

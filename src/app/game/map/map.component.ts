@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { GameUIService } from '../game-ui.service';
 
 
@@ -14,8 +14,6 @@ import { MapService } from './map.service';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnDestroy {
-
-  @Output() openModal = new EventEmitter<string>();
 
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
