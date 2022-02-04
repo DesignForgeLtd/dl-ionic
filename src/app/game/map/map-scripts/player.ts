@@ -78,6 +78,9 @@ export class Player {
 
   moveHero(move_x, move_y)
 	{
+    if (this.coord_x === move_x && this.coord_y === move_y){
+      return false;
+    }
     // TODO: check if have EN, HP, KO... otherwise return with error msg
 
     // TODO: add "queued-up" move (change destination before reaching current; after current step; (2) in flow chart)

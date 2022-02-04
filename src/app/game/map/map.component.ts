@@ -165,7 +165,7 @@ export class MapComponent implements OnInit, OnDestroy {
         Math.floor(this.pointer.y / this.scaledSize)
       );
 
-      if (result !== true)
+      if (result !== true && result !== false)
       {
         this.showError(result);
       }
