@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { GameUIService } from '../game-ui.service';
 
 @Component({
   selector: 'app-mailbox',
@@ -7,18 +8,16 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class MailboxComponent implements OnInit {
 
-  @Output() closeMenu = new EventEmitter();
-
   public mailbox = 'inbox';
   public threadId: number;
   public threadTitle: string;
 
-  constructor() { }
+  constructor(private gameUIService: GameUIService) { }
 
   ngOnInit() {}
 
   closeFeature() {
-    this.closeMenu.emit();
+    this.gameUIService.openedModal.emit(null);
   }
 
   onChooseThread(event: { threadId: number; threadTitle: string }) {

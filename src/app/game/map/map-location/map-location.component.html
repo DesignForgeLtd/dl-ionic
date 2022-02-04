@@ -1,17 +1,21 @@
+<div class="backdrop"></div>
 <div id="map-location-container">
 
   <ion-card>
     <ion-card-header>
       <ion-toolbar>
         <ion-buttons slot="end">
-          <ion-button color="danger" (click)="closeFeature()">
+          <ion-button color="danger" (click)="closeModal()">
             <ion-icon name="close-circle" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-card-header>
     <ion-card-content>
-      CONTENT HERE
+      <h1>{{ locationData.name }}</h1>
+
+      <button *ngIf="locationData.type === 10" (click)="goLevelUp()">Go level up</button>
+      <button *ngIf="locationData.type === 11" (click)="goLevelDown()">Go level down</button>
 
     </ion-card-content>
   </ion-card>

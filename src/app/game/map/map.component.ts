@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { GameUIService } from '../game-ui.service';
 
 
 import { Player } from './map-scripts/player';
@@ -13,8 +14,6 @@ import { MapService } from './map.service';
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements OnInit, OnDestroy {
-
-  @Output() openMenu = new EventEmitter<string>();
 
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
@@ -44,6 +43,9 @@ export class MapComponent implements OnInit, OnDestroy {
   viewport: Viewport;
   world: World;
 
+  openedModal = null;
+  specialLocationData = null;
+
   tileSheet: HTMLImageElement;
   heroImage: HTMLImageElement;
 
@@ -56,10 +58,15 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(
     private http: HttpClient,
-    private mapService: MapService
+    private mapService: MapService,
+    private gameUIService: GameUIService
   ) {
     this.tileSheet = new Image();
     this.heroImage = new Image();
+
+    this.gameUIService.openedModal.subscribe(
+      (modal: string) => this.openedModal = modal
+    );
   }
 
   ngOnInit(): void {
@@ -76,7 +83,6 @@ export class MapComponent implements OnInit, OnDestroy {
     //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
     this.viewport = new Viewport(0, 0, this.width, this.height);
 
-    this.loadGameMap();
     this.loadPlayerData();
     this.loadMonsters();
 
@@ -88,10 +94,9 @@ export class MapComponent implements OnInit, OnDestroy {
     cancelAnimationFrame(this.animationFrame);
   }
 
-  loadGameMap(){
-    this.world = new World();
+  loadGameMap(level: number){
     this.http.get(
-      'assets/detailedMap1.txt',
+      'assets/detailedMap'+(level+1)+'.txt',
       {responseType: 'text'}
     )
     .subscribe(data => {
@@ -104,11 +109,33 @@ export class MapComponent implements OnInit, OnDestroy {
     .subscribe(data => {
       console.log('Loaded: ');
       console.log(data);
-        this.player = new Player(data.position % 200, Math.floor(data.position / 200), this.world, this.scaledSize);
-        this.playerSavedPosition = this.player.position;
-        this.playerInfoUpdate(data);
-        this.loop();
-        this.animationFrame = window.requestAnimationFrame(() => this.loop());
+
+      const playerData = data.playerData;
+
+      this.world = new World(playerData.level);
+
+      this.player = new Player(
+        playerData.position % 200,
+        Math.floor(playerData.position / 200),
+        playerData.level,
+        this.world,
+        this.scaledSize
+      );
+      this.playerSavedPosition = this.player.position;
+      this.loadGameMap(this.player.level);
+      this.playerInfoUpdate(playerData);
+      this.loop();
+      this.animationFrame = window.requestAnimationFrame(() => this.loop());
+
+      if (data.foundLocation !== null){
+        console.log('foundLocation: ');
+        console.log(data.foundLocation);
+        this.specialLocationData = data.foundLocation;
+        this.gameUIService.openedModal.emit('map-location');
+      }else{
+        this.specialLocationData = null;
+        this.gameUIService.openedModal.emit(null);
+      }
     });
   }
 
@@ -138,7 +165,7 @@ export class MapComponent implements OnInit, OnDestroy {
         Math.floor(this.pointer.y / this.scaledSize)
       );
 
-      if (result !== true)
+      if (result !== true && result !== false)
       {
         this.showError(result);
       }
@@ -214,7 +241,11 @@ export class MapComponent implements OnInit, OnDestroy {
           if (data.foundLocation !== null){
             console.log('foundLocation: ');
             console.log(data.foundLocation);
-            this.openMenu.emit('map-location');
+            this.specialLocationData = data.foundLocation;
+            this.gameUIService.openedModal.emit('map-location');
+          }else{
+            this.specialLocationData = null;
+            this.gameUIService.openedModal.emit(null);
           }
         }
         else {
@@ -248,7 +279,8 @@ export class MapComponent implements OnInit, OnDestroy {
       + ', Energy: ' + playerInfo.energy
       + ', Stamina: ' + playerInfo.stamina
       + ', Health: ' + playerInfo.health
-      + ', Position: ' + playerInfo.position + ' ('+this.player.coord_x+','+this.player.coord_y+')';
+      + ', Position: ' + playerInfo.position + ' ('+this.player.coord_x+','+this.player.coord_y+')'
+      + ', Level: ' + playerInfo.level;
   }
 
   drawTerrain(){
@@ -411,4 +443,48 @@ export class MapComponent implements OnInit, OnDestroy {
     setTimeout(() => document.getElementById('error-info').style.display = 'none', 3000);
   }
 
+  mapLocationAction(action) {
+
+    console.log('mapLocationAction in MapComponent: ' + action);
+
+    switch (action) {
+      case 'goLevelUp':
+        this.useSubway('up');
+        break;
+      case 'goLevelDown':
+        this.useSubway('down');
+        break;
+    }
+  }
+
+  useSubway(direction: string){
+    console.log('going level '+direction+'!');
+    this.mapService.useUndergroundPassage(direction).subscribe(data => {
+      if (data.success === true){
+        console.log(data);
+        this.playerInfoUpdate(data.playerData);
+        this.player.level = data.playerData.level;
+        this.world.setLevel(this.player.level);
+        this.loadGameMap(data.playerData.level);
+
+        if (data.foundLocation !== null){
+          console.log('foundLocation: ');
+          console.log(data.foundLocation);
+          this.specialLocationData = data.foundLocation;
+          this.gameUIService.openedModal.emit('map-location');
+        }else{
+          this.specialLocationData = null;
+          this.gameUIService.openedModal.emit(null);
+        }
+      }
+      else {
+        this.showError(data.errorMessage);
+      }
+
+    });
+  }
+
+  closeModal(){
+    this.gameUIService.openedModal.emit(null);
+  }
 }

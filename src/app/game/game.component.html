@@ -1,9 +1,9 @@
 
-<app-map (openMenu)="onNavigate($event)"></app-map>
+<app-map></app-map>
 
-<app-menu (openMenu)="onNavigate($event)"></app-menu>
+<app-menu></app-menu>
 
-<app-mailbox *ngIf="loadedFeature === 'mailbox'" (closeMenu)="loadedFeature = ''"></app-mailbox>
-<app-baggage *ngIf="loadedFeature === 'baggage'" (closeMenu)="loadedFeature = ''"></app-baggage>
-<app-map-location *ngIf="loadedFeature === 'map-location'" (closeMenu)="loadedFeature = ''"></app-map-location>
+<app-mailbox *ngIf="openedModal === 'mailbox'" (click)="closeModal()"></app-mailbox>
+<app-baggage *ngIf="openedModal === 'baggage'" (click)="closeModal()"></app-baggage>
+<app-map-location *ngIf="openedModal === 'map-location'" (click)="closeModal()"></app-map-location>
 

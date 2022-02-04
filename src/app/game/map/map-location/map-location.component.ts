@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { GameUIService } from '../../game-ui.service';
 
 @Component({
   selector: 'app-map-location',
@@ -7,16 +8,27 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class MapLocationComponent implements OnInit {
 
-  @Output() closeMenu = new EventEmitter();
+  @Input() locationData = null;
 
-  constructor() { }
+  @Output() mapLocationAction = new EventEmitter<string>();
+
+  constructor(private gameUIService: GameUIService) { }
 
   ngOnInit() {
-    console.log('initialised map-location');
+    console.log('initialised map-location; locationData: ');
+    console.log(this.locationData);
   }
 
-  closeFeature() {
-    this.closeMenu.emit();
+  closeModal(){
+    this.gameUIService.openedModal.emit(null);
+  }
+
+  goLevelUp(){
+    this.mapLocationAction.emit('goLevelUp');
+  }
+
+  goLevelDown(){
+    this.mapLocationAction.emit('goLevelDown');
   }
 
 }

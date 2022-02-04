@@ -17,7 +17,7 @@ export class Player {
 
   private world: World;
 
-  constructor(public coord_x: number, public coord_y: number, world, scaled_size) {
+  constructor(public coord_x: number, public coord_y: number, public level: number, world, scaled_size) {
     this.scaled_size = scaled_size;
     this.world = world;
     this.pixel_x = this.coord_x * this.scaled_size; // pixels
@@ -25,6 +25,7 @@ export class Player {
     this.position = this.coord_x + this.coord_y * 200;
     this.direction = null;
     this.prev_direction = 'down';
+    this.level = level;
   };
 
   animate() {
@@ -77,6 +78,9 @@ export class Player {
 
   moveHero(move_x, move_y)
 	{
+    if (this.coord_x === move_x && this.coord_y === move_y){
+      return false;
+    }
     // TODO: check if have EN, HP, KO... otherwise return with error msg
 
     // TODO: add "queued-up" move (change destination before reaching current; after current step; (2) in flow chart)
