@@ -28,7 +28,7 @@ export class MapService {
 
   loadPlayerData(){
     return this.http.get<{'playerData': PlayerData; 'foundLocation': FoundLocationData}>( // 'id': string;'position': number;'level': number
-      AppSettings.API_ENDPOINT + '/player/getEssentialData',
+      AppSettings.API_ENDPOINT + '/hero/getEssentialData',
       {responseType: 'json'}
     );
   }
@@ -42,14 +42,14 @@ export class MapService {
 
   updateActualPosition(playerPosition){
     return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
-      AppSettings.API_ENDPOINT + '/player/move/' + playerPosition,
+      AppSettings.API_ENDPOINT + '/map/move/' + playerPosition,
       {}
     );
   }
 
   useUndergroundPassage(direction){
     return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
-      AppSettings.API_ENDPOINT + '/player/subway/'+direction,
+      AppSettings.API_ENDPOINT + '/map/subway/'+direction,
       {responseType: 'json'}
     );
   }
