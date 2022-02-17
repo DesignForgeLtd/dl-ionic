@@ -3,7 +3,7 @@
 
 <app-menu></app-menu>
 
-<app-mailbox *ngIf="openedModal === 'mailbox'" (click)="closeModal()"></app-mailbox>
-<app-baggage *ngIf="openedModal === 'baggage'" (click)="closeModal()"></app-baggage>
+<app-mailbox *ngIf="openedModal === 'mailbox'"></app-mailbox>
+<app-baggage *ngIf="openedModal === 'baggage'"></app-baggage>
 <app-map-location *ngIf="openedModal === 'map-location'" (click)="closeModal()"></app-map-location>
 

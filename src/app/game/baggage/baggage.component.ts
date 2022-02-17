@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GameUIService } from '../game-ui.service';
 
 @Component({
   selector: 'app-baggage',
@@ -7,8 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BaggageComponent implements OnInit {
 
-  constructor() { }
+  constructor(private gameUIService: GameUIService) { }
 
   ngOnInit() {}
+
+  closeFeature() {
+    this.gameUIService.openedModal.emit(null);
+  }
 
 }
