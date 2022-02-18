@@ -12,6 +12,16 @@ interface PlayerData{
   stamina: number;
 }
 
+interface HeroFullData{
+  energy: number;
+  health: number;
+  id: number;
+  level: number;
+  name: string;
+  position: number;
+  stamina: number;
+}
+
 interface FoundLocationData{
   energy: number;
   health: number;
@@ -26,7 +36,7 @@ interface FoundLocationData{
 export class MapService {
   constructor(private http: HttpClient){}
 
-  loadPlayerData(){
+  loadHeroEssentialData(){
     return this.http.get<{'playerData': PlayerData; 'foundLocation': FoundLocationData}>( // 'id': string;'position': number;'level': number
       AppSettings.API_ENDPOINT + '/hero/getEssentialData',
       {responseType: 'json'}
@@ -54,4 +64,10 @@ export class MapService {
     );
   }
 
+  loadHeroFullData(){
+    return this.http.get<{'heroFullData': HeroFullData}>(
+      AppSettings.API_ENDPOINT + '/hero/getFullData',
+      {responseType: 'json'}
+    );
+  }
 }
