@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameUIService } from '../../game-ui.service';
+import { HeroService } from '../hero.service';
 
 @Component({
   selector: 'app-hero-attributes',
@@ -8,10 +9,17 @@ import { GameUIService } from '../../game-ui.service';
 })
 export class HeroAttributesComponent implements OnInit {
 
-  constructor(private gameUIService: GameUIService) { }
+  public heroData: any;
+
+  constructor(
+    private gameUIService: GameUIService,
+    private heroService: HeroService
+    ) { }
 
   ngOnInit() {
-
+    this.heroService.loadHeroData().subscribe(data => {
+      this.heroData = data.heroData;
+    });
   }
 
   closeModal(){
