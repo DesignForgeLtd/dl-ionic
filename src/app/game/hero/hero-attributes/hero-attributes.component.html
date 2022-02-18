@@ -12,11 +12,12 @@
       </ion-toolbar>
     </ion-card-header>
     <ion-card-content>
-      <h1>{{ locationData.name }}</h1>
+      <h1>Hero attributes</h1>
 
-      <button *ngIf="locationData.type === 10" (click)="goLevelUp()">Go level up</button>
-      <button *ngIf="locationData.type === 11" (click)="goLevelDown()">Go level down</button>
-
+      <ul>
+        <li>Strength: {{ heroData.strength }}</li>
+        <li>Dexterity: {{ heroData.dexterity }}</li>
+      </ul>
     </ion-card-content>
   </ion-card>
 </div>

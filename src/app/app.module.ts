@@ -21,6 +21,7 @@ import { BaggageComponent } from './game/baggage/baggage.component';
 
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { HeroAttributesComponent } from './game/hero/hero-attributes/hero-attributes.component';
 
 
 
@@ -37,7 +38,8 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
     MsgThreadComponent,
     CreateMsgComponent,
     BaggageComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    HeroAttributesComponent
   ],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule],

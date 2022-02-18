@@ -83,7 +83,7 @@ export class MapComponent implements OnInit, OnDestroy {
     //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
     this.viewport = new Viewport(0, 0, this.width, this.height);
 
-    this.loadPlayerData();
+    this.loadHeroEssentialData();
     this.loadMonsters();
 
     this.addCanvasClickListener();
@@ -104,8 +104,8 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadPlayerData(){
-    this.mapService.loadPlayerData()
+  loadHeroEssentialData(){
+    this.mapService.loadHeroEssentialData()
     .subscribe(data => {
       console.log('Loaded: ');
       console.log(data);
