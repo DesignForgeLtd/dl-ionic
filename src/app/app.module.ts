@@ -21,6 +21,7 @@ import { CreateMsgComponent } from './game/mailbox/create-msg/create-msg.compone
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { HeroAttributesComponent } from './game/hero/hero-attributes/hero-attributes.component';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -40,7 +41,14 @@ import { HeroAttributesComponent } from './game/hero/hero-attributes/hero-attrib
     HeroAttributesComponent
   ],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    CommonModule
+  ],
   providers: [
     {
       provide: RouteReuseStrategy,

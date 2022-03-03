@@ -15,4 +15,14 @@ export class HeroService {
     );
   }
 
+  allocateAttributePoint(attribute: string){
+    return this.http.post<{'success': boolean; 'message': boolean; 'heroData': any}>(
+      AppSettings.API_ENDPOINT + '/hero/allocateAttributePoint',
+      {
+        attribute,
+        responseType: 'json'
+      }
+    );
+  }
+
 }
