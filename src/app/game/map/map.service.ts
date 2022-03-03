@@ -23,13 +23,12 @@ interface HeroFullData{
 }
 
 interface FoundLocationData{
-  energy: number;
-  health: number;
+  coords: string;
+  description: string;
   id: number;
-  level: number;
   name: string;
-  position: string;
-  stamina: number;
+  position: number;
+  type: number;
 }
 
 @Injectable({providedIn: 'root'})

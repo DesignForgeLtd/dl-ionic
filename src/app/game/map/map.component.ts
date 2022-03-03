@@ -127,16 +127,29 @@ export class MapComponent implements OnInit, OnDestroy {
       this.loop();
       this.animationFrame = window.requestAnimationFrame(() => this.loop());
 
-      if (data.foundLocation !== null){
-        console.log('foundLocation: ');
-        console.log(data.foundLocation);
-        this.specialLocationData = data.foundLocation;
-        this.gameUIService.openedModal.emit('map-location');
-      }else{
-        this.specialLocationData = null;
-        this.gameUIService.openedModal.emit(null);
-      }
+      this.handleFoundLocation(data.foundLocation);
     });
+  }
+
+  handleFoundLocation(foundLocation){
+    if (foundLocation !== null){
+      if (foundLocation.type === 3){
+        console.log('found Production Location: ');
+        console.log(foundLocation);
+        this.specialLocationData = foundLocation;
+        this.gameUIService.openedModal.emit('map-production-location');
+      }
+      else {
+        console.log('found Other Location: ');
+        console.log(foundLocation);
+        this.specialLocationData = foundLocation;
+        this.gameUIService.openedModal.emit('map-location');
+      }
+
+    }else{
+      this.specialLocationData = null;
+      this.gameUIService.openedModal.emit(null);
+    }
   }
 
   loadMonsters(){
@@ -238,15 +251,7 @@ export class MapComponent implements OnInit, OnDestroy {
           this.setServerSavedNewPosition();
           this.player.incrementHeroStep();
 
-          if (data.foundLocation !== null){
-            console.log('foundLocation: ');
-            console.log(data.foundLocation);
-            this.specialLocationData = data.foundLocation;
-            this.gameUIService.openedModal.emit('map-location');
-          }else{
-            this.specialLocationData = null;
-            this.gameUIService.openedModal.emit(null);
-          }
+          this.handleFoundLocation(data.foundLocation);
         }
         else {
           this.showError(data.errorMessage);
@@ -467,15 +472,7 @@ export class MapComponent implements OnInit, OnDestroy {
         this.world.setLevel(this.player.level);
         this.loadGameMap(data.playerData.level);
 
-        if (data.foundLocation !== null){
-          console.log('foundLocation: ');
-          console.log(data.foundLocation);
-          this.specialLocationData = data.foundLocation;
-          this.gameUIService.openedModal.emit('map-location');
-        }else{
-          this.specialLocationData = null;
-          this.gameUIService.openedModal.emit(null);
-        }
+        this.handleFoundLocation(data.foundLocation);
       }
       else {
         this.showError(data.errorMessage);

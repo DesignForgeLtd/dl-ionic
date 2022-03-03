@@ -22,6 +22,7 @@ import { AuthInterceptor } from './auth/auth.interceptor';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { HeroAttributesComponent } from './game/hero/hero-attributes/hero-attributes.component';
 import { CommonModule } from '@angular/common';
+import { MapProductionLocationComponent } from './game/map/map-production-location/map-production-location.component';
 
 
 
@@ -31,6 +32,7 @@ import { CommonModule } from '@angular/common';
     GameComponent,
     MapComponent,
     MapLocationComponent,
+    MapProductionLocationComponent,
     MenuComponent,
     AuthComponent,
     MailboxComponent,
