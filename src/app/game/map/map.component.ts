@@ -44,7 +44,7 @@ export class MapComponent implements OnInit, OnDestroy {
   world: World;
 
   openedModal = null;
-  specialLocationData = null;
+  locationData = null;
 
   tileSheet: HTMLImageElement;
   heroImage: HTMLImageElement;
@@ -136,18 +136,18 @@ export class MapComponent implements OnInit, OnDestroy {
       if (foundLocation.type === 3){
         console.log('found Production Location: ');
         console.log(foundLocation);
-        this.specialLocationData = foundLocation;
+        this.locationData = foundLocation;
         this.gameUIService.openedModal.emit('map-production-location');
       }
       else {
         console.log('found Other Location: ');
         console.log(foundLocation);
-        this.specialLocationData = foundLocation;
+        this.locationData = foundLocation;
         this.gameUIService.openedModal.emit('map-location');
       }
 
     }else{
-      this.specialLocationData = null;
+      this.locationData = null;
       this.gameUIService.openedModal.emit(null);
     }
   }
