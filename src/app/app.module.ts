@@ -23,6 +23,8 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
 import { HeroAttributesComponent } from './game/hero/hero-attributes/hero-attributes.component';
 import { CommonModule } from '@angular/common';
 import { MapProductionLocationComponent } from './game/map/map-production-location/map-production-location.component';
+import { ProductionLinesComponent } from './game/map/map-production-location/production-lines/production-lines.component';
+import { ProductionLineComponent } from './game/map/map-production-location/production-lines/production-line/production-line.component';
 
 
 
@@ -33,6 +35,8 @@ import { MapProductionLocationComponent } from './game/map/map-production-locati
     MapComponent,
     MapLocationComponent,
     MapProductionLocationComponent,
+    ProductionLinesComponent,
+    ProductionLineComponent,
     MenuComponent,
     AuthComponent,
     MailboxComponent,

@@ -1,0 +1,48 @@
+<div>
+  Produced: {{ productionLine.produced_name }} [have: {{ productionLine.produced_in_baggage }}]
+  <br />
+  Components:
+  <ul>
+    <li>
+      {{ productionLine.component1_required_quantity }}
+      x {{ productionLine.component1_name }}
+      [have: {{ productionLine.component1_in_baggage }}]
+    </li>
+    <li *ngIf="productionLine.component2_id">
+      {{ productionLine.component2_required_quantity }}
+      x {{ productionLine.component2_name }}
+      [have: {{ productionLine.component2_in_baggage }}]
+    </li>
+    <li *ngIf="productionLine.component3_id">
+      {{ productionLine.component3_required_quantity }}
+      x {{ productionLine.component3_name }}
+      [have: {{ productionLine.component3_in_baggage }}]
+    </li>
+  </ul>
+  <br />
+  Time: {{ productionLine.energy * 15 }} seconds
+  <button *ngIf="available">Start Production</button>
+  <hr />
+</div>
+
+  <!--
+  component1_id: 53
+  component1_in_baggage: 0
+  component1_name: "rekin"
+  component1_required_quantity: 4
+  component2_id: 119
+  component2_in_baggage: 0
+  component2_name: "mąka"
+  component2_required_quantity: 1
+  component3_id: 1
+  component3_in_baggage: 0
+  component3_name: "grzyby"
+  component3_required_quantity: 3
+  energy: 23
+  gold: 8
+  hero_exp: 23
+  occupation_exp: 23
+  produced_id: 55
+  produced_in_baggage: 0
+  produced_name: "steki z rekina"
+  -->

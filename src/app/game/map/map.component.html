@@ -8,14 +8,14 @@
 
 <app-map-location
   *ngIf="openedModal === 'map-location'"
-  [locationData]="specialLocationData"
+  [locationData]="locationData"
   (mapLocationAction)="mapLocationAction($event)"
   (click)="closeModal()"
 ></app-map-location>
 
 <app-map-production-location
   *ngIf="openedModal === 'map-production-location'"
-  [locationData]="specialLocationData"
+  [passedLocationData]="locationData"
   (mapLocationAction)="mapLocationAction($event)"
   (click)="closeModal()"
 ></app-map-production-location>

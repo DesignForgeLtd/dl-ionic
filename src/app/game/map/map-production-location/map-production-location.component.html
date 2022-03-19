@@ -12,8 +12,33 @@
       </ion-toolbar>
     </ion-card-header>
     <ion-card-content>
-      <h1>Production location: {{ locationData.name }}</h1>
+      <h1>Production location: {{ passedLocationData.name }}</h1>
 
+      <div *ngIf="isLoading" style="text-align: center;">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+
+      <div *ngIf="! isLoading" style="overflow-y: auto; height: 300px;">
+        <div [innerHtml]="locationData.occupation_description"></div>
+        <h2>Occupation: {{ locationData.occupation_name }}</h2>
+        <h2>Level: {{ locationData.occupation_level }} ({{ locationData.occupation_exp }} exp)</h2>
+
+        <div *ngIf="locationData.production_lines.available_production_lines !== null">
+          <h2>Available products:</h2>
+          <app-production-lines
+            [productionLines]="locationData.production_lines.available_production_lines"
+            [available]="true"
+          ></app-production-lines>
+        </div>
+
+        <div *ngIf="locationData.production_lines.next_level_production_lines !== null">
+          <h2>Available soon:</h2>
+          <app-production-lines
+            [productionLines]="locationData.production_lines.next_level_production_lines"
+            [available]="false"
+          ></app-production-lines>
+        </div>
+      </div>
 
     </ion-card-content>
   </ion-card>
