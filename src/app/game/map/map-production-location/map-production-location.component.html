@@ -22,21 +22,34 @@
         <div [innerHtml]="locationData.occupation_description"></div>
         <h2>Occupation: {{ locationData.occupation_name }}</h2>
         <h2>Level: {{ locationData.occupation_level }} ({{ locationData.occupation_exp }} exp)</h2>
+        <h2>Tool used: {{ locationData.tool_required }} (have: {{ locationData.tool_quantity }})</h2>
 
         <div *ngIf="locationData.production_lines.available_production_lines !== null">
-          <h2>Available products:</h2>
-          <app-production-lines
-            [productionLines]="locationData.production_lines.available_production_lines"
-            [available]="true"
-          ></app-production-lines>
+          <ion-card>
+            <ion-card-header>
+              Available products
+            </ion-card-header>
+            <ion-card-content>
+              <app-production-lines
+                [productionLines]="locationData.production_lines.available_production_lines"
+                [available]="true"
+              ></app-production-lines>
+            </ion-card-content>
+          </ion-card>
         </div>
 
         <div *ngIf="locationData.production_lines.next_level_production_lines !== null">
-          <h2>Available soon:</h2>
-          <app-production-lines
-            [productionLines]="locationData.production_lines.next_level_production_lines"
-            [available]="false"
-          ></app-production-lines>
+          <ion-card>
+            <ion-card-header>
+              Available soon
+            </ion-card-header>
+            <ion-card-content>
+              <app-production-lines
+                [productionLines]="locationData.production_lines.next_level_production_lines"
+                [available]="false"
+              ></app-production-lines>
+            </ion-card-content>
+          </ion-card>
         </div>
       </div>
 
