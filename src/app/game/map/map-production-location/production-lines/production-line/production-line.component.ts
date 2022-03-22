@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ProductionService } from '../../production.service';
 
 @Component({
   selector: 'app-production-line',
@@ -8,9 +9,9 @@ import { Component, Input, OnInit } from '@angular/core';
 export class ProductionLineComponent implements OnInit {
 
   @Input() productionLine = null;
-  @Input() available = null;
+  @Input() available = null; // = production possible (enough components etc)
 
-  constructor() { }
+  constructor(private productionService: ProductionService) { }
 
   ngOnInit() {
     if (this.productionLine.component1_required_quantity > this.productionLine.component1_in_baggage){
@@ -26,6 +27,12 @@ export class ProductionLineComponent implements OnInit {
     && this.productionLine.component3_required_quantity > this.productionLine.component3_in_baggage) {
       this.available = false;
     }
+  }
+
+  startProduction(itemId: number, quantity: number){
+    this.productionService.startProduction(itemId, quantity).subscribe(data => {
+      console.log(data);
+    });
   }
 
   /*

@@ -21,7 +21,8 @@
   </ul>
   <br />
   Time: {{ productionLine.energy * 15 }} seconds
-  <button *ngIf="available">Start Production</button>
+  <button *ngIf="available" (click)="startProduction(productionLine.produced_id, 1)">Start Production</button>
+
   <hr />
 </div>
 

@@ -10,12 +10,10 @@
   *ngIf="openedModal === 'map-location'"
   [locationData]="locationData"
   (mapLocationAction)="mapLocationAction($event)"
-  (click)="closeModal()"
 ></app-map-location>
 
 <app-map-production-location
   *ngIf="openedModal === 'map-production-location'"
   [passedLocationData]="locationData"
   (mapLocationAction)="mapLocationAction($event)"
-  (click)="closeModal()"
 ></app-map-production-location>
