@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouteReuseStrategy } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
@@ -25,6 +26,8 @@ import { CommonModule } from '@angular/common';
 import { MapProductionLocationComponent } from './game/map/map-production-location/map-production-location.component';
 import { ProductionLinesComponent } from './game/map/map-production-location/production-lines/production-lines.component';
 import { ProductionLineComponent } from './game/map/map-production-location/production-lines/production-line/production-line.component';
+
+import { productionLocationReducer } from './game/map/map-production-location/store/production-location.reducer';
 
 
 
@@ -51,6 +54,7 @@ import { ProductionLineComponent } from './game/map/map-production-location/prod
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
+    StoreModule.forRoot({productionLocation: productionLocationReducer}),
     HttpClientModule,
     FormsModule,
     CommonModule
