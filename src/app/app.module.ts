@@ -17,6 +17,7 @@ import { MailboxComponent } from './game/mailbox/mailbox.component';
 import { InboxComponent } from './game/mailbox/inbox/inbox.component';
 import { MsgThreadComponent } from './game/mailbox/msg-thread/msg-thread.component';
 import { CreateMsgComponent } from './game/mailbox/create-msg/create-msg.component';
+import { BaggageComponent } from './game/baggage/baggage.component';
 
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
@@ -37,6 +38,7 @@ import { CommonModule } from '@angular/common';
     InboxComponent,
     MsgThreadComponent,
     CreateMsgComponent,
+    BaggageComponent,
     LoadingSpinnerComponent,
     HeroAttributesComponent
   ],

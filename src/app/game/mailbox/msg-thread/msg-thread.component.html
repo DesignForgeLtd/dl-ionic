@@ -28,7 +28,7 @@
         {{message.content}}
       </ion-card-content>
       <ion-card-subtitle class="ion-padding-start ion-padding-end">
-        <small>[{{message.sent_at}}]</small>
+        <small>[{{message.created_at | date:'yyyy-MM-dd HH:mm'}}]</small>
       </ion-card-subtitle>
     </ion-card>
   </ion-col>
