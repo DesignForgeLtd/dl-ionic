@@ -18,12 +18,28 @@ export class MapProductionLocationComponent implements OnInit {
 
   constructor(
     private gameUIService: GameUIService,
-    private productionService: ProductionService) { }
+    private productionService: ProductionService) {
+      this.productionService.productionLinesUpdated.subscribe(
+        (status: boolean) => {
+          console.log('productionLinesUpdated changed to TRUE - reinitializing lines');
+          this.initialize();
+          //this.productionService.productionLinesUpdated.emit(false);
+        }
+      )
+    }
 
   ngOnInit() {
     console.log('initialised map-location; locationData: ');
     console.log(this.passedLocationData);
 
+    this.initialize();
+  }
+
+  closeModal(){
+    this.gameUIService.openedModal.emit(null);
+  }
+
+  initialize(){
     this.productionService.loadProductionLocationData(this.passedLocationData.position)
       .subscribe(data => {
         this.isLoading = false;
@@ -37,10 +53,6 @@ export class MapProductionLocationComponent implements OnInit {
 
 
       });
-  }
-
-  closeModal(){
-    this.gameUIService.openedModal.emit(null);
   }
 
 }

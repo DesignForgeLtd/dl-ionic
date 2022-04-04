@@ -28,6 +28,9 @@ import { ProductionLinesComponent } from './game/map/map-production-location/pro
 import { ProductionLineComponent } from './game/map/map-production-location/production-lines/production-line/production-line.component';
 
 import { productionLocationReducer } from './game/map/map-production-location/store/production-location.reducer';
+import { ProductionQueueComponent } from './game/map/map-production-location/production-queue/production-queue.component';
+import { ProductionQueueItemComponent }
+  from './game/map/map-production-location/production-queue/production-queue-item/production-queue-item.component';
 
 
 
@@ -40,6 +43,8 @@ import { productionLocationReducer } from './game/map/map-production-location/st
     MapProductionLocationComponent,
     ProductionLinesComponent,
     ProductionLineComponent,
+    ProductionQueueComponent,
+    ProductionQueueItemComponent,
     MenuComponent,
     AuthComponent,
     MailboxComponent,

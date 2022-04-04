@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
 
 // interface ProductionLocationData{
@@ -8,6 +8,9 @@ import { AppSettings } from 'src/app/AppSettings';
 
 @Injectable({providedIn: 'root'})
 export class ProductionService {
+
+  productionLinesUpdated = new EventEmitter<boolean>();
+
   constructor(private http: HttpClient){}
 
   loadProductionLocationData(position: number){

@@ -11,14 +11,14 @@
         </ion-buttons>
       </ion-toolbar>
     </ion-card-header>
-    <ion-card-content>
+    <ion-card-content style="height: 100%;">
       <h1>Production location: {{ passedLocationData.name }}</h1>
 
       <div *ngIf="isLoading" style="text-align: center;">
         <app-loading-spinner></app-loading-spinner>
       </div>
 
-      <div *ngIf="! isLoading" style="overflow-y: auto; height: 300px;">
+      <div *ngIf="! isLoading" style="overflow-y: auto; height: 100%">
         <div [innerHtml]="locationData.occupation_description"></div>
         <h2>Occupation: {{ locationData.occupation_name }}</h2>
         <h2>Level: {{ locationData.occupation_level }} ({{ locationData.occupation_exp }} exp)</h2>
@@ -27,30 +27,38 @@
         <div *ngIf="locationData.production_lines.available_production_lines !== null">
           <ion-card>
             <ion-card-header>
-              Available products
+              Production queue / Ready items
+            </ion-card-header>
+            <ion-card-content>
+              <app-production-queue
+                [items]="locationData.ready_items"
+                [ready]="true"
+              ></app-production-queue>
+              <app-production-queue
+                [items]="locationData.production_queue"
+                [ready]="false"
+              ></app-production-queue>
+            </ion-card-content>
+          </ion-card>
+          <ion-card>
+            <ion-card-header>
+              Available for production
             </ion-card-header>
             <ion-card-content>
               <app-production-lines
                 [productionLines]="locationData.production_lines.available_production_lines"
                 [available]="true"
               ></app-production-lines>
-            </ion-card-content>
-          </ion-card>
-        </div>
-
-        <div *ngIf="locationData.production_lines.next_level_production_lines !== null">
-          <ion-card>
-            <ion-card-header>
-              Available soon
-            </ion-card-header>
-            <ion-card-content>
               <app-production-lines
+                *ngIf="locationData.production_lines.next_level_production_lines !== null"
                 [productionLines]="locationData.production_lines.next_level_production_lines"
                 [available]="false"
               ></app-production-lines>
             </ion-card-content>
           </ion-card>
         </div>
+
+
       </div>
 
     </ion-card-content>

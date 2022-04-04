@@ -25,16 +25,22 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+html,body {
+  height:100%;
+}
+
 .modal-container {
   position: fixed;
-  top: 20vh;
-  left: 20vw;
-  width: 60vw;
-  height: 60vh;
+  top: 3vh;
+  left: 3vw;
+  width: 94vw;
+  height: 94vh;
   //background-color: darkslategray;
   z-index: 99999;
   padding: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.26);
+  display: flex;
+
 }
 
 .backdrop{
@@ -45,4 +51,11 @@
   height: 100vh;
   background: rgba(0,0,0,0.75);
   z-index: 1000;
+}
+
+.productionLinesSeparator{
+  height: 100px;
+  width: 1px;
+  background-color: #000;
+  display: inline-block;
 }

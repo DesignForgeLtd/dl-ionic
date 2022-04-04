@@ -1,0 +1,8 @@
+<div style="font-size: 9px; display:inline-block;margin-right:5px;padding:10px">
+  {{ ready ? 'Ready' : 'In production' }}: <br />
+  {{ item.name }}<br />
+  Quantity: {{ item.quantity }}
+  <br />
+  <button *ngIf="ready" (click)="collectItem()">Collect</button>
+</div>
+

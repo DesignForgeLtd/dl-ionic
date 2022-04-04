@@ -32,6 +32,9 @@ export class ProductionLineComponent implements OnInit {
   startProduction(itemId: number, quantity: number){
     this.productionService.startProduction(itemId, quantity).subscribe(data => {
       console.log(data);
+      if (data.success === true) {
+        this.productionService.productionLinesUpdated.emit(true);
+      }
     });
   }
 

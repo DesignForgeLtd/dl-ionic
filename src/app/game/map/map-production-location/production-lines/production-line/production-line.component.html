@@ -1,26 +1,26 @@
-<div>
+<div style="font-size: 9px; display:inline-block;margin-right:5px;padding:10px">
   Produced: {{ productionLine.produced_name }} [have: {{ productionLine.produced_in_baggage }}]
   <br />
   Components:
-  <ul>
+  <ul style="padding: 0;margin-top:2px;margin-bottom:2px;">
     <li>
-      {{ productionLine.component1_required_quantity }}
-      x {{ productionLine.component1_name }}
+      <b>{{ productionLine.component1_required_quantity }}
+      x {{ productionLine.component1_name }}</b>
       [have: {{ productionLine.component1_in_baggage }}]
     </li>
     <li *ngIf="productionLine.component2_id">
-      {{ productionLine.component2_required_quantity }}
-      x {{ productionLine.component2_name }}
+      <b>{{ productionLine.component2_required_quantity }}
+      x {{ productionLine.component2_name }}</b>
       [have: {{ productionLine.component2_in_baggage }}]
     </li>
     <li *ngIf="productionLine.component3_id">
-      {{ productionLine.component3_required_quantity }}
-      x {{ productionLine.component3_name }}
+      <b>{{ productionLine.component3_required_quantity }}
+      x {{ productionLine.component3_name }}</b>
       [have: {{ productionLine.component3_in_baggage }}]
     </li>
   </ul>
   <br />
-  Time: {{ productionLine.energy * 15 }} seconds
+  <span style="background-color:#ff0;color:black">Time: {{ productionLine.energy * 15 }} seconds</span><br />
   <button *ngIf="available" (click)="startProduction(productionLine.produced_id, 1)">Start Production</button>
 
   <hr />

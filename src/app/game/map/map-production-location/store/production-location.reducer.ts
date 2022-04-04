@@ -24,7 +24,7 @@ export function productionLocationReducer(
       };
 
       const updatedItems = [...state.items];
-      updatedItems[action.payload.id] = updatedItems;
+      //updatedItems[action.payload.id] = updatedItems;
 
       return {
         ...state,

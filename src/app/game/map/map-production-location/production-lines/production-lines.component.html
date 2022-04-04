@@ -1,3 +1,7 @@
+<div
+  *ngIf=" ! available"
+  class="productionLinesSeparator"
+></div>
 <app-production-line
   *ngFor="let productionLine of productionLines"
   [productionLine]="productionLine"
