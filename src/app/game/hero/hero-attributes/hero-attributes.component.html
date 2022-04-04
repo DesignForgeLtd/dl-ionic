@@ -12,12 +12,48 @@
       </ion-toolbar>
     </ion-card-header>
     <ion-card-content>
-      <h1>Hero attributes</h1>
 
-      <ul>
-        <li>Strength: {{ heroData.strength }}</li>
-        <li>Dexterity: {{ heroData.dexterity }}</li>
-      </ul>
+      <ion-button *ngIf="message" expand="full" color="{{ error ? 'danger' : 'success' }}">{{ message }}</ion-button>
+
+      <h1>Hero</h1>
+
+      <div *ngIf="isLoading" style="text-align: center;">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+
+      <div *ngIf="! isLoading">
+        <h4>Basic Info</h4>
+        <ul>
+          <li>Race: {{ heroData.race_name }}</li>
+          <li>Profession: {{ heroData.profession_name }}</li>
+          <li>Level: {{ heroData.level }}</li>
+          <li>Wisdom points: {{ heroData.wisdom_points }}</li>
+          <li>Experience: {{ heroData.experience }} / {{ heroData.xp_for_next_level }}</li>
+          <li>Baggage: {{ heroData.baggage_taken }} / {{ heroData.baggage_max + heroData.baggage_extra }}</li>
+          <li>Health: {{ heroData.health }} / {{ heroData.health_max }}</li>
+          <li>Stamina: {{ heroData.stamina }} / {{ heroData.stamina_max }}</li>
+          <li>Mana: {{ heroData.mana }} / {{ heroData.mana_max }}</li>
+        </ul>
+
+        <h4>Attributes</h4>
+        <ul>
+          <li *ngFor="let attribute of heroAttributes">
+            {{ attribute | titlecase }}:
+            {{ heroData[attribute] }}
+            <button *ngIf="heroData.skill_points" (click)="allocateAttributePoint(attribute)">
+              Allocate Attribute Point
+            </button>
+          </li>
+
+          <li>Available Skill Points: {{ heroData.skill_points }}</li>
+        </ul>
+
+        <h4>Possession</h4>
+        <ul>
+          <li>Gold: {{ heroData.gold }}</li>
+          <li>Maeteria Coins (MC): {{ heroData.MM }}</li>
+        </ul>
+      </div>
     </ion-card-content>
   </ion-card>
 </div>
