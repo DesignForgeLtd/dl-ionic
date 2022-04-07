@@ -20,7 +20,7 @@ export class MsgThreadComponent implements OnInit {
     recipient_id: number;
     delivered: string;
     content: string;
-    sent_at: Date;
+    created_at: Date;
   }[];
   public recipientId: number;
   public message: string;
