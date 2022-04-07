@@ -137,18 +137,18 @@ export class MapComponent implements OnInit, OnDestroy {
         console.log('found Production Location: ');
         console.log(foundLocation);
         this.locationData = foundLocation;
-        this.gameUIService.openedModal.emit('map-production-location');
+        this.gameUIService.openLocationModal('map-production-location');
       }
       else {
         console.log('found Other Location: ');
         console.log(foundLocation);
         this.locationData = foundLocation;
-        this.gameUIService.openedModal.emit('map-location');
+        this.gameUIService.openLocationModal('map-location');
       }
 
     }else{
       this.locationData = null;
-      this.gameUIService.openedModal.emit(null);
+      this.gameUIService.openLocationModal('');
     }
   }
 

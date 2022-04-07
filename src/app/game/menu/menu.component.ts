@@ -17,15 +17,23 @@ export class MenuComponent implements OnInit {
   //public menuMailImg = 'assets/graphics/layout/game/plachta_buttony.jpg';
 
   loggedIn = false;
+  atLocation = false;
 
   constructor(
     private authService: AuthService,
-    private gameUIService: GameUIService) { }
+    private gameUIService: GameUIService) {
+      this.gameUIService.currentLocationEmitter.subscribe(
+        (currentLocation: string) => this.atLocation = currentLocation !== ''
+      );
+    }
 
   ngOnInit() {
     if (this.authService.user !== null){
       this.loggedIn = true;
     }
+
+    this.atLocation = this.gameUIService.currentLocation !== '';
+    console.log(this.atLocation);
   }
 
   onOpenMenu(feature: string) {
@@ -38,7 +46,7 @@ export class MenuComponent implements OnInit {
   }
 
   showLocation(){
-    this.gameUIService.openedModal.emit('map-location');
+    this.gameUIService.openLocationModal('current-location');
   }
 
 }
