@@ -4,14 +4,23 @@
 }
 
 .menu-icon {
-  background-position: -14px -305px;
   width: 65px;
   height: 65px;
   cursor: pointer;
   background-image: url('../../../assets/graphics/layout/game/plachta_buttony.jpg');
 }
 
+.menu-icon-mailbox {
+  background-position: -14px -305px;
+}
 
+.menu-icon-baggage {
+  background-position: -14px -231px;
+}
+
+.menu-icon-location {
+  background-position: -14px -157px;
+}
 #hero-attributes {
   top:200px;left:20px;background-position:-89px -9px;
 }
