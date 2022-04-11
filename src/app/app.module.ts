@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RouteReuseStrategy } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { StoreModule } from '@ngrx/store';
+//import { StoreModule } from '@ngrx/store';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
@@ -28,7 +28,7 @@ import { MapProductionLocationComponent } from './game/map/map-production-locati
 import { ProductionLinesComponent } from './game/map/map-production-location/production-lines/production-lines.component';
 import { ProductionLineComponent } from './game/map/map-production-location/production-lines/production-line/production-line.component';
 
-import { productionLocationReducer } from './game/map/map-production-location/store/production-location.reducer';
+//import { productionLocationReducer } from './game/map/map-production-location/store/production-location.reducer';
 import { ProductionQueueComponent } from './game/map/map-production-location/production-queue/production-queue.component';
 import { ProductionQueueItemComponent }
   from './game/map/map-production-location/production-queue/production-queue-item/production-queue-item.component';
@@ -63,7 +63,7 @@ import { JourneyComponent } from './game/journey/journey.component';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    StoreModule.forRoot({productionLocation: productionLocationReducer}),
+//    StoreModule.forRoot({productionLocation: productionLocationReducer}),
     HttpClientModule,
     FormsModule,
     CommonModule
