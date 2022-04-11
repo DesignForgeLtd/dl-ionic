@@ -56,6 +56,8 @@ export class MapComponent implements OnInit, OnDestroy {
   private animationFrame;
   private serverSavedNewPosition = true;
 
+
+
   constructor(
     private http: HttpClient,
     private mapService: MapService,

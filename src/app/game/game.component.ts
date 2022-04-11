@@ -8,6 +8,7 @@ import { GameUIService } from './game-ui.service';
 })
 export class GameComponent implements OnInit {
 
+  playerDataOccupiedWith = 'journey';
   public openedModal = null;
 
   constructor(private gameUIService: GameUIService) {
@@ -16,7 +17,9 @@ export class GameComponent implements OnInit {
     );
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.playerDataOccupiedWith);
+  }
 
   closeModal(){
     this.gameUIService.openedModal.emit(null);

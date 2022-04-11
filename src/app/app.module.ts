@@ -32,6 +32,7 @@ import { productionLocationReducer } from './game/map/map-production-location/st
 import { ProductionQueueComponent } from './game/map/map-production-location/production-queue/production-queue.component';
 import { ProductionQueueItemComponent }
   from './game/map/map-production-location/production-queue/production-queue-item/production-queue-item.component';
+import { JourneyComponent } from './game/journey/journey.component';
 
 
 
@@ -54,7 +55,8 @@ import { ProductionQueueItemComponent }
     CreateMsgComponent,
     BaggageComponent,
     LoadingSpinnerComponent,
-    HeroAttributesComponent
+    HeroAttributesComponent,
+    JourneyComponent
   ],
   entryComponents: [],
   imports: [

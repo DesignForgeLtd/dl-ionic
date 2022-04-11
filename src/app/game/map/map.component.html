@@ -8,7 +8,7 @@
 
 <app-map-location
   *ngIf="openedModal === 'map-location'"
-  [locationData]="locationData"
+  [passedLocationData]="locationData"
   (mapLocationAction)="mapLocationAction($event)"
 ></app-map-location>
 

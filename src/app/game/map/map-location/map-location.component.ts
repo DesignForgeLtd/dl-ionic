@@ -8,15 +8,18 @@ import { GameUIService } from '../../game-ui.service';
 })
 export class MapLocationComponent implements OnInit {
 
-  @Input() locationData = null;
+  @Input() passedLocationData = null;
 
   @Output() mapLocationAction = new EventEmitter<string>();
+
+  locationData = null;
 
   constructor(private gameUIService: GameUIService) { }
 
   ngOnInit() {
     console.log('initialised map-location; locationData: ');
-    console.log(this.locationData);
+    this.locationData = this.passedLocationData;
+    console.log(this.passedLocationData);
   }
 
   closeModal(){

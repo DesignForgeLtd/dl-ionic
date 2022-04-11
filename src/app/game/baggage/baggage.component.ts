@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameUIService } from '../game-ui.service';
+import { BaggageService } from './baggage.service';
 
 @Component({
   selector: 'app-baggage',
@@ -8,12 +9,31 @@ import { GameUIService } from '../game-ui.service';
 })
 export class BaggageComponent implements OnInit {
 
-  constructor(private gameUIService: GameUIService) { }
+  public isLoading = true;
+  public baggageData = null;
 
-  ngOnInit() {}
+  constructor(
+    private gameUIService: GameUIService,
+    private baggageService: BaggageService) { }
+
+  ngOnInit() {
+    this.initialize();
+  }
 
   closeFeature() {
     this.gameUIService.openedModal.emit(null);
+  }
+
+  initialize(){
+    this.baggageService.loadBaggageData()
+      .subscribe(data => {
+        this.isLoading = false;
+        this.baggageData = data;
+
+        console.log('loadBaggageData: ');
+        console.log(data);
+
+      });
   }
 
 }
