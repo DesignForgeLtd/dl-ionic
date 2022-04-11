@@ -8,8 +8,11 @@ import { GameUIService } from './game-ui.service';
 })
 export class GameComponent implements OnInit {
 
-  playerDataOccupiedWith = 'journey'; // TODO
+  playerDataOccupiedWith = null;  // change null to 'journey' if you want to test journey
+
   /*
+    TODO:
+
     1. load player data at this point (move this.loadHeroEssentialData(); from MapComponent)
     2. pass data from step 1 to MapComponent
     3. make playerDataOccupiedWith (above) dynamic - based on what is loaded via loadHeroEssentialData
