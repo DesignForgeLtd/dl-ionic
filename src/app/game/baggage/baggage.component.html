@@ -13,8 +13,43 @@
     </ion-card-header>
 
 
-    <ion-card-content>
+    <ion-card-content style="min-height:300px">
+      <ion-tabs>
+        <ion-tab-bar slot="top">
+          <ion-tab-button
+            *ngFor="let baggageType of baggageTypes"
+            (click)="openCategory(baggageType.id)"
+          >
+            <ion-icon name="calendar"></ion-icon>
+            <ion-label>{{ baggageType.name }}</ion-label>
+          </ion-tab-button>
+        </ion-tab-bar>
+      </ion-tabs>
+      <div *ngFor="let baggageType of baggageTypes" id="baggage-parent-id-{{ baggageType.id }}" class="baggage-parent-wrapper">
+        <div class="baggage-subtypes">
+          <ion-button color="primary" (click)="filterSubtype('all')" catid="all">All</ion-button>
+          <ion-button
+            *ngFor="let baggageTypeChild of baggageType.children"
+            color="secondary"
+            attr.catid="{{ baggageTypeChild.id }}"
+            (click)="filterSubtype(baggageTypeChild.id)"
+          >
+            {{ baggageTypeChild.name }}
+          </ion-button>
+        </div>
 
+        <div
+          *ngFor="let baggageTypeChild of baggageType.children"
+          class="baggage-child-wrapper"
+          attr.catid="{{ baggageTypeChild.id }}"
+          id="baggage-child-id-{{ baggageTypeChild.id }}"
+        >
+          <app-baggage-item
+            *ngFor="let baggageItem of baggageItems[baggageTypeChild.id] | keyvalue"
+            [item]="baggageItem">
+          </app-baggage-item>
+        </div>
+      </div>
     </ion-card-content>
   </ion-card>
   </div>

@@ -14,14 +14,14 @@ export class BaggageService {
   constructor(private http: HttpClient){}
 
   loadBaggageData(){
-    return this.http.get<{'baggageData': any}>(
+    return this.http.get<{'items': {'result': Array<string>}; 'types': Array<string>}>(
       AppSettings.API_ENDPOINT + '/baggage/info',
       {responseType: 'json'}
     );
   }
 
   throwAway(baggageItemId: number, quantity: number){
-    return this.http.post<{'success': boolean; 'errorMessage': string;}>(
+    return this.http.post<{'success': boolean; 'errorMessage': string}>(
       AppSettings.API_ENDPOINT + '/baggage/drop',
       {
         baggage_item_id: baggageItemId,

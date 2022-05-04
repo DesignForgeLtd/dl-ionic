@@ -5,3 +5,17 @@
   height: 100%;
   //background-color: darkslategray;
 }
+
+.baggage-parent-wrapper{
+  display: none;
+  padding-top: 80px;
+
+  ion-button{
+    display: inline-block;
+    margin-right: 10px;
+  }
+}
+
+.baggage-child-wrapper{
+  display: inline-block;
+}

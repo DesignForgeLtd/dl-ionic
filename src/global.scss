@@ -59,3 +59,21 @@ html,body {
   background-color: #000;
   display: inline-block;
 }
+
+.baggage-item-image{
+  display: block;
+  width: 60px;
+  height: 60px;
+
+  &.weapon{
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.baggage-item{
+  display: inline-block;
+  margin-right: 10px;
+  width: 100px;
+}
+

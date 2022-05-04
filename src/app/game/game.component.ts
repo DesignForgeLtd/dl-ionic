@@ -8,7 +8,7 @@ import { GameUIService } from './game-ui.service';
 })
 export class GameComponent implements OnInit {
 
-  playerDataOccupiedWith = 'journey';  // change null to 'journey' if you want to test journey
+  playerDataOccupiedWith = null;  // change null to 'journey' if you want to test journey
 
   /*
     TODO:
