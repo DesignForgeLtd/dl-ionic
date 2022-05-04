@@ -18,6 +18,7 @@
 
           <ng-container *ngFor="let baggageType of baggageTypes">
             <ng-container *ngFor="let baggageTypeChild of baggageType.children">
+              <h2 *ngIf="baggageItems[baggageTypeChild.id]">{{ baggageTypeChild.name }}</h2>
               <app-baggage-item
                 *ngFor="let baggageItem of baggageItems[baggageTypeChild.id] | keyvalue"
                 [item]="baggageItem">
