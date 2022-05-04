@@ -15,5 +15,10 @@
 <app-map-production-location
   *ngIf="openedModal === 'map-production-location'"
   [passedLocationData]="locationData"
-  (mapLocationAction)="mapLocationAction($event)"
 ></app-map-production-location>
+<!-- (mapLocationAction)="mapLocationAction($event)" -->
+
+<app-shop
+  *ngIf="openedModal === 'shop'"
+  [passedLocationData]="locationData"
+></app-shop>
