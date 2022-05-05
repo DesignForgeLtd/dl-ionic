@@ -136,19 +136,25 @@ export class MapComponent implements OnInit, OnDestroy {
 
   handleFoundLocation(foundLocation){
     if (foundLocation !== null){
-      if (foundLocation.type === 3){
-        console.log('found Production Location: ');
-        console.log(foundLocation);
-        this.locationData = foundLocation;
-        this.gameUIService.openLocationModal('map-production-location');
+      switch (foundLocation.type) {
+        case 3:
+          console.log('found Production Location: ');
+          console.log(foundLocation);
+          this.locationData = foundLocation;
+          this.gameUIService.openLocationModal('map-production-location');
+          break;
+        case 2:
+          console.log('found Shop Location: ');
+          console.log(foundLocation);
+          this.locationData = foundLocation;
+          this.gameUIService.openLocationModal('shop');
+          break;
+        default:
+          console.log('found Other Location: ');
+          console.log(foundLocation);
+          this.locationData = foundLocation;
+          this.gameUIService.openLocationModal('map-location');
       }
-      else {
-        console.log('found Other Location: ');
-        console.log(foundLocation);
-        this.locationData = foundLocation;
-        this.gameUIService.openLocationModal('map-location');
-      }
-
     }else{
       this.locationData = null;
       this.gameUIService.openLocationModal('');

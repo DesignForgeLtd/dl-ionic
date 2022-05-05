@@ -2,29 +2,27 @@ import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
 
-// interface ProductionLocationData{
-
-// }
 
 @Injectable({providedIn: 'root'})
-export class BaggageService {
+export class ShopService {
 
   baggageUpdated = new EventEmitter<boolean>();
 
   constructor(private http: HttpClient){}
 
-  loadBaggageData(){
+  loadShopData(position: number){
+    //return this.http.get<{'result': Array<string>}>(
     return this.http.get<{'items': {'result': Array<string>}; 'types': Array<string>}>(
-      AppSettings.API_ENDPOINT + '/baggage/info',
-      {responseType: 'json'}
+      AppSettings.API_ENDPOINT + '/shop/info/' + position,
+      { responseType: 'json' }
     );
   }
 
-  throwAway(baggageItemId: number, quantity: number){
+  buyItem(itemId: number, quantity: number){
     return this.http.post<{'success': boolean; 'errorMessage': string}>(
-      AppSettings.API_ENDPOINT + '/baggage/drop',
+      AppSettings.API_ENDPOINT + '/baggage/buy',
       {
-        // baggage_item_id: baggageItemId,
+        item_id: itemId,
         quantity
       }
     );

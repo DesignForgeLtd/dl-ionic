@@ -4,6 +4,7 @@
   <ion-card>
     <ion-card-header>
       <ion-toolbar>
+        <h1>Production location: {{ passedLocationData.name }}</h1>
         <ion-buttons slot="end">
           <ion-button color="danger" (click)="closeModal()">
             <ion-icon name="close-circle" slot="icon-only"></ion-icon>
@@ -12,7 +13,6 @@
       </ion-toolbar>
     </ion-card-header>
     <ion-card-content style="height: 100%;">
-      <h1>Production location: {{ passedLocationData.name }}</h1>
 
       <div *ngIf="isLoading" style="text-align: center;">
         <app-loading-spinner></app-loading-spinner>
