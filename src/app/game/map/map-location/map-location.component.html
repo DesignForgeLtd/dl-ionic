@@ -16,6 +16,15 @@
 
       <button *ngIf="locationData.type === 10" (click)="goLevelUp()">Go level up</button>
       <button *ngIf="locationData.type === 11" (click)="goLevelDown()">Go level down</button>
+      <button *ngIf="locationData.type === 13" (click)="usePortal()">Use Portal</button>
+
+      <div *ngIf="locationData.type === 7 && locationFullData">
+        <button *ngFor="let connection of locationFullData.connections"
+          (click)="usePort(connection.id)">
+          Go to {{connection.destination.name}}
+        </button>
+      </div>
+
 
     </ion-card-content>
   </ion-card>

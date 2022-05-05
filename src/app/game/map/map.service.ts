@@ -8,6 +8,8 @@ interface PlayerData{
   id: number;
   level: number;
   name: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  occupied_with: string;
   position: number;
   stamina: number;
 }
@@ -18,6 +20,8 @@ interface HeroFullData{
   id: number;
   level: number;
   name: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  occupied_with: string;
   position: number;
   stamina: number;
 }
@@ -36,7 +40,8 @@ export class MapService {
   constructor(private http: HttpClient){}
 
   loadHeroEssentialData(){
-    return this.http.get<{'playerData': PlayerData; 'foundLocation': FoundLocationData}>( // 'id': string;'position': number;'level': number
+    // eslint-disable-next-line max-len
+    return this.http.get<{'playerData': PlayerData; 'foundLocation': FoundLocationData; 'locationFullData': any}>( // 'id': string;'position': number;'level': number
       AppSettings.API_ENDPOINT + '/hero/getEssentialData',
       {responseType: 'json'}
     );
@@ -63,9 +68,30 @@ export class MapService {
     );
   }
 
+  usePortConnection(connectionId){
+    return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
+      AppSettings.API_ENDPOINT + '/map/port/'+connectionId,
+      {responseType: 'json'}
+    );
+  }
+
+  // usePortal(){
+  //   return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
+  //     AppSettings.API_ENDPOINT + '/map/portal/'+connectionId,
+  //     {responseType: 'json'}
+  //   );
+  // }
+
   loadHeroFullData(){
     return this.http.get<{'heroFullData': HeroFullData}>(
       AppSettings.API_ENDPOINT + '/hero/getFullData',
+      {responseType: 'json'}
+    );
+  }
+
+  getLocationFullData(type: number, playerPosition: number){
+    return this.http.get<{'success': boolean; 'errorMessage': string; 'portData': any}>(
+      AppSettings.API_ENDPOINT + '/map/locationFullData/' + type + '/' + playerPosition,
       {responseType: 'json'}
     );
   }

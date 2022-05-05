@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Input } from '@angular/core';
 import { GameUIService } from '../game-ui.service';
 
 
@@ -45,6 +45,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   openedModal = null;
   locationData = null;
+  locationFullData = null;
 
   tileSheet: HTMLImageElement;
   heroImage: HTMLImageElement;
@@ -72,6 +73,7 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    console.log('Map component initialized');
     this.context = this.canvas.nativeElement.getContext('2d');
 
     /* The width and height of the inside of the browser window */
@@ -84,7 +86,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
     //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
     this.viewport = new Viewport(0, 0, this.width, this.height);
-
     this.loadHeroEssentialData();
     this.loadMonsters();
 
@@ -126,7 +127,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.playerSavedPosition = this.player.position;
       this.loadGameMap(this.player.level);
       this.playerInfoUpdate(playerData);
-      this.loop();
+      // this.loop();
       this.animationFrame = window.requestAnimationFrame(() => this.loop());
 
       this.handleFoundLocation(data.foundLocation);
@@ -452,14 +453,21 @@ export class MapComponent implements OnInit, OnDestroy {
 
   mapLocationAction(action) {
 
-    console.log('mapLocationAction in MapComponent: ' + action);
+    console.log('mapLocationAction in MapComponent:');
+    console.log(action);
 
-    switch (action) {
+    switch (action.name) {
       case 'goLevelUp':
         this.useSubway('up');
         break;
       case 'goLevelDown':
         this.useSubway('down');
+        break;
+      case 'goToTravel':
+        this.usePort(action.param);
+        break;
+      case 'usePortal':
+        // this.usePortal();
         break;
     }
   }
@@ -475,6 +483,35 @@ export class MapComponent implements OnInit, OnDestroy {
         this.loadGameMap(data.playerData.level);
 
         this.handleFoundLocation(data.foundLocation);
+      }
+      else {
+        this.showError(data.errorMessage);
+      }
+
+    });
+  }
+
+  usePortal(portConnection: number){
+    // this.mapService.usePortal().subscribe(data => {
+    //   if (data.success === true){
+    //     console.log(data);
+    //     this.playerInfoUpdate(data.playerData);
+    //     this.loadGameMap(data.playerData.level);
+    //   }
+    //   else {
+    //     this.showError(data.errorMessage);
+    //   }
+
+    // });
+  }
+
+  usePort(portConnection: number){
+    this.mapService.usePortConnection(portConnection).subscribe(data => {
+      if (data.success === true){
+        console.log(data);
+        this.playerInfoUpdate(data.playerData);
+        this.loadGameMap(data.playerData.level);
+        this.gameUIService.changeHeroOccupation('journey');
       }
       else {
         this.showError(data.errorMessage);
