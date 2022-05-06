@@ -473,7 +473,7 @@ export class MapComponent implements OnInit, OnDestroy {
         this.usePort(action.param);
         break;
       case 'usePortal':
-        // this.usePortal();
+        this.usePortal(action.param);
         break;
     }
   }
@@ -497,18 +497,22 @@ export class MapComponent implements OnInit, OnDestroy {
     });
   }
 
-  usePortal(portConnection: number){
-    // this.mapService.usePortal().subscribe(data => {
-    //   if (data.success === true){
-    //     console.log(data);
-    //     this.playerInfoUpdate(data.playerData);
-    //     this.loadGameMap(data.playerData.level);
-    //   }
-    //   else {
-    //     this.showError(data.errorMessage);
-    //   }
+  usePortal(portalId: number){
+    this.mapService.usePortal(portalId).subscribe(data => {
+      if (data.success === true){
+        console.log(data);
+        this.playerInfoUpdate(data.playerData);
+        this.player.level = data.playerData.level;
+        this.world.setLevel(this.player.level);
+        this.loadGameMap(data.playerData.level);
 
-    // });
+        this.handleFoundLocation(data.foundLocation);
+      }
+      else {
+        this.showError(data.errorMessage);
+      }
+
+    });
   }
 
   usePort(portConnection: number){

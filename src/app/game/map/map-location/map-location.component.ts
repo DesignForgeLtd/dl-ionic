@@ -28,6 +28,9 @@ export class MapLocationComponent implements OnInit {
     if(this.locationData.type === 7){
       this.getPortData();
     }
+    if(this.locationData.type === 13){
+      this.getPortalData();
+    }
   }
 
   closeModal(){
@@ -42,19 +45,26 @@ export class MapLocationComponent implements OnInit {
     this.mapLocationAction.emit({name: 'goLevelDown', param: null});
   }
 
-  usePortal(){
-    this.mapLocationAction.emit({name: 'usePortal', param: null});
-  }
-
   getPortData(){
     //znajdz param, wyciagnij dane z API, uzywajac serwisu map
     this.mapService.getLocationFullData(7, this.locationData.position).subscribe(data => {
-      this.locationFullData = data.portData;
+      this.locationFullData = data.locationFullData;
+    });
+  }
+
+  getPortalData(){
+    //znajdz param, wyciagnij dane z API, uzywajac serwisu map
+    this.mapService.getLocationFullData(13, this.locationData.position).subscribe(data => {
+      this.locationFullData = data.locationFullData;
     });
   }
 
   usePort(connectionId: number){
     this.mapLocationAction.emit({name: 'goToTravel', param: connectionId});
+  }
+
+  usePortal(portalId: number){
+    this.mapLocationAction.emit({name: 'usePortal', param: portalId});
   }
 
 }

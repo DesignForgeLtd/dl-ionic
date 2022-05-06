@@ -75,12 +75,12 @@ export class MapService {
     );
   }
 
-  // usePortal(){
-  //   return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
-  //     AppSettings.API_ENDPOINT + '/map/portal/'+connectionId,
-  //     {responseType: 'json'}
-  //   );
-  // }
+  usePortal(portalId){
+    return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
+      AppSettings.API_ENDPOINT + '/map/portal/'+portalId,
+      {responseType: 'json'}
+    );
+  }
 
   loadHeroFullData(){
     return this.http.get<{'heroFullData': HeroFullData}>(
@@ -90,7 +90,7 @@ export class MapService {
   }
 
   getLocationFullData(type: number, playerPosition: number){
-    return this.http.get<{'success': boolean; 'errorMessage': string; 'portData': any}>(
+    return this.http.get<{'success': boolean; 'errorMessage': string; 'locationFullData': any}>(
       AppSettings.API_ENDPOINT + '/map/locationFullData/' + type + '/' + playerPosition,
       {responseType: 'json'}
     );
