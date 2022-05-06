@@ -24,7 +24,8 @@ export class BaggageService {
     return this.http.post<{'success': boolean; 'errorMessage': string}>(
       AppSettings.API_ENDPOINT + '/baggage/drop',
       {
-        // baggage_item_id: baggageItemId,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        baggage_item_id: baggageItemId,
         quantity
       }
     );

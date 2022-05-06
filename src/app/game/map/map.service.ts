@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
@@ -7,14 +8,10 @@ interface PlayerData{
   health: number;
   id: number;
   level: number;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   hero_level: number;
   name: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   occupied_with: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   occupation_start: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   occupation_finish: string;
   position: number;
   stamina: number;
@@ -26,7 +23,6 @@ interface HeroFullData{
   id: number;
   level: number;
   name: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   occupied_with: string;
   position: number;
   stamina: number;
