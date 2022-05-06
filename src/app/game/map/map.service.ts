@@ -7,9 +7,15 @@ interface PlayerData{
   health: number;
   id: number;
   level: number;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  hero_level: number;
   name: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   occupied_with: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  occupation_start: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  occupation_finish: string;
   position: number;
   stamina: number;
 }

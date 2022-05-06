@@ -501,12 +501,8 @@ export class MapComponent implements OnInit, OnDestroy {
     this.mapService.usePortal(portalId).subscribe(data => {
       if (data.success === true){
         console.log(data);
-        this.playerInfoUpdate(data.playerData);
-        this.player.level = data.playerData.level;
-        this.world.setLevel(this.player.level);
-        this.loadGameMap(data.playerData.level);
-
-        this.handleFoundLocation(data.foundLocation);
+        this.loadHeroEssentialData();
+        this.gameUIService.openLocationModal('');
       }
       else {
         this.showError(data.errorMessage);
