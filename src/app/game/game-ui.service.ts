@@ -6,6 +6,7 @@ export class GameUIService {
   public currentLocation: string;
   currentLocationEmitter = new EventEmitter<string>();
   openedModal = new EventEmitter<string>();
+  playerOccupiedWith = new EventEmitter<string>();
 
   constructor() {
     this.currentLocation = '';
@@ -26,6 +27,10 @@ export class GameUIService {
       this.openedModal.emit(location);
       this.currentLocationEmitter.emit(location);
     }
+  }
+
+  changeHeroOccupation(occupation: string){
+      this.playerOccupiedWith.emit(occupation);
   }
 
 }

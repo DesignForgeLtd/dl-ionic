@@ -36,19 +36,19 @@ export class Player {
     /* Gradually moves the player closer to x, y every time animate() is called. */
     if (x < this.pixel_x)
     {
-      this.pixel_x-=1;
+      this.pixel_x-=4;
     }
     else if (x > this.pixel_x)
     {
-      this.pixel_x+=1;
+      this.pixel_x+=4;
     }
     if (y < this.pixel_y)
     {
-      this.pixel_y-=1;
+      this.pixel_y-=4;
     }
     else if (y > this.pixel_y)
     {
-      this.pixel_y+=1;
+      this.pixel_y+=4;
     }
     //this.pixel_x += (x - this.pixel_x - scaled_size * 0.0) * 0.05;
     //this.pixel_y += (y - this.pixel_y - scaled_size * 0.4) * 0.05;
