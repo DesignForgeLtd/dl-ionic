@@ -126,7 +126,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.playerSavedPosition = this.player.position;
       this.loadGameMap(this.player.level);
       this.playerInfoUpdate(playerData);
-      this.loop();
+      //this.loop();
       this.animationFrame = window.requestAnimationFrame(() => this.loop());
 
       this.handleFoundLocation(data.foundLocation);
