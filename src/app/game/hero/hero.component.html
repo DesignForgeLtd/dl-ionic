@@ -1,0 +1,47 @@
+
+<div class="backdrop"></div>
+<div class="modal-container"  id="hero-container">
+
+  <ion-card style="min-width:340px">
+
+    <ion-card-header>
+      <ion-toolbar>
+        <h1>Your Hero</h1>
+        <ion-buttons slot="end">
+          <ion-button color="danger" (click)="closeModal()">
+            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+      <ion-toolbar>
+        <ion-tabs>
+          <ion-tab-bar slot="top">
+            <ion-tab-button
+              *ngFor="let tab of heroTabs"
+              (click)="openTab(tab.label)"
+              [selected]="chosenTab === tab.label"
+            >
+              <ion-icon name="calendar"></ion-icon>
+              <ion-label>{{ tab.name }}</ion-label>
+            </ion-tab-button>
+          </ion-tab-bar>
+        </ion-tabs>
+      </ion-toolbar>
+
+    </ion-card-header>
+
+
+
+    <ion-card-content>
+
+
+      <app-hero-attributes *ngIf="chosenTab === 'attributes'"></app-hero-attributes>
+      <app-hero-skills *ngIf="chosenTab === 'skills'"></app-hero-skills>
+      <app-hero-occupations *ngIf="chosenTab === 'occupations'"></app-hero-occupations>
+      <app-hero-active-elixirs *ngIf="chosenTab === 'active-elixirs'"></app-hero-active-elixirs>
+
+
+
+    </ion-card-content>
+  </ion-card>
+  </div>

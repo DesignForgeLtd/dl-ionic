@@ -1,0 +1,11 @@
+<h1>
+  Skills:
+</h1>
+
+<div *ngIf="isLoading" style="text-align: center;">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+
+<div *ngFor="let skill of heroSkills">
+  <b>{{skill.weapon_type.name}}</b> -> level {{skill.level}} ({{skill.points}} points)
+</div>

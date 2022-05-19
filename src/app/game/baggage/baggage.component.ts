@@ -74,7 +74,7 @@ export class BaggageComponent implements OnInit {
     }
 
     for(const element of typeButtons){
-      if (element.getAttribute('catid') == id){
+      if (element.getAttribute('catid') === id){
         element.setAttribute('color', 'primary');
         element.setAttribute('ng-reflect-color', 'primary');
       }

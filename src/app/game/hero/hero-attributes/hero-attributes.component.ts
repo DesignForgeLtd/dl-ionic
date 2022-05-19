@@ -18,7 +18,6 @@ export class HeroAttributesComponent implements OnInit {
   public heroAttributes = ['strength', 'dexterity', 'vitality', 'intelligence', 'endurance', 'quickness'];
 
   constructor(
-    private gameUIService: GameUIService,
     private heroService: HeroService
     ) { }
 
@@ -30,10 +29,6 @@ export class HeroAttributesComponent implements OnInit {
       this.error = ! data.success;
       this.message = data.errorMessage;
     });
-  }
-
-  closeModal(){
-    this.gameUIService.openedModal.emit(null);
   }
 
   allocateAttributePoint(attribute){
