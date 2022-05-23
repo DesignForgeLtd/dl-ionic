@@ -1,0 +1,15 @@
+<h1>
+  Active elixirs:
+</h1>
+
+<div *ngIf="isLoading" style="text-align: center;">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+
+<div *ngFor="let elixir of activeElixirs">
+  <div class="baggage-item">
+    <div class="baggage-item-image" style="background-image: url('../../../assets/graphics/items/{{ elixir.item.params.image }}');"></div>
+    {{ elixir.item.name }} [{{ elixir.active_until | date:'yyyy-MM-dd HH:mm' }}]
+  </div>
+</div>
+

@@ -1,0 +1,11 @@
+<h1>
+  Occupations:
+</h1>
+
+<div *ngIf="isLoading" style="text-align: center;">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+
+<div *ngFor="let heroOccupation of heroOccupations">
+  {{heroOccupation.occupation.name}} -> level {{heroOccupation.level}} ({{heroOccupation.experience}} exp)
+</div>

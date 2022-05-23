@@ -35,6 +35,10 @@ import { ProductionQueueItemComponent }
 import { JourneyComponent } from './game/journey/journey.component';
 import { BaggageItemComponent } from './game/baggage/baggage-item/baggage-item.component';
 import { ShopComponent } from './game/map/shop/shop.component';
+import { HeroComponent } from './game/hero/hero.component';
+import { HeroActiveElixirsComponent } from './game/hero/hero-active-elixirs/hero-active-elixirs.component';
+import { HeroOccupationsComponent } from './game/hero/hero-occupations/hero-occupations.component';
+import { HeroSkillsComponent } from './game/hero/hero-skills/hero-skills.component';
 
 
 
@@ -58,7 +62,11 @@ import { ShopComponent } from './game/map/shop/shop.component';
     BaggageComponent,
     BaggageItemComponent,
     LoadingSpinnerComponent,
+    HeroComponent,
+    HeroActiveElixirsComponent,
     HeroAttributesComponent,
+    HeroOccupationsComponent,
+    HeroSkillsComponent,
     JourneyComponent,
     ShopComponent
   ],
