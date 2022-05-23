@@ -1,0 +1,17 @@
+<ion-list class="baggage-popover-list">
+  <ion-item
+    *ngIf="item.points !== null"
+    (click)="baggageUse()"
+  >
+    <ion-icon name="heart-outline"></ion-icon> Use
+  </ion-item>
+  <ion-item
+    *ngIf="item.weapon === 'weapon'"
+    (click)="baggagePutOn()"
+  >
+    <ion-icon name="person-add-outline"></ion-icon> Put on
+  </ion-item>
+  <ion-item (click)="baggageThrowAway()">
+    <ion-icon name="trash-outline"></ion-icon> Throw away
+  </ion-item>
+</ion-list>

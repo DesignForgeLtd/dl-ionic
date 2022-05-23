@@ -1,4 +1,7 @@
-<div class="baggage-item">
-  <div class="baggage-item-image {{ item.weapon }}" style="background-image: url('../../../assets/graphics/{{ item.image }}');"></div>
+<div class="baggage-item" (click)="baggageItemClick($event, item)">
+  <div
+    class="baggage-item-image {{ item.weapon }}"
+    style="background-image: url('../../../assets/graphics/{{ item.image }}');"
+  ></div>
   {{ item.name }} [{{ item.quantity }}]
 </div>
