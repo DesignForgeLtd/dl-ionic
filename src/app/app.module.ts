@@ -37,6 +37,10 @@ import { BaggageItemComponent } from './game/baggage/baggage-item/baggage-item.c
 import { ShopComponent } from './game/map/shop/shop.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { HeroComponent } from './game/hero/hero.component';
+import { HeroActiveElixirsComponent } from './game/hero/hero-active-elixirs/hero-active-elixirs.component';
+import { HeroOccupationsComponent } from './game/hero/hero-occupations/hero-occupations.component';
+import { HeroSkillsComponent } from './game/hero/hero-skills/hero-skills.component';
 
 
 
@@ -60,7 +64,11 @@ import { environment } from '../environments/environment';
     BaggageComponent,
     BaggageItemComponent,
     LoadingSpinnerComponent,
+    HeroComponent,
+    HeroActiveElixirsComponent,
     HeroAttributesComponent,
+    HeroOccupationsComponent,
+    HeroSkillsComponent,
     JourneyComponent,
     ShopComponent
   ],

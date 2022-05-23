@@ -25,4 +25,25 @@ export class HeroService {
     );
   }
 
+  loadHeroSkills(){
+    return this.http.get<{'success': boolean; 'errorMessage': boolean; 'data': any}>(
+      AppSettings.API_ENDPOINT + '/hero/skills',
+      {responseType: 'json'}
+    );
+  }
+
+  loadHeroOccupations(){
+    return this.http.get<{'success': boolean; 'errorMessage': boolean; 'data': any}>(
+      AppSettings.API_ENDPOINT + '/hero/occupations',
+      {responseType: 'json'}
+    );
+  }
+
+  loadHeroActiveElixirs(){
+    return this.http.get<{'success': boolean; 'errorMessage': boolean; 'data': any}>(
+      AppSettings.API_ENDPOINT + '/hero/elixirs',
+      {responseType: 'json'}
+    );
+  }
+
 }

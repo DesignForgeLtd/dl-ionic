@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameUIService } from './game-ui.service';
+import { MapService } from './map/map.service';
 
 @Component({
   selector: 'app-game',
@@ -8,7 +9,7 @@ import { GameUIService } from './game-ui.service';
 })
 export class GameComponent implements OnInit {
 
-  playerDataOccupiedWith = null;  // change null to 'journey' if you want to test journey
+  public playerDataOccupiedWith;//'journey';  // change null to 'journey' if you want to test journey
 
   /*
     TODO:
@@ -21,19 +22,33 @@ export class GameComponent implements OnInit {
 
   */
   public openedModal = null;
+  public heroEssentialData = null;
 
-  constructor(private gameUIService: GameUIService) {
+  constructor(private mapService: MapService, private gameUIService: GameUIService) {
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
+    );
+    this.gameUIService.playerOccupiedWith.subscribe(
+      (occupiedWith: string) => this.playerDataOccupiedWith = occupiedWith
     );
   }
 
   ngOnInit() {
-    console.log(this.playerDataOccupiedWith);
+    // MarrQ
+    this.loadHeroEssentialData();console.log(this.playerDataOccupiedWith);
   }
 
   closeModal(){
     this.gameUIService.openedModal.emit(null);
+  }
+
+  // MarrQ
+  loadHeroEssentialData(){
+    this.mapService.loadHeroEssentialData()
+    .subscribe(data => {
+      this.heroEssentialData = data;
+      this.playerDataOccupiedWith = data.playerData.occupied_with;
+    });
   }
 
 }

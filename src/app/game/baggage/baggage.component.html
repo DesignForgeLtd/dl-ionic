@@ -21,6 +21,7 @@
           <ion-tab-button
             *ngFor="let baggageType of baggageTypes"
             (click)="openCategory(baggageType.id)"
+            [selected]="currentParentId === baggageType.id"
           >
             <ion-icon name="calendar"></ion-icon>
             <ion-label>{{ baggageType.name }}</ion-label>

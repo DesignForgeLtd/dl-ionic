@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
@@ -7,7 +8,11 @@ interface PlayerData{
   health: number;
   id: number;
   level: number;
+  hero_level: number;
   name: string;
+  occupied_with: string;
+  occupation_start: string;
+  occupation_finish: string;
   position: number;
   stamina: number;
 }
@@ -18,6 +23,7 @@ interface HeroFullData{
   id: number;
   level: number;
   name: string;
+  occupied_with: string;
   position: number;
   stamina: number;
 }
@@ -36,7 +42,8 @@ export class MapService {
   constructor(private http: HttpClient){}
 
   loadHeroEssentialData(){
-    return this.http.get<{'playerData': PlayerData; 'foundLocation': FoundLocationData}>( // 'id': string;'position': number;'level': number
+    // eslint-disable-next-line max-len
+    return this.http.get<{'playerData': PlayerData; 'foundLocation': FoundLocationData; 'locationFullData': any}>( // 'id': string;'position': number;'level': number
       AppSettings.API_ENDPOINT + '/hero/getEssentialData',
       {responseType: 'json'}
     );
@@ -63,9 +70,30 @@ export class MapService {
     );
   }
 
+  usePortConnection(connectionId){
+    return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
+      AppSettings.API_ENDPOINT + '/map/port/'+connectionId,
+      {responseType: 'json'}
+    );
+  }
+
+  usePortal(portalId){
+    return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
+      AppSettings.API_ENDPOINT + '/map/portal/'+portalId,
+      {responseType: 'json'}
+    );
+  }
+
   loadHeroFullData(){
     return this.http.get<{'heroFullData': HeroFullData}>(
       AppSettings.API_ENDPOINT + '/hero/getFullData',
+      {responseType: 'json'}
+    );
+  }
+
+  getLocationFullData(type: number, playerPosition: number){
+    return this.http.get<{'success': boolean; 'errorMessage': string; 'locationFullData': any}>(
+      AppSettings.API_ENDPOINT + '/map/locationFullData/' + type + '/' + playerPosition,
       {responseType: 'json'}
     );
   }
