@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AlertController, PopoverController, ToastController } from '@ionic/angular';
 import { BaggageService } from '../baggage.service';
 
 @Component({
@@ -10,7 +11,11 @@ export class BaggagePopoverComponent implements OnInit {
 
   @Input() item;
 
-  constructor(private baggageService: BaggageService) { }
+  constructor(
+    private baggageService: BaggageService,
+    public baggageItemController: PopoverController,
+    public toastController: ToastController,
+    public alertController: AlertController) { }
 
   ngOnInit() {
     console.log(this.item);
@@ -18,6 +23,13 @@ export class BaggagePopoverComponent implements OnInit {
 
   baggageUse(){
     console.log('Using ' + this.item.name);
+    this.baggageService.use(this.item.hero_item_id).subscribe(data => {
+      console.log('data: ');
+      console.log(data);
+
+      this.presentToast('Used ' + this.item.name);
+      this.baggageItemController.dismiss();
+    });
   }
 
   baggagePutOn(){
@@ -26,13 +38,49 @@ export class BaggagePopoverComponent implements OnInit {
 
   baggageThrowAway(){
     console.log('Throwing away ' + this.item.name);
-    this.baggageService.throwAway(this.item.hero_item_id, 1).subscribe(data => {
+    this.presentAlertConfirm();
 
-      console.log('data: ');
-      console.log(data);
-      console.log('threw away.');
+  }
 
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000
     });
+    toast.present();
+  }
+
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Throw away',
+      message: 'Are you sure??',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          cssClass: 'secondary',
+          //id: 'cancel-button',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Yes',
+          //id: 'confirm-button',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.baggageItemController.dismiss();
+            this.baggageService.throwAway(this.item.hero_item_id, 1).subscribe(data => {
+              console.log('data: ');
+              console.log(data);
+              console.log('threw away.');
+            });
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
 }

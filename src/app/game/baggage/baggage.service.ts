@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
@@ -20,11 +21,19 @@ export class BaggageService {
     );
   }
 
+  use(baggageItemId: number){
+    return this.http.post<{'success': boolean; 'errorMessage': string}>(
+      AppSettings.API_ENDPOINT + '/baggage/use',
+      {
+        baggage_item_id: baggageItemId
+      }
+    );
+  }
+
   throwAway(baggageItemId: number, quantity: number){
     return this.http.post<{'success': boolean; 'errorMessage': string}>(
       AppSettings.API_ENDPOINT + '/baggage/drop',
       {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         baggage_item_id: baggageItemId,
         quantity
       }
