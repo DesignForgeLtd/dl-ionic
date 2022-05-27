@@ -71,6 +71,7 @@ export class BaggagePopoverComponent implements OnInit {
             console.log('Confirm Okay');
             this.baggageItemController.dismiss();
             this.baggageService.throwAway(this.item.hero_item_id, 1).subscribe(data => {
+              this.presentToast('Threw away ' + this.item.name);
               console.log('data: ');
               console.log(data);
               console.log('threw away.');
