@@ -126,7 +126,7 @@ export class MapComponent implements OnInit, OnDestroy {
       );
       this.playerSavedPosition = this.player.position;
       this.loadGameMap(this.player.level);
-      this.playerInfoUpdate(playerData);
+      this.heroInfoUpdate(playerData);
       // this.loop();
       this.animationFrame = window.requestAnimationFrame(() => this.loop());
 
@@ -267,7 +267,7 @@ export class MapComponent implements OnInit, OnDestroy {
           this.player.revertHeroLastStep();
         }
 
-        this.playerInfoUpdate(data.playerData);
+        this.heroInfoUpdate(data.playerData);
       });
   }
 
@@ -287,14 +287,8 @@ export class MapComponent implements OnInit, OnDestroy {
       + ' ('+this.player.coord_x+','+this.player.coord_y+')';
   }
 
-  playerInfoUpdate(playerInfo){
-    document.getElementById('player-info').innerHTML =
-      '<b>' + playerInfo.name + '</b> (ID: ' + playerInfo.id + ')'
-      + ', Energy: ' + playerInfo.energy
-      + ', Stamina: ' + playerInfo.stamina
-      + ', Health: ' + playerInfo.health
-      + ', Position: ' + playerInfo.position + ' ('+this.player.coord_x+','+this.player.coord_y+')'
-      + ', Level: ' + playerInfo.level;
+  heroInfoUpdate(playerInfo){
+    this.gameUIService.heroInfoInitialize(playerInfo);
   }
 
   drawTerrain(){
@@ -483,7 +477,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.mapService.useUndergroundPassage(direction).subscribe(data => {
       if (data.success === true){
         console.log(data);
-        this.playerInfoUpdate(data.playerData);
+        this.heroInfoUpdate(data.playerData);
         this.player.level = data.playerData.level;
         this.world.setLevel(this.player.level);
         this.loadGameMap(data.playerData.level);
@@ -515,7 +509,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.mapService.usePortConnection(portConnection).subscribe(data => {
       if (data.success === true){
         console.log(data);
-        this.playerInfoUpdate(data.playerData);
+        this.heroInfoUpdate(data.playerData);
         this.loadGameMap(data.playerData.level);
         this.gameUIService.changeHeroOccupation('journey');
       }

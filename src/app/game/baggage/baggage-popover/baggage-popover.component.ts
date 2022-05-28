@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlertController, PopoverController, ToastController } from '@ionic/angular';
+import { GameUIService } from '../../game-ui.service';
 import { BaggageService } from '../baggage.service';
 
 @Component({
@@ -13,6 +14,7 @@ export class BaggagePopoverComponent implements OnInit {
 
   constructor(
     private baggageService: BaggageService,
+    private gameUIService: GameUIService,
     public baggageItemController: PopoverController,
     public toastController: ToastController,
     public alertController: AlertController) { }
@@ -26,14 +28,45 @@ export class BaggagePopoverComponent implements OnInit {
     this.baggageService.use(this.item.hero_item_id).subscribe(data => {
       console.log('data: ');
       console.log(data);
-
-      this.presentToast('Used ' + this.item.name);
+      if (data.success === true) {
+        this.presentToast('success', 'Used ' + this.item.name);
+        this.item.quantity -= data.quantity;
+        this.gameUIService.heroInfoUpdate(data.hero_data_to_update);
+      } else {
+        this.presentToast('danger', 'Could not use ' + this.item.name);
+      }
       this.baggageItemController.dismiss();
     });
   }
 
-  baggagePutOn(){
+  equipHero(){
     console.log('Putting on ' + this.item.name);
+    this.baggageService.equipHero(this.item.hero_item_id, 1).subscribe(data => {
+      console.log('data: ');
+      console.log(data);
+      if (data.success === true) {
+        this.presentToast('success', 'Equipped hero with ' + this.item.name);
+        this.item.in_use = 1;
+      } else {
+        this.presentToast('danger', 'Could not equip hero with ' + this.item.name);
+      }
+      this.baggageItemController.dismiss();
+    });
+  }
+
+  unEquipHero(){
+    console.log('Taking off on ' + this.item.name);
+    this.baggageService.equipHero(this.item.hero_item_id, 0).subscribe(data => {
+      console.log('data: ');
+      console.log(data);
+      if (data.success === true) {
+        this.presentToast('success', 'UnEquipped ' + this.item.name + '');
+        this.item.in_use = 0;
+      } else {
+        this.presentToast('danger', 'Could not unEquip ' + this.item.name + '');
+      }
+      this.baggageItemController.dismiss();
+    });
   }
 
   baggageThrowAway(){
@@ -42,9 +75,11 @@ export class BaggagePopoverComponent implements OnInit {
 
   }
 
-  async presentToast(message: string) {
+  async presentToast(color: string, message: string) {
     const toast = await this.toastController.create({
       message,
+      animated: true,
+      color,
       duration: 2000
     });
     toast.present();
@@ -71,10 +106,18 @@ export class BaggagePopoverComponent implements OnInit {
             console.log('Confirm Okay');
             this.baggageItemController.dismiss();
             this.baggageService.throwAway(this.item.hero_item_id, 1).subscribe(data => {
-              this.presentToast('Threw away ' + this.item.name);
+              if (data.success === true) {
+                this.presentToast('success', 'Threw away ' + this.item.name);
+                this.item.quantity -= data.quantity;
+              } else {
+                this.presentToast('danger', 'Could not throw away ' + this.item.name);
+              }
+
               console.log('data: ');
               console.log(data);
-              console.log('threw away.');
+
+
+
             });
           }
         }

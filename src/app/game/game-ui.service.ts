@@ -33,4 +33,27 @@ export class GameUIService {
       this.playerOccupiedWith.emit(occupation);
   }
 
+  heroInfoInitialize(heroInfo){
+    document.getElementById('hero-info').innerHTML =
+      '<b>' + heroInfo.name + '</b> (ID: ' + heroInfo.id + ')'
+      + ', Energy: ' + heroInfo.energy
+      + ', Stamina: <span id="hero-stamina">' + heroInfo.stamina + '</span>'
+      + ', Health: <span id="hero-health">' + heroInfo.health + '</span>'
+      + ', Position: ' + heroInfo.position
+      + ' (' + (heroInfo.position % 200) + ',' + Math.floor(heroInfo.position / 200) + ')'
+      + ', Level: ' + heroInfo.level;
+  }
+
+  heroInfoUpdate(heroData){
+    if (typeof heroData.stamina !== 'undefined'){
+      document.getElementById('hero-stamina').innerHTML = heroData.stamina;
+    }
+    if (typeof heroData.health !== 'undefined'){
+      document.getElementById('hero-health').innerHTML = heroData.health;
+    }
+  }
+
+  heroHealthUpdate(health){
+    document.getElementById('hero-health').innerHTML = health;
+  }
 }

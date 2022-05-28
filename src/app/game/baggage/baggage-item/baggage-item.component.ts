@@ -15,6 +15,7 @@ export class BaggageItemComponent implements OnInit {
 
   ngOnInit() {
     this.item = this.item.value;
+    console.log(this.item);
   }
 
   async baggageItemClick(event, item){

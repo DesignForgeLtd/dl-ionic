@@ -1,4 +1,5 @@
-<div class="baggage-item" (click)="baggageItemClick($event, item)">
+<div *ngIf="item.quantity > 0" class="baggage-item" (click)="baggageItemClick($event, item)">
+  <ion-badge *ngIf="item.in_use" color="success">Equipped</ion-badge>
   <div
     class="baggage-item-image {{ item.weapon }}"
     style="background-image: url('../../../assets/graphics/{{ item.image }}');"
