@@ -22,3 +22,9 @@
   *ngIf="openedModal === 'shop'"
   [passedLocationData]="locationData"
 ></app-shop>
+
+<app-monster
+  *ngIf="openedModal === 'monster'"
+  [passedMonsterData]="monsterData"
+  (mapLocationAction)="mapLocationAction($event)"
+></app-monster>

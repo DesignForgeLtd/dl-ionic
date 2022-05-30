@@ -40,6 +40,7 @@ import { HeroActiveElixirsComponent } from './game/hero/hero-active-elixirs/hero
 import { HeroOccupationsComponent } from './game/hero/hero-occupations/hero-occupations.component';
 import { HeroSkillsComponent } from './game/hero/hero-skills/hero-skills.component';
 import { BaggagePopoverComponent } from './game/baggage/baggage-popover/baggage-popover.component';
+import { MonsterComponent } from './game/map/monster/monster.component';
 
 
 
@@ -70,7 +71,8 @@ import { BaggagePopoverComponent } from './game/baggage/baggage-popover/baggage-
     HeroSkillsComponent,
     JourneyComponent,
     ShopComponent,
-    BaggagePopoverComponent
+    BaggagePopoverComponent,
+    MonsterComponent
   ],
   entryComponents: [],
   imports: [

@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { PopoverController } from '@ionic/angular';
 
 @Injectable({providedIn: 'root'})
 export class GameUIService {
@@ -53,7 +54,9 @@ export class GameUIService {
     }
   }
 
-  heroHealthUpdate(health){
-    document.getElementById('hero-health').innerHTML = health;
+  openMonsterModal(){
+    console.log('opening monster modal');
+
+    this.openedModal.emit('monster');
   }
 }

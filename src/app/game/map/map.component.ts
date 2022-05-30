@@ -8,6 +8,11 @@ import { Viewport } from './map-scripts/viewport';
 import { World } from './map-scripts/world';
 import { MapService } from './map.service';
 
+// interface MonstersData{
+//   positions: any;
+//   alive: any;
+// }
+
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -46,6 +51,7 @@ export class MapComponent implements OnInit, OnDestroy {
   openedModal = null;
   locationData = null;
   locationFullData = null;
+  monsterData = null;
 
   tileSheet: HTMLImageElement;
   heroImage: HTMLImageElement;
@@ -130,11 +136,21 @@ export class MapComponent implements OnInit, OnDestroy {
       // this.loop();
       this.animationFrame = window.requestAnimationFrame(() => this.loop());
 
-      this.handleFoundLocation(data.foundLocation);
+      this.handleFoundLocation(data.foundLocation, data.foundMonster);
     });
   }
 
-  handleFoundLocation(foundLocation){
+  // handleFoundMonster(foundMonster){
+  //   if (foundMonster === null) {
+  //     return;
+  //   }
+
+  //   if (foundMonster.alive){
+  //     console.log('MONSTER ZYJE!!!');
+  //   }
+  // }
+
+  handleFoundLocation(foundLocation, foundMonster = null){
     if (foundLocation !== null){
       switch (foundLocation.type) {
         case 3:
@@ -149,6 +165,11 @@ export class MapComponent implements OnInit, OnDestroy {
           this.locationData = foundLocation;
           this.gameUIService.openLocationModal('shop');
           break;
+        case 6:
+          console.log('found Monster');
+          this.monsterData = foundMonster;
+          this.gameUIService.openMonsterModal();
+          break;
         default:
           console.log('found Other Location: ');
           console.log(foundLocation);
@@ -161,10 +182,12 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
+
   loadMonsters(){
     this.mapService.loadMonstersData()
     .subscribe(data => {
       this.monsters = data.monsters;
+      console.log(this.monsters);
     });
   }
 
@@ -242,7 +265,7 @@ export class MapComponent implements OnInit, OnDestroy {
       this.setServerSavedNewPositionToFalse();
       this.player.moveHeroStep();
       this.player.animate();
-      this.sendApiRequest();
+      this.updateHeroPosition();
     }
     else
     {
@@ -251,16 +274,24 @@ export class MapComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendApiRequest(){
+  updateHeroPosition(){
     // send info about player's new coords to the server
 
       this.playerSavedPosition = this.player.position;
       this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
         if (data.success === true){
           this.setServerSavedNewPosition();
-          this.player.incrementHeroStep();
 
-          this.handleFoundLocation(data.foundLocation);
+          //this.handleFoundMonster(data.foundMonster);
+
+          if (data.foundMonster !== null && data.foundMonster.alive === true){
+            console.log('Monster is alive!!!');
+            this.player.revertHeroLastStep();
+          } else {
+            this.player.incrementHeroStep();
+          }
+
+          this.handleFoundLocation(data.foundLocation, data.foundMonster);
         }
         else {
           this.showError(data.errorMessage);
@@ -364,14 +395,19 @@ export class MapComponent implements OnInit, OnDestroy {
   getMonsterImagePosition(ppp){
     // console.log('monster found at: ' + ppp);
     // console.log('image pos: ' + this.monsters[ppp]);
-    let imagePosition = this.monsters[ppp];
-    if (imagePosition.includes(','))
-    {
+    let imagePosition = this.monsters[ppp].image;
+
+    if (this.monsters[ppp].alive === false){
+      imagePosition = '39';
+    }
+
+    if (imagePosition.includes(',')){ // for non-standard "dead picture" monsters
       imagePosition = imagePosition.split(',');
       imagePosition = imagePosition[0]; // if alive
 
-      // TODO:
-      // imagePosition = imagePosition[1]; // if dead
+      if (this.monsters[ppp].alive === false){
+        imagePosition = imagePosition[1]; // if dead
+      }
     }
 
     return (11 * this.scaledSize)+'|'+(imagePosition * this.scaledSize);

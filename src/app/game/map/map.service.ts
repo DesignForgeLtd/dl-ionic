@@ -37,13 +37,28 @@ interface FoundLocationData{
   type: number;
 }
 
+interface FoundMonsterData{
+  aktywny: string;
+  opis: string;
+  ostatnioZabil: string;
+  alive: boolean;
+}
+
+interface MapResponseData{
+  'success': boolean;
+  'errorMessage': string;
+  'playerData': PlayerData;
+  'foundLocation': FoundLocationData;
+  'foundMonster': FoundMonsterData;
+}
+
 @Injectable({providedIn: 'root'})
 export class MapService {
   constructor(private http: HttpClient){}
 
   loadHeroEssentialData(){
     // eslint-disable-next-line max-len
-    return this.http.get<{'playerData': PlayerData; 'foundLocation': FoundLocationData; 'locationFullData': any}>( // 'id': string;'position': number;'level': number
+    return this.http.get<{'playerData': PlayerData; 'foundLocation': FoundLocationData; 'locationFullData': any; 'foundMonster': FoundMonsterData}>( // 'id': string;'position': number;'level': number
       AppSettings.API_ENDPOINT + '/hero/getEssentialData',
       {responseType: 'json'}
     );
@@ -57,28 +72,28 @@ export class MapService {
   }
 
   updateActualPosition(playerPosition){
-    return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
+    return this.http.post<MapResponseData>(
       AppSettings.API_ENDPOINT + '/map/move/' + playerPosition,
       {}
     );
   }
 
   useUndergroundPassage(direction){
-    return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
+    return this.http.post<MapResponseData>(
       AppSettings.API_ENDPOINT + '/map/subway/'+direction,
       {responseType: 'json'}
     );
   }
 
   usePortConnection(connectionId){
-    return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
+    return this.http.post<MapResponseData>(
       AppSettings.API_ENDPOINT + '/map/port/'+connectionId,
       {responseType: 'json'}
     );
   }
 
   usePortal(portalId){
-    return this.http.post<{'success': boolean; 'errorMessage': string; 'playerData': PlayerData; 'foundLocation': FoundLocationData}>(
+    return this.http.post<MapResponseData>(
       AppSettings.API_ENDPOINT + '/map/portal/'+portalId,
       {responseType: 'json'}
     );

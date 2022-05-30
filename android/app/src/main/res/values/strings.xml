@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">Dragon Lords</string>
-    <string name="title_activity_main">Dragon Lords</string>
-    <string name="package_name">dragon.lords</string>
-    <string name="custom_url_scheme">dragon.lords</string>
-</resources>
