@@ -1,0 +1,19 @@
+<div class="backdrop"></div>
+<div class="modal-container">
+
+  <ion-card>
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-buttons slot="end">
+          <ion-button color="danger" (click)="closeModal()">
+            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content *ngIf="monsterData !== null">
+      <h1>Monster: {{ monsterData.name }}</h1>
+      <p>{{ monsterData.opis }} </p>
+    </ion-card-content>
+  </ion-card>
+</div>
