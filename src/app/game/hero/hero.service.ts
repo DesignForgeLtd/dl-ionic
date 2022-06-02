@@ -46,4 +46,11 @@ export class HeroService {
     );
   }
 
+  loadBadges(heroId: number){
+    return this.http.get<{'success': boolean; 'errorMessage': boolean; 'badges': any}>(
+      AppSettings.API_ENDPOINT + '/badges/display/'+heroId,
+      {responseType: 'json'}
+    );
+  }
+
 }

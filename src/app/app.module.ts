@@ -39,6 +39,7 @@ import { HeroComponent } from './game/hero/hero.component';
 import { HeroActiveElixirsComponent } from './game/hero/hero-active-elixirs/hero-active-elixirs.component';
 import { HeroOccupationsComponent } from './game/hero/hero-occupations/hero-occupations.component';
 import { HeroSkillsComponent } from './game/hero/hero-skills/hero-skills.component';
+import { BadgesComponent } from './game/hero/badges/badges.component';
 
 
 
@@ -67,6 +68,7 @@ import { HeroSkillsComponent } from './game/hero/hero-skills/hero-skills.compone
     HeroAttributesComponent,
     HeroOccupationsComponent,
     HeroSkillsComponent,
+    BadgesComponent,
     JourneyComponent,
     ShopComponent
   ],
