@@ -29,7 +29,7 @@ export class BadgesComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.heroService.loadBadges(2).subscribe(data => {
+    this.heroService.loadBadges(0).subscribe(data => {
       console.log(data);
       this.badges = data.badges;
       this.isLoading = false;
