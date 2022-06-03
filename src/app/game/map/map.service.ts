@@ -50,6 +50,7 @@ interface MapResponseData{
   'playerData': PlayerData;
   'foundLocation': FoundLocationData;
   'foundMonster': FoundMonsterData;
+  'receivedBadge': FoundMonsterData;
 }
 
 @Injectable({providedIn: 'root'})

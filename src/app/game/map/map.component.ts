@@ -532,7 +532,6 @@ export class MapComponent implements OnInit, OnDestroy {
       if (data.success === true){
         console.log(data);
         this.loadHeroEssentialData();
-        this.gameUIService.openLocationModal('');
       }
       else {
         this.showError(data.errorMessage);
