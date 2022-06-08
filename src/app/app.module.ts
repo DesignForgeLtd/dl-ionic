@@ -41,6 +41,7 @@ import { HeroOccupationsComponent } from './game/hero/hero-occupations/hero-occu
 import { HeroSkillsComponent } from './game/hero/hero-skills/hero-skills.component';
 import { BaggagePopoverComponent } from './game/baggage/baggage-popover/baggage-popover.component';
 import { MonsterComponent } from './game/map/monster/monster.component';
+import { MiningComponent } from './game/mining/mining.component';
 
 
 
@@ -72,7 +73,8 @@ import { MonsterComponent } from './game/map/monster/monster.component';
     JourneyComponent,
     ShopComponent,
     BaggagePopoverComponent,
-    MonsterComponent
+    MonsterComponent,
+    MiningComponent
   ],
   entryComponents: [],
   imports: [

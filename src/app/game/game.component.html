@@ -1,9 +1,8 @@
 
 <app-map *ngIf="playerDataOccupiedWith === null"></app-map>
 
-<app-journey
-  *ngIf="playerDataOccupiedWith === 'journey'"
-></app-journey>
+<app-mining *ngIf="playerDataOccupiedWith === 'mining'"></app-mining>
+<app-journey *ngIf="playerDataOccupiedWith === 'journey'"></app-journey>
 
 <app-menu></app-menu>
 
