@@ -25,8 +25,8 @@ export class MiningComponent implements OnInit {
   playerSize = 64;
   playerScaledSize = 64;
 
-  columns   = 7;// columns and rows in map below
-  rows      = 7;
+  columns   = 50;// columns and rows in map below
+  rows      = 10;
 
   // from session
   gamemapSize = '17x11';
@@ -132,7 +132,7 @@ export class MiningComponent implements OnInit {
       const playerData = data.playerData;
 
       this.world = new World(playerData.level);
-      playerData.position = 201;
+      playerData.position = 1001;
       this.player = new Player(
         playerData.position % 200,
         Math.floor(playerData.position / 200),
