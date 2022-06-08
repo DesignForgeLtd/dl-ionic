@@ -1,4 +1,8 @@
-<div *ngIf="item.quantity > 0" class="baggage-item" (click)="baggageItemClick($event, item)">
+<div
+  *ngIf="item.quantity > 0 || item.quantity === null"
+  class="baggage-item"
+  (click)="baggageItemClick($event)"
+>
   <ion-badge *ngIf="item.in_use" color="success">Equipped</ion-badge>
   <ion-badge *ngIf="item.quantity > 1" color="secondary">{{ item.quantity }}</ion-badge>
   <div

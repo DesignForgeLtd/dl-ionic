@@ -40,9 +40,11 @@ export class GameUIService {
       + ', Energy: ' + heroInfo.energy
       + ', Stamina: <span id="hero-stamina">' + heroInfo.stamina + '</span>'
       + ', Health: <span id="hero-health">' + heroInfo.health + '</span>'
+      + ', Mana: <span id="hero-mana">' + heroInfo.mana + '</span>'
+      + ', Gold: <span id="hero-gold">' + heroInfo.gold + '</span>'
       + ', Position: ' + heroInfo.position
       + ' (' + (heroInfo.position % 200) + ',' + Math.floor(heroInfo.position / 200) + ')'
-      + ', Level: ' + heroInfo.level;
+      + ', World Level: ' + heroInfo.level;
   }
 
   heroInfoUpdate(heroData){
@@ -51,6 +53,12 @@ export class GameUIService {
     }
     if (typeof heroData.health !== 'undefined'){
       document.getElementById('hero-health').innerHTML = heroData.health;
+    }
+    if (typeof heroData.mana !== 'undefined'){
+      document.getElementById('hero-mana').innerHTML = heroData.mana;
+    }
+    if (typeof heroData.gold !== 'undefined'){
+      document.getElementById('hero-gold').innerHTML = heroData.gold;
     }
   }
 

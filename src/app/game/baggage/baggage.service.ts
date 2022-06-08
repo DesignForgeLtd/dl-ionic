@@ -16,6 +16,7 @@ interface BaggageActionResponseData{
   'hero_item': any;
   'hero_data_to_update': any;
   'quantity': number;
+  'price': number;
 }
 
 @Injectable({providedIn: 'root'})
@@ -57,6 +58,16 @@ export class BaggageService {
       {
         baggage_item_id: baggageItemId,
         state
+      }
+    );
+  }
+
+  shopBuy(itemId: number, quantity: number){
+    return this.http.post<BaggageActionResponseData>(
+      AppSettings.API_ENDPOINT + '/baggage/purchase',
+      {
+        shop_item_id: itemId,
+        quantity
       }
     );
   }

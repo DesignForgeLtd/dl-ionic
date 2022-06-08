@@ -22,7 +22,9 @@
               <h2 *ngIf="baggageItems[baggageTypeChild.id]">{{ baggageTypeChild.name }}</h2>
               <app-baggage-item
                 *ngFor="let baggageItem of baggageItems[baggageTypeChild.id] | keyvalue"
-                [item]="baggageItem">
+                [item]="baggageItem"
+                [area]="'shop'"
+              >
               </app-baggage-item>
             </ng-container>
           </ng-container>

@@ -248,6 +248,7 @@ export class MapComponent implements OnInit, OnDestroy {
         this.tryHeroNextStep();
       }
       else{
+        console.log('Hero stuck due to serverSavedNewPosition === false');
         // TODO: after 5s (?) of API not responding, player.revertHeroLastStep()
         // keep in mind, hero might simply not be moving (no lag)... do not revert then
       }
@@ -279,8 +280,8 @@ export class MapComponent implements OnInit, OnDestroy {
 
       this.playerSavedPosition = this.player.position;
       this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
+        this.setServerSavedNewPosition();
         if (data.success === true){
-          this.setServerSavedNewPosition();
 
           //this.handleFoundMonster(data.foundMonster);
 
@@ -295,7 +296,9 @@ export class MapComponent implements OnInit, OnDestroy {
         }
         else {
           this.showError(data.errorMessage);
+          console.log('HERE');
           this.player.revertHeroLastStep();
+          this.player.stop();
         }
 
         this.heroInfoUpdate(data.playerData);
@@ -318,8 +321,8 @@ export class MapComponent implements OnInit, OnDestroy {
       + ' ('+this.player.coord_x+','+this.player.coord_y+')';
   }
 
-  heroInfoUpdate(playerInfo){
-    this.gameUIService.heroInfoInitialize(playerInfo);
+  heroInfoUpdate(heroInfo){
+    this.gameUIService.heroInfoInitialize(heroInfo);
   }
 
   drawTerrain(){
