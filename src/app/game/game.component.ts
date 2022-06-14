@@ -35,7 +35,8 @@ export class GameComponent implements OnInit {
 
   ngOnInit() {
     // MarrQ
-    this.loadHeroEssentialData();console.log(this.playerDataOccupiedWith);
+    this.loadHeroEssentialData();
+    console.log(this.playerDataOccupiedWith);
   }
 
   closeModal(){

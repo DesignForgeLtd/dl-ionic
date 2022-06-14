@@ -153,17 +153,23 @@ export class MapComponent implements OnInit, OnDestroy {
   handleFoundLocation(foundLocation, foundMonster = null){
     if (foundLocation !== null){
       switch (foundLocation.type) {
+        case 2:
+          console.log('found Shop Location: ');
+          console.log(foundLocation);
+          this.locationData = foundLocation;
+          this.gameUIService.openLocationModal('shop');
+          break;
         case 3:
           console.log('found Production Location: ');
           console.log(foundLocation);
           this.locationData = foundLocation;
           this.gameUIService.openLocationModal('map-production-location');
           break;
-        case 2:
-          console.log('found Shop Location: ');
+        case 4:
+          console.log('found Mining Location: ');
           console.log(foundLocation);
           this.locationData = foundLocation;
-          this.gameUIService.openLocationModal('shop');
+          this.gameUIService.openLocationModal('map-location');
           break;
         case 6:
           console.log('found Monster');
@@ -508,6 +514,9 @@ export class MapComponent implements OnInit, OnDestroy {
       case 'usePortal':
         this.usePortal(action.param);
         break;
+      case 'startMining':
+        this.startMining(action.param);
+        break;
     }
   }
 
@@ -549,13 +558,25 @@ export class MapComponent implements OnInit, OnDestroy {
       if (data.success === true){
         console.log(data);
         this.heroInfoUpdate(data.playerData);
-        this.loadGameMap(data.playerData.level);
+        this.loadGameMap(data.playerData.level); // TODO: check if can be removed
         this.gameUIService.changeHeroOccupation('journey');
       }
       else {
         this.showError(data.errorMessage);
       }
+    });
+  }
 
+  startMining(position: number){
+    this.mapService.startMining(position).subscribe(data => {
+      if (data.success === true){
+        console.log(data);
+        this.heroInfoUpdate(data.playerData);
+        this.gameUIService.changeHeroOccupation('mining');
+      }
+      else {
+        this.showError(data.errorMessage);
+      }
     });
   }
 

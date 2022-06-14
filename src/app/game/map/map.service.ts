@@ -99,6 +99,20 @@ export class MapService {
     );
   }
 
+  startMining(position){
+    return this.http.post<MapResponseData>(
+      AppSettings.API_ENDPOINT + '/map/start-mining/'+position,
+      {responseType: 'json'}
+    );
+  }
+
+  stopMining(){
+    return this.http.post<MapResponseData>(
+      AppSettings.API_ENDPOINT + '/map/stop-mining',
+      {responseType: 'json'}
+    );
+  }
+
   loadHeroFullData(){
     return this.http.get<{'heroFullData': HeroFullData}>(
       AppSettings.API_ENDPOINT + '/hero/getFullData',
