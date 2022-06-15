@@ -58,10 +58,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
   monsters: any;
 
-  private context: CanvasRenderingContext2D;
+  context: CanvasRenderingContext2D;
 
-  private animationFrame;
-  private serverSavedNewPosition = true;
+  animationFrame;
+  serverSavedNewPosition = true;
 
 
 
