@@ -123,6 +123,11 @@ export class MapComponent implements OnInit, OnDestroy {
 
       this.world = new World(playerData.level);
 
+      const positionOverwrite = this.overwriteHeroPosition();
+      if (positionOverwrite !== null){
+        playerData.position = positionOverwrite;
+      }
+
       this.player = new Player(
         playerData.position % 200,
         Math.floor(playerData.position / 200),
@@ -133,11 +138,16 @@ export class MapComponent implements OnInit, OnDestroy {
       this.playerSavedPosition = this.player.position;
       this.loadGameMap(this.player.level);
       this.heroInfoUpdate(playerData);
+
       // this.loop();
       this.animationFrame = window.requestAnimationFrame(() => this.loop());
 
       this.handleFoundLocation(data.foundLocation, data.foundMonster);
     });
+  }
+
+  overwriteHeroPosition(){
+    return null;
   }
 
   // handleFoundMonster(foundMonster){
