@@ -115,7 +115,18 @@ export class MiningComponent implements OnInit {
         } else if (x === this.columns - 1){
           data += 'g31';
         } else {
-          data += 'p70';
+          const rand = Math.floor(Math.random() * 100);
+          if (rand > 90){
+            data += 'z00';
+          } else if (rand > 77){
+            const rand2 = Math.floor(Math.random() * 6);
+            data += 'g0' + rand2.toString();
+          } else if (rand > 60){
+            const rand2 = Math.floor(Math.random() * 6) + 72;
+            data += 'p' + rand2.toString();
+          } else {
+            data += 'p70';
+          }
         }
       }
     }

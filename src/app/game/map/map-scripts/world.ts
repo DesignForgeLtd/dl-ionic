@@ -431,7 +431,7 @@ export class World{
 	}
 
 
-drawTile(i)
+drawTile(i, world = null)
 {
 	const szerokoscPola = 76;
 
@@ -874,7 +874,9 @@ drawTile(i)
 
 			 break;
 			case 'z':
+        link = (9 * szerokoscPola)+'|'+(48 * szerokoscPola);  // hebanowiec
 
+							link += '|||hebanowiec';
 			 break;
 
 		}
