@@ -16,10 +16,14 @@ import { MapService } from '../map/map.service';
 })
 export class MiningComponent extends MapComponent implements OnInit {
 
-/*  @ViewChild('canvas', { static: true })*/
+  /*  @ViewChild('canvas', { static: true })*/
 
-columns   = 50;// columns and rows in map below
-rows      = 10;
+  columns   = 50;// columns and rows in map below
+  rows      = 10;
+
+  overwriteHeroPosition(){
+    return 1001;
+  }
 
   loadGameMap(level: number){
     let data = '';
