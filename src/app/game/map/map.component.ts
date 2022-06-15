@@ -63,18 +63,16 @@ export class MapComponent implements OnInit, OnDestroy {
   animationFrame;
   serverSavedNewPosition = true;
 
-  public gameUIService: GameUIService;
-  public http: HttpClient;
-  public mapService: MapService;
+
 
   constructor(
-
+    public http: HttpClient,
+    public mapService: MapService,
+    public gameUIService: GameUIService
   ) {
     this.tileSheet = new Image();
     this.heroImage = new Image();
-    this.gameUIService = new GameUIService();
-    this.http = new HttpClient();
-    this.mapService = new MapService();
+    //this.gameUIService = new GameUIService();
 
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
