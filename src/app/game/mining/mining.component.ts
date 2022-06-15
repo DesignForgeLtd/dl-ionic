@@ -1,13 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Input } from '@angular/core';
-import { GameUIService } from '../game-ui.service';
 
 import { MapComponent } from '../map/map.component';
 
-import { Player } from '../map/map-scripts/player';
-import { Viewport } from '../map/map-scripts/viewport';
-import { World } from '../map/map-scripts/world';
-import { MapService } from '../map/map.service';
 
 @Component({
   selector: 'app-mining',
