@@ -104,7 +104,7 @@ export class MapComponent implements OnInit, OnDestroy {
     cancelAnimationFrame(this.animationFrame);
   }
 
-  loadGameMap(level: number){
+  loadGameMap(level: number, originalPosition: number = null){
     this.http.get(
       'assets/detailedMap'+(level+1)+'.txt',
       {responseType: 'text'}
@@ -124,6 +124,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
       this.world = new World(playerData.level);
 
+      const originalPosition = playerData.position;
       const positionOverwrite = this.overwriteHeroPosition();
       if (positionOverwrite !== null){
         playerData.position = positionOverwrite;
@@ -137,7 +138,7 @@ export class MapComponent implements OnInit, OnDestroy {
         this.scaledSize
       );
       this.playerSavedPosition = this.player.position;
-      this.loadGameMap(this.player.level);
+      this.loadGameMap(this.player.level, originalPosition);
       this.heroInfoUpdate(playerData);
 
       // this.loop();

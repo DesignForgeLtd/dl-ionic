@@ -126,4 +126,12 @@ export class MapService {
       {responseType: 'json'}
     );
   }
+
+  loadMineMap( playerPosition: number){
+    return this.http.get(
+      AppSettings.API_ENDPOINT + '/mine/map/' + playerPosition,
+      {responseType: 'text'}
+    );
+  }
+
 }

@@ -14,8 +14,6 @@ import { MapComponent } from '../map/map.component';
 })
 export class MiningComponent extends MapComponent implements OnInit {
 
-  /*  @ViewChild('canvas', { static: true })*/
-
   columns   = 50;// columns and rows in map below
   rows      = 10;
 
@@ -32,7 +30,14 @@ export class MiningComponent extends MapComponent implements OnInit {
     return 1001;
   }
 
-  loadGameMap(level: number){
+  loadGameMap(level: number, originalPosition: number){
+    this.mapService.loadMineMap(originalPosition)
+      .subscribe(data => {
+        this.world.populateMap(data);
+      });
+  }
+
+  loadGameMapBackup(level: number){
     let data = '';
     for (let y=0; y<this.rows; y++){
       for (let x=0; x<this.columns; x++){
