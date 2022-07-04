@@ -11,6 +11,7 @@ import { BaggageService } from '../baggage.service';
 export class BaggagePopoverComponent implements OnInit {
 
   @Input() item;
+  @Input() area;
 
   constructor(
     private baggageService: BaggageService,
@@ -21,6 +22,7 @@ export class BaggagePopoverComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.item);
+    console.log(this.area);
   }
 
   baggageUse(){
@@ -125,6 +127,25 @@ export class BaggagePopoverComponent implements OnInit {
     });
 
     await alert.present();
+  }
+
+  shopBuy(quantity: number){
+    console.log('buying '+quantity+' of '+this.item.name+'...');
+    this.baggageService.shopBuy(this.item.shop_item_id, quantity).subscribe(data => {
+      console.log('data: ');
+      console.log(data);
+      if (data.success === true) {
+        this.presentToast('success', 'Bought ' + data.quantity + 'x ' + this.item.name + ' for total price of ' + data.price + ' gold.');
+        //this.gameUIService.heroInfoUpdate(data.hero_data_to_update);
+        const gold = parseInt(document.getElementById('hero-gold').innerHTML, 10); // TODO: update this when HeroInfoComponent is created
+        console.log('gold:' + gold);
+        document.getElementById('hero-gold').innerHTML = (gold - data.price).toString();
+
+      } else {
+        this.presentToast('danger', 'Could not buy ' + this.item.name);
+      }
+      this.baggageItemController.dismiss();
+    });
   }
 
 }

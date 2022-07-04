@@ -10,6 +10,7 @@ import { BaggagePopoverComponent } from '../baggage-popover/baggage-popover.comp
 export class BaggageItemComponent implements OnInit {
 
   @Input() item = null;
+  @Input() area = null;
 
   constructor(public baggageItemController: PopoverController) { }
 
@@ -18,12 +19,13 @@ export class BaggageItemComponent implements OnInit {
     console.log(this.item);
   }
 
-  async baggageItemClick(event, item){
+  async baggageItemClick(event){
     console.log(event);
     const popover = await this.baggageItemController.create({
       component: BaggagePopoverComponent,
       componentProps: {
-        item
+        item: this.item,
+        area: this.area
       },
       event
     });
