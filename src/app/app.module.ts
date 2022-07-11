@@ -42,6 +42,7 @@ import { HeroSkillsComponent } from './game/hero/hero-skills/hero-skills.compone
 import { BadgesComponent } from './game/hero/badges/badges.component';
 import { BaggagePopoverComponent } from './game/baggage/baggage-popover/baggage-popover.component';
 import { MonsterComponent } from './game/map/monster/monster.component';
+import { BankComponent } from './game/map/bank/bank.component';
 
 
 
@@ -73,6 +74,7 @@ import { MonsterComponent } from './game/map/monster/monster.component';
     BadgesComponent,
     JourneyComponent,
     ShopComponent,
+    BankComponent,
     BaggagePopoverComponent,
     MonsterComponent
   ],

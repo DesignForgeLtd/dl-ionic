@@ -1,0 +1,46 @@
+<div class="backdrop"></div>
+<div class="modal-container">
+
+  <ion-card>
+
+    <ion-card-header>
+      <ion-toolbar>
+        <h1>Bank</h1>
+        <ion-buttons slot="end">
+          <ion-button color="danger" (click)="closeModal()">
+            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+
+
+    <ion-card-content style="min-height:300px">
+
+          <ng-container>
+            <h2>Your Bank ballance is <b>{{ bank }}</b> gold.</h2>
+
+            <ion-item>
+              <ion-label position="floating">Amount</ion-label>
+              <ion-input type="number" #bankRemoveAmount></ion-input>
+            </ion-item>
+
+            <ion-button type="button" color="light" (click)="removeGoldFromBank(bankRemoveAmount.value)">Remove</ion-button>
+
+            <h2>You have {{ gold }} gold.</h2>
+
+            <ion-item>
+              <ion-label position="floating">Amount</ion-label>
+              <ion-input type="number" #bankInsertAmount></ion-input>
+            </ion-item>
+
+            <ion-button type="button" color="light" (click)="insertGoldToBank(bankInsertAmount.value)">Insert</ion-button>
+
+          </ng-container>
+
+          <ion-button *ngIf="message" expand="full" color="warning">{{message}}</ion-button>
+
+    </ion-card-content>
+
+  </ion-card>
+</div>

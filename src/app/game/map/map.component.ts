@@ -170,6 +170,11 @@ export class MapComponent implements OnInit, OnDestroy {
           this.monsterData = foundMonster;
           this.gameUIService.openMonsterModal();
           break;
+        case 14:
+          console.log('found Bank');
+          console.log(foundLocation);
+            this.gameUIService.openLocationModal('bank');
+          break;
         default:
           console.log('found Other Location: ');
           console.log(foundLocation);
