@@ -25,16 +25,46 @@ export class MiningComponent extends MapComponent implements OnInit {
     super(http, mapService, gameUIService);
   }
 
-
-  overwriteHeroPosition(){
-    return 1001;
-  }
-
   loadGameMap(level: number, originalPosition: number){
     this.mapService.loadMineMap(originalPosition)
       .subscribe(data => {
         this.world.populateMap(data);
       });
+  }
+
+  updateHeroPosition(){
+    // send info about player's new coords to the server
+
+    this.playerSavedPosition = this.player.position;
+    this.mapService.updatePositionInMine(this.playerSavedPosition).subscribe(data => {
+      this.setServerSavedNewPosition();
+      if (data.success === true){
+        this.player.incrementHeroStep();
+        if (data.foundResource !== false){
+          switch (data.foundResource)
+          {
+            case 'wood':
+              this.showSuccess('Collected resource: ' + data.foundResource);
+              this.world.replaceTileInMap(this.player.position, 'p70');
+              break;
+            case 'portal':
+              console.log('Found portal!!!');
+              break;
+          }
+
+        } else {
+
+        }
+      }
+      else {
+        this.showError(data.errorMessage);
+        console.log('HERE');
+        this.player.revertHeroLastStep();
+        this.player.stop();
+      }
+
+      this.heroInfoUpdate(data.playerData);
+    });
   }
 
 }

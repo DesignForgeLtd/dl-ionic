@@ -64,7 +64,7 @@ export class MenuComponent implements OnInit {
   stopMining(){
     this.mapService.stopMining().subscribe(data => {
       if (data.success === true){
-        console.log('her!');
+        console.log('here!');
         console.log(data);
         //this.heroInfoUpdate(data.playerData);
         this.gameUIService.changeHeroOccupation('');

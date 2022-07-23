@@ -122,17 +122,17 @@ export class MapComponent implements OnInit, OnDestroy {
 
       const playerData = data.playerData;
 
-      this.world = new World(playerData.level);
+      this.world = new World(playerData.level, this.columns, this.rows);
 
       const originalPosition = playerData.position;
-      const positionOverwrite = this.overwriteHeroPosition();
-      if (positionOverwrite !== null){
-        playerData.position = positionOverwrite;
+      if (playerData.occupied_with === 'mining'){
+        playerData.position = playerData.positionInMine;
       }
-
+console.log('this.rows: '+this.rows);
+console.log('this.columns: '+this.columns);
       this.player = new Player(
-        playerData.position % 200,
-        Math.floor(playerData.position / 200),
+        playerData.position % this.columns,
+        Math.floor(playerData.position / this.columns),
         playerData.level,
         this.world,
         this.scaledSize
@@ -146,10 +146,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
       this.handleFoundLocation(data.foundLocation, data.foundMonster);
     });
-  }
-
-  overwriteHeroPosition(){
-    return null;
   }
 
   // handleFoundMonster(foundMonster){
@@ -205,7 +201,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.mapService.loadMonstersData()
     .subscribe(data => {
       this.monsters = data.monsters;
-      console.log(this.monsters);
+      //console.log(this.monsters);
     });
   }
 
@@ -250,6 +246,7 @@ export class MapComponent implements OnInit, OnDestroy {
     // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
 
     this.heroLoop();
+    // console.log('this.player.pixel_x, this.player.pixel_y: ' + this.player.pixel_x, this.player.pixel_y);
     this.viewport.scrollTo(this.player.pixel_x, this.player.pixel_y);
 
     this.drawTerrain();
@@ -335,7 +332,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   infolocationUpdate(){
     document.getElementById('location-info').innerHTML =
-      this.world.locationInfo(this.player.coord_x + this.player.coord_y * 200)
+      this.world.locationInfo(this.player.coord_x + this.player.coord_y * this.columns)
       + ' ('+this.player.coord_x+','+this.player.coord_y+')';
   }
 
@@ -348,7 +345,8 @@ export class MapComponent implements OnInit, OnDestroy {
     column and row (x and y) we use floor to round down and for the max we
     use ceil to round up. We want to get the rows and columns under the borders
     of the viewport rectangle. This is visualized by the white square in the example. */
-    //console.log(this.player);
+// console.log('this.viewport.x, this.viewport.w: ' + this.viewport.x, this.viewport.w);
+// console.log('this.viewport.y, this.viewport.h: ' + this.viewport.y, this.viewport.h);
     let xMin = Math.floor(this.viewport.x / this.scaledSize);
     let yMin = Math.floor(this.viewport.y / this.scaledSize);
     let xMax = Math.ceil((this.viewport.x + this.viewport.w) / this.scaledSize);
@@ -377,7 +375,8 @@ export class MapComponent implements OnInit, OnDestroy {
     const ppp = x + y * this.columns;
 
     const poleLinkOpis = this.world.drawTile(ppp*3).split('|||');
-
+// console.log('poleLinkOpis: ');
+// console.log(poleLinkOpis);
     let plo0 = poleLinkOpis[0];
     if ( poleLinkOpis[1] === 'monster'){
       plo0 = this.getMonsterImagePosition(ppp);
@@ -506,6 +505,14 @@ export class MapComponent implements OnInit, OnDestroy {
     document.getElementById('error-info').style.display = 'block';
 
     setTimeout(() => document.getElementById('error-info').style.display = 'none', 3000);
+  }
+
+  showSuccess(successMessage){
+    console.log(successMessage);
+    document.getElementById('success-info').innerHTML = successMessage;
+    document.getElementById('success-info').style.display = 'block';
+
+    setTimeout(() => document.getElementById('success-info').style.display = 'none', 3000);
   }
 
   mapLocationAction(action) {
