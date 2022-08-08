@@ -171,9 +171,14 @@ export class MapComponent implements OnInit, OnDestroy {
           this.gameUIService.openMonsterModal();
           break;
         case 14:
-          console.log('found Bank');
+          console.log('found Bank: ');
           console.log(foundLocation);
-            this.gameUIService.openLocationModal('bank');
+          this.gameUIService.openLocationModal('bank');
+          break;
+        case 8:
+          console.log('found Other Location: ');
+          console.log(foundLocation);
+          this.handleOtherLocation(foundLocation.id);
           break;
         default:
           console.log('found Other Location: ');
@@ -184,6 +189,16 @@ export class MapComponent implements OnInit, OnDestroy {
     }else{
       this.locationData = null;
       this.gameUIService.openLocationModal('');
+    }
+  }
+
+  handleOtherLocation(locationId: number){
+    switch (locationId) {
+      case 79:
+        this.gameUIService.openLocationModal('witch');
+        break;
+      default:
+        this.gameUIService.openLocationModal('map-location');
     }
   }
 

@@ -36,7 +36,7 @@ export class GameUIService {
 
   heroInfoInitialize(heroInfo){
     document.getElementById('hero-info').innerHTML =
-      '<b>' + heroInfo.name + '</b> (ID: ' + heroInfo.id + ')'
+      '<b id="hero-name">' + heroInfo.name + '</b> (ID: ' + heroInfo.id + ')'
       + ', Energy: ' + heroInfo.energy
       + ', Stamina: <span id="hero-stamina">' + heroInfo.stamina + '</span>'
       + ', Health: <span id="hero-health">' + heroInfo.health + '</span>'
@@ -59,6 +59,9 @@ export class GameUIService {
     }
     if (typeof heroData.gold !== 'undefined'){
       document.getElementById('hero-gold').innerHTML = heroData.gold;
+    }
+    if (typeof heroData.name !== 'undefined'){
+      document.getElementById('hero-name').innerHTML = heroData.name;
     }
   }
 

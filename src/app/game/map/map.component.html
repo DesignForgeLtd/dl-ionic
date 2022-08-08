@@ -28,6 +28,11 @@
   [passedLocationData]="locationData"
 ></app-bank>
 
+<app-witch
+  *ngIf="openedModal === 'witch'"
+  [passedLocationData]="locationData"
+></app-witch>
+
 <app-monster
   *ngIf="openedModal === 'monster'"
   [passedMonsterData]="monsterData"

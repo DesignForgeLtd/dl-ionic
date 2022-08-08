@@ -43,6 +43,7 @@ import { BadgesComponent } from './game/hero/badges/badges.component';
 import { BaggagePopoverComponent } from './game/baggage/baggage-popover/baggage-popover.component';
 import { MonsterComponent } from './game/map/monster/monster.component';
 import { BankComponent } from './game/map/bank/bank.component';
+import { WitchComponent } from './game/map/witch/witch.component';
 
 
 
@@ -75,6 +76,7 @@ import { BankComponent } from './game/map/bank/bank.component';
     JourneyComponent,
     ShopComponent,
     BankComponent,
+    WitchComponent,
     BaggagePopoverComponent,
     MonsterComponent
   ],
