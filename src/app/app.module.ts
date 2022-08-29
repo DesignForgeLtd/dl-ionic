@@ -44,6 +44,7 @@ import { BaggagePopoverComponent } from './game/baggage/baggage-popover/baggage-
 import { MonsterComponent } from './game/map/monster/monster.component';
 import { BankComponent } from './game/map/bank/bank.component';
 import { WitchComponent } from './game/map/witch/witch.component';
+import { WeaponFixComponent } from './game/map/weapon-fix/weapon-fix.component';
 
 
 
@@ -77,6 +78,7 @@ import { WitchComponent } from './game/map/witch/witch.component';
     ShopComponent,
     BankComponent,
     WitchComponent,
+    WeaponFixComponent,
     BaggagePopoverComponent,
     MonsterComponent
   ],

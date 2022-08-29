@@ -1,0 +1,66 @@
+<div class="backdrop"></div>
+<div class="modal-container">
+
+  <ion-card>
+
+    <ion-card-header>
+      <ion-toolbar>
+        <h1>Weapon Fix</h1>
+        <ion-buttons slot="end">
+          <ion-button color="danger" (click)="closeModal()">
+            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+
+
+    <ion-card-content style="min-height:300px">
+
+          <ng-container>
+
+            <h2>Here you can fix your weapon.</h2>
+
+            <div *ngIf="resourcesNeeded">
+              To fix your weapon for
+              {{resourcesNeeded.durabilityMin}} - {{resourcesNeeded.durabilityMax}}
+              points, you need
+              {{resourcesNeeded.steel}} steel,
+              {{resourcesNeeded.lubricant}} lubricant,
+              {{resourcesNeeded.gold}} gold.
+            </div>
+
+            <div *ngIf="resources">
+              You have now
+              {{resources.steel}} steel,
+              {{resources.lubricant}} lubricant,
+              {{resources.gold}} gold.
+            </div>
+
+            <div *ngIf="weaponList.length; else noWeaponList">
+              <h3>Choose weapon to fix:</h3>
+              <select #weaponFixItem>
+                <option *ngFor="let weapon of weaponList"
+                    value="{{weapon.id}}"
+                    id="weaponFixItem{{weapon.id}}">
+                  {{weapon.item.name}} - {{weapon.durability}} / {{weapon.durability_max}}
+                </option>
+              </select>
+              <div>
+                <button (click)="fixWeapon()">Fix Weapon</button>
+              </div>
+            </div>
+
+            <ng-template #noWeaponList>
+              <h3>You have no weapon to fix.</h3>
+            </ng-template>
+
+
+          </ng-container>
+
+          <ion-button *ngIf="message" expand="full" color="warning">{{message}}</ion-button>
+
+    </ion-card-content>
+
+  </ion-card>
+</div>

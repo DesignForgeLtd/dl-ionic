@@ -197,6 +197,9 @@ export class MapComponent implements OnInit, OnDestroy {
       case 79:
         this.gameUIService.openLocationModal('witch');
         break;
+      case 81:
+        this.gameUIService.openLocationModal('weapon-fix');
+        break;
       default:
         this.gameUIService.openLocationModal('map-location');
     }

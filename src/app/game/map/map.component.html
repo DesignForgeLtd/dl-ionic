@@ -33,6 +33,11 @@
   [passedLocationData]="locationData"
 ></app-witch>
 
+<app-weapon-fix
+  *ngIf="openedModal === 'weapon-fix'"
+  [passedLocationData]="locationData"
+></app-weapon-fix>
+
 <app-monster
   *ngIf="openedModal === 'monster'"
   [passedMonsterData]="monsterData"
