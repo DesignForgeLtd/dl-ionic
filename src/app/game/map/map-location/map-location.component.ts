@@ -67,4 +67,7 @@ export class MapLocationComponent implements OnInit {
     this.mapLocationAction.emit({name: 'usePortal', param: portalId});
   }
 
+  startMining(){
+    this.mapLocationAction.emit({name: 'startMining', param: this.locationData.position});
+  }
 }

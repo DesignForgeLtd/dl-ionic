@@ -18,14 +18,18 @@ export class Player {
   private world: World;
 
   constructor(public coord_x: number, public coord_y: number, public level: number, world, scaled_size) {
+    console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
+
+
     this.scaled_size = scaled_size;
     this.world = world;
     this.pixel_x = this.coord_x * this.scaled_size; // pixels
     this.pixel_y = this.coord_y * this.scaled_size;
-    this.position = this.coord_x + this.coord_y * 200;
+    this.position = this.coord_x + this.coord_y * this.world.columns;
     this.direction = null;
     this.prev_direction = 'down';
     this.level = level;
+    console.log('INIT: position: ' + this.position);
   };
 
   animate() {
@@ -91,10 +95,10 @@ export class Player {
     }
 
     console.log(
-      'Going from ('+ this.coord_x+', '+ this.coord_y + ')='+(this.coord_x + this.coord_y *200)
-      +' to ('+ move_x+', '+ move_y + ')='+(move_x + move_y *200)+'');
+      'Going from ('+ this.coord_x+', '+ this.coord_y + ')='+(this.coord_x + this.coord_y * this.world.columns)
+      +' to ('+ move_x+', '+ move_y + ')='+(move_x + move_y *this.world.columns)+'');
 
-    const destination = move_x + move_y*200;
+    const destination = move_x + move_y*this.world.columns;
 
     const positionAccessible = this.world.positionAccessible(destination);
     if (positionAccessible !== true)
@@ -163,7 +167,7 @@ export class Player {
 				break;
 		}
 
-    this.position = this.coord_x + this.coord_y * 200;
+    this.position = this.coord_x + this.coord_y * this.world.columns;
 
     this.clearMovementParams();
   }
@@ -172,7 +176,7 @@ export class Player {
     if (this.hero_path == null){
       return;
     }
-
+console.log('this.world.columns: '+this.world.columns);
 		switch(this.hero_path[this.hero_path_step])
 		{
 			case 1:
@@ -181,10 +185,10 @@ export class Player {
 			case -1:
 				this.go('left');
 				break;
-			case 200:
+			case this.world.columns:
 				this.go('down');
 				break;
-			case -200:
+			case -1 * this.world.columns:
 				this.go('up');
 				break;
 		}
@@ -193,7 +197,7 @@ export class Player {
   go(direction){
 
     this.prev_direction=this.direction;
-
+    console.log('before move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     //console.log('go ' + direction);
     switch (direction)
     {
@@ -215,7 +219,9 @@ export class Player {
         break;
     }
 
-    this.position = this.coord_x + this.coord_y * 200;
+    this.position = this.coord_x + this.coord_y * this.world.columns;
+    console.log('after move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
+    console.log('after move: position: ' + this.position);
   }
 
   stop(){
