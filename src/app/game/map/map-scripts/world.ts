@@ -2,11 +2,16 @@
 export class World{
 
   public tiles: any;
+  public columns: number;
+  public rows: number;
+
   private level: number;
 
-  constructor(level: number) {
-    this.tiles = new Array(120000);
+  constructor(level: number, columns: number, rows: number) {
+    this.tiles = new Array(columns * rows);
     this.level = level;
+    this.columns = columns;
+    this.rows = rows;
     //console.log('this.level: '+this.level);
   }
 
@@ -15,11 +20,18 @@ export class World{
   }
 
   populateMap(tiles){
-    this.tiles = tiles;
+    this.tiles = tiles.split('');
+  }
+
+  replaceTileInMap(position, tileString){
+    this.tiles[position * 3] = tileString[0];
+    this.tiles[position * 3 + 1] = tileString[1];
+    this.tiles[position * 3 + 2] = tileString[2];
   }
 
   positionAccessible(position) {
-
+// console.log('position: ' + position);
+// console.log('this.tiles[position]: ' + this.tiles[position]);
     position *= 3; // because each tile map is described with 3 bytes (where 1st stands for the type of terrain)
 
     if (this.tiles[position] === 'w') { // water
@@ -431,7 +443,7 @@ export class World{
 	}
 
 
-drawTile(i)
+drawTile(i, world = null)
 {
 	const szerokoscPola = 76;
 
@@ -874,7 +886,9 @@ drawTile(i)
 
 			 break;
 			case 'z':
+        link = (9 * szerokoscPola)+'|'+(48 * szerokoscPola);  // hebanowiec
 
+							link += '|||hebanowiec';
 			 break;
 
 		}

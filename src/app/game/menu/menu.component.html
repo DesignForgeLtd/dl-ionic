@@ -6,5 +6,8 @@
   <div>
     <a (click)="onLogout()">Logout</a>
   </div>
+  <div *ngIf="occupiedWith === 'mining'">
+    <a (click)="stopMining()">Stop Mining</a>
+  </div>
 </div>
 

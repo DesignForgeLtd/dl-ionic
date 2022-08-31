@@ -42,8 +42,8 @@ export class GameComponent implements OnInit {
 
   ngOnInit() {
     // MarrQ
-    this.loadHeroEssentialData();console.log(this.playerDataOccupiedWith);
-    // this.gameUIService.openedBadgePopup.emit('receivedBadge');
+    this.loadHeroEssentialData();
+    console.log(this.playerDataOccupiedWith);
   }
 
   closeModal(){

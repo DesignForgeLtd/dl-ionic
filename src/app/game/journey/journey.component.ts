@@ -37,7 +37,7 @@ export class JourneyComponent implements OnInit {
         this.arrivalTime--;
         if(this.arrivalTime === 0){
           clearInterval(myInterval);
-          this.gameUIService.changeHeroOccupation(null);
+          this.gameUIService.changeHeroOccupation('');
         }
       }, 1000);
 

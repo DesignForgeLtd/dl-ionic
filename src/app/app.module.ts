@@ -46,6 +46,7 @@ import { BankComponent } from './game/map/bank/bank.component';
 import { WitchComponent } from './game/map/witch/witch.component';
 import { WeaponFixComponent } from './game/map/weapon-fix/weapon-fix.component';
 import { ReceivedBadgeComponent } from './game/received-badge/received-badge/received-badge.component';
+import { MiningComponent } from './game/mining/mining.component';
 
 
 
@@ -82,7 +83,8 @@ import { ReceivedBadgeComponent } from './game/received-badge/received-badge/rec
     WeaponFixComponent,
     BaggagePopoverComponent,
     MonsterComponent,
-    ReceivedBadgeComponent
+    ReceivedBadgeComponent,
+    MiningComponent
   ],
   entryComponents: [],
   imports: [

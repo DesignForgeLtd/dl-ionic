@@ -43,8 +43,8 @@ export class HeroPath
 		this.path = new Array();
 		this.steps = new Array();
 
-		this.finish_position = this.to_x + this.to_y * 200;
-		this.start_position = this.from_x + this.from_y * 200;
+		this.finish_position = this.to_x + this.to_y * this.world.columns;
+		this.start_position = this.from_x + this.from_y * this.world.columns;
 	}
 
 	findSteps(){
@@ -84,7 +84,7 @@ export class HeroPath
 	buildGraph(){
 		for (let y = this.min_y; y <= this.max_y; y++){
 			for (let x = this.min_x; x <= this.max_x; x++){
-				this.current_node_position = x + y*200;
+				this.current_node_position = x + y*this.world.columns;
 
 				this.neighbours = new Object();
 
@@ -110,11 +110,11 @@ export class HeroPath
 				}
 				if (y !== this.max_y) // South
 				{
-					this.addNeighbourIfValid(200);
+					this.addNeighbourIfValid(this.world.columns);
 				}
 				if (y !== this.min_y) // North
 				{
-					this.addNeighbourIfValid(-200);
+					this.addNeighbourIfValid(-1 * this.world.columns);
 				}
 
 
@@ -216,8 +216,8 @@ export class HeroPath
       const difference = posi - prev_posi;
       if (difference === 1
         || difference === -1
-        || difference === 200
-        || difference === -200
+        || difference === this.world.columns
+        || difference === -1 * this.world.columns
         )
       {
 			  steps.push(difference);
@@ -226,8 +226,8 @@ export class HeroPath
 			// possible elements:
 	 		// this.steps.push(1); // right
 			// this.steps.push(-1); // left
-			// this.steps.push(200); // down
-			// this.steps.push(-200); // up
+			// this.steps.push(this.world.columns); // down
+			// this.steps.push(-1 * this.world.columns); // up
 		}
 
 		this.steps = steps;
