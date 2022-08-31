@@ -15,6 +15,7 @@ interface PlayerData{
   occupation_finish: string;
   position: number;
   stamina: number;
+  positionInMine: number;
 }
 
 interface HeroFullData{
@@ -51,6 +52,13 @@ interface MapResponseData{
   'foundLocation': FoundLocationData;
   'foundMonster': FoundMonsterData;
   'receivedBadge': FoundMonsterData;
+}
+
+interface MineResponseData{
+  'success': boolean;
+  'errorMessage': string;
+  'playerData': PlayerData;
+  'foundResource': any;
 }
 
 @Injectable({providedIn: 'root'})
@@ -100,6 +108,20 @@ export class MapService {
     );
   }
 
+  startMining(position){
+    return this.http.post<MapResponseData>(
+      AppSettings.API_ENDPOINT + '/mine/start-mining/'+position,
+      {responseType: 'json'}
+    );
+  }
+
+  stopMining(){
+    return this.http.post<MapResponseData>(
+      AppSettings.API_ENDPOINT + '/mine/stop-mining',
+      {responseType: 'json'}
+    );
+  }
+
   loadHeroFullData(){
     return this.http.get<{'heroFullData': HeroFullData}>(
       AppSettings.API_ENDPOINT + '/hero/getFullData',
@@ -111,6 +133,20 @@ export class MapService {
     return this.http.get<{'success': boolean; 'errorMessage': string; 'locationFullData': any}>(
       AppSettings.API_ENDPOINT + '/map/locationFullData/' + type + '/' + playerPosition,
       {responseType: 'json'}
+    );
+  }
+
+  loadMineMap( playerPosition: number){
+    return this.http.get(
+      AppSettings.API_ENDPOINT + '/mine/map/' + playerPosition,
+      {responseType: 'text'}
+    );
+  }
+
+  updatePositionInMine(playerPosition){
+    return this.http.post<MineResponseData>(
+      AppSettings.API_ENDPOINT + '/mine/move/' + playerPosition,
+      {}
     );
   }
 }

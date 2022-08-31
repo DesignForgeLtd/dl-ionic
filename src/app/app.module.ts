@@ -44,6 +44,7 @@ import { BaggagePopoverComponent } from './game/baggage/baggage-popover/baggage-
 import { MonsterComponent } from './game/map/monster/monster.component';
 import { BankComponent } from './game/map/bank/bank.component';
 import { WitchComponent } from './game/map/witch/witch.component';
+import { MiningComponent } from './game/mining/mining.component';
 
 
 
@@ -78,7 +79,8 @@ import { WitchComponent } from './game/map/witch/witch.component';
     BankComponent,
     WitchComponent,
     BaggagePopoverComponent,
-    MonsterComponent
+    MonsterComponent,
+    MiningComponent
   ],
   entryComponents: [],
   imports: [

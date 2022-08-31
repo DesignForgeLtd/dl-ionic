@@ -58,20 +58,21 @@ export class MapComponent implements OnInit, OnDestroy {
 
   monsters: any;
 
-  private context: CanvasRenderingContext2D;
+  context: CanvasRenderingContext2D;
 
-  private animationFrame;
-  private serverSavedNewPosition = true;
+  animationFrame;
+  serverSavedNewPosition = true;
 
 
 
   constructor(
-    private http: HttpClient,
-    private mapService: MapService,
-    private gameUIService: GameUIService
+    public http: HttpClient,
+    public mapService: MapService,
+    public gameUIService: GameUIService
   ) {
     this.tileSheet = new Image();
     this.heroImage = new Image();
+    //this.gameUIService = new GameUIService();
 
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
@@ -103,7 +104,7 @@ export class MapComponent implements OnInit, OnDestroy {
     cancelAnimationFrame(this.animationFrame);
   }
 
-  loadGameMap(level: number){
+  loadGameMap(level: number, originalPosition: number = null){
     this.http.get(
       'assets/detailedMap'+(level+1)+'.txt',
       {responseType: 'text'}
@@ -121,18 +122,25 @@ export class MapComponent implements OnInit, OnDestroy {
 
       const playerData = data.playerData;
 
-      this.world = new World(playerData.level);
+      this.world = new World(playerData.level, this.columns, this.rows);
 
+      const originalPosition = playerData.position;
+      if (playerData.occupied_with === 'mining'){
+        playerData.position = playerData.positionInMine;
+      }
+console.log('this.rows: '+this.rows);
+console.log('this.columns: '+this.columns);
       this.player = new Player(
-        playerData.position % 200,
-        Math.floor(playerData.position / 200),
+        playerData.position % this.columns,
+        Math.floor(playerData.position / this.columns),
         playerData.level,
         this.world,
         this.scaledSize
       );
       this.playerSavedPosition = this.player.position;
-      this.loadGameMap(this.player.level);
+      this.loadGameMap(this.player.level, originalPosition);
       this.heroInfoUpdate(playerData);
+
       // this.loop();
       this.animationFrame = window.requestAnimationFrame(() => this.loop());
 
@@ -153,17 +161,23 @@ export class MapComponent implements OnInit, OnDestroy {
   handleFoundLocation(foundLocation, foundMonster = null){
     if (foundLocation !== null){
       switch (foundLocation.type) {
+        case 2:
+          console.log('found Shop Location: ');
+          console.log(foundLocation);
+          this.locationData = foundLocation;
+          this.gameUIService.openLocationModal('shop');
+          break;
         case 3:
           console.log('found Production Location: ');
           console.log(foundLocation);
           this.locationData = foundLocation;
           this.gameUIService.openLocationModal('map-production-location');
           break;
-        case 2:
-          console.log('found Shop Location: ');
+        case 4:
+          console.log('found Mining Location: ');
           console.log(foundLocation);
           this.locationData = foundLocation;
-          this.gameUIService.openLocationModal('shop');
+          this.gameUIService.openLocationModal('map-location');
           break;
         case 6:
           console.log('found Monster');
@@ -207,7 +221,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.mapService.loadMonstersData()
     .subscribe(data => {
       this.monsters = data.monsters;
-      console.log(this.monsters);
+      //console.log(this.monsters);
     });
   }
 
@@ -252,6 +266,7 @@ export class MapComponent implements OnInit, OnDestroy {
     // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
 
     this.heroLoop();
+    // console.log('this.player.pixel_x, this.player.pixel_y: ' + this.player.pixel_x, this.player.pixel_y);
     this.viewport.scrollTo(this.player.pixel_x, this.player.pixel_y);
 
     this.drawTerrain();
@@ -337,7 +352,7 @@ export class MapComponent implements OnInit, OnDestroy {
 
   infolocationUpdate(){
     document.getElementById('location-info').innerHTML =
-      this.world.locationInfo(this.player.coord_x + this.player.coord_y * 200)
+      this.world.locationInfo(this.player.coord_x + this.player.coord_y * this.columns)
       + ' ('+this.player.coord_x+','+this.player.coord_y+')';
   }
 
@@ -350,7 +365,8 @@ export class MapComponent implements OnInit, OnDestroy {
     column and row (x and y) we use floor to round down and for the max we
     use ceil to round up. We want to get the rows and columns under the borders
     of the viewport rectangle. This is visualized by the white square in the example. */
-    //console.log(this.player);
+// console.log('this.viewport.x, this.viewport.w: ' + this.viewport.x, this.viewport.w);
+// console.log('this.viewport.y, this.viewport.h: ' + this.viewport.y, this.viewport.h);
     let xMin = Math.floor(this.viewport.x / this.scaledSize);
     let yMin = Math.floor(this.viewport.y / this.scaledSize);
     let xMax = Math.ceil((this.viewport.x + this.viewport.w) / this.scaledSize);
@@ -379,7 +395,8 @@ export class MapComponent implements OnInit, OnDestroy {
     const ppp = x + y * this.columns;
 
     const poleLinkOpis = this.world.drawTile(ppp*3).split('|||');
-
+// console.log('poleLinkOpis: ');
+// console.log(poleLinkOpis);
     let plo0 = poleLinkOpis[0];
     if ( poleLinkOpis[1] === 'monster'){
       plo0 = this.getMonsterImagePosition(ppp);
@@ -510,6 +527,14 @@ export class MapComponent implements OnInit, OnDestroy {
     setTimeout(() => document.getElementById('error-info').style.display = 'none', 3000);
   }
 
+  showSuccess(successMessage){
+    console.log(successMessage);
+    document.getElementById('success-info').innerHTML = successMessage;
+    document.getElementById('success-info').style.display = 'block';
+
+    setTimeout(() => document.getElementById('success-info').style.display = 'none', 3000);
+  }
+
   mapLocationAction(action) {
 
     console.log('mapLocationAction in MapComponent:');
@@ -527,6 +552,9 @@ export class MapComponent implements OnInit, OnDestroy {
         break;
       case 'usePortal':
         this.usePortal(action.param);
+        break;
+      case 'startMining':
+        this.startMining(action.param);
         break;
     }
   }
@@ -568,13 +596,25 @@ export class MapComponent implements OnInit, OnDestroy {
       if (data.success === true){
         console.log(data);
         this.heroInfoUpdate(data.playerData);
-        this.loadGameMap(data.playerData.level);
+        this.loadGameMap(data.playerData.level); // TODO: check if can be removed
         this.gameUIService.changeHeroOccupation('journey');
       }
       else {
         this.showError(data.errorMessage);
       }
+    });
+  }
 
+  startMining(position: number){
+    this.mapService.startMining(position).subscribe(data => {
+      if (data.success === true){
+        console.log(data);
+        this.heroInfoUpdate(data.playerData);
+        this.gameUIService.changeHeroOccupation('mining');
+      }
+      else {
+        this.showError(data.errorMessage);
+      }
     });
   }
 
