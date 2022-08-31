@@ -1,14 +1,14 @@
 
 <app-map *ngIf="playerDataOccupiedWith === null"></app-map>
 
-<app-journey
-  *ngIf="playerDataOccupiedWith === 'journey'"
-></app-journey>
+<app-journey *ngIf="playerDataOccupiedWith === 'journey'"></app-journey>
 
 <app-menu></app-menu>
 
 <app-mailbox *ngIf="openedModal === 'mailbox'"></app-mailbox>
 <app-hero *ngIf="openedModal === 'hero'"></app-hero>
 <app-baggage *ngIf="openedModal === 'baggage'"></app-baggage>
+
+<app-received-badge *ngIf="openedBadgePopup" [receivedBadge]="openedBadgePopup"></app-received-badge>
 
 

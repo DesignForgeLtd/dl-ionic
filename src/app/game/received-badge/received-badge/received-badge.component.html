@@ -1,0 +1,42 @@
+<div class="backdrop-over"></div>
+
+<div class="popup-container">
+
+  <ion-card>
+
+    <ion-card-header>
+      <ion-card-title>
+        <h1>Received Badge</h1>
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <div class="badge-image"
+        [style.background-position-y]="-1 * 150 * (receivedBadge.level - 1) + 'px'">
+        <div class="badge-image"
+          [style.background-position-y]="-450 - 1 * 150 * receivedBadge.image + 'px'"></div>
+      </div>
+      <div class="badge-description"
+        style="width:400px;">
+        <h2>{{ receivedBadge.name }}</h2>
+        {{ receivedBadge.description }}
+        <br>
+        <h3>Reward: {{receivedBadge.prize}} MM</h3>
+      </div>
+
+    </ion-card-content>
+
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons>
+          <ion-button color="success" (click)="closePopup()">
+            OK
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>
+
+  </ion-card>
+
+</div>

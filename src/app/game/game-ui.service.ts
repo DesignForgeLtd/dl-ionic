@@ -7,6 +7,7 @@ export class GameUIService {
   public currentLocation: string;
   currentLocationEmitter = new EventEmitter<string>();
   openedModal = new EventEmitter<string>();
+  openedBadgePopup = new EventEmitter<any>();
   playerOccupiedWith = new EventEmitter<string>();
 
   constructor() {
@@ -70,4 +71,17 @@ export class GameUIService {
 
     this.openedModal.emit('monster');
   }
+
+  openReceivedBadgeModal(){
+    console.log('opening received badge modal');
+
+    this.openedModal.emit('receivedBadge');
+  }
+
+  displayErrorMessageInConsole(errorMessage: any){
+    if( errorMessage !== null ){
+      console.log(errorMessage);
+    }
+  }
+
 }

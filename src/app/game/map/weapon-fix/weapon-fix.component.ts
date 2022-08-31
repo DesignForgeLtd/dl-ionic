@@ -12,11 +12,11 @@ export class WeaponFixComponent implements OnInit {
   @Input() passedLocationData = null;
   @ViewChild('weaponFixItem') weaponFixItem: ElementRef;
 
-  locationData = null;
-  message = null;
-  weaponList = [];
-  resources = null;
-  resourcesNeeded = null;
+  public locationData = null;
+  public message = null;
+  public weaponList = [];
+  public resources = null;
+  public resourcesNeeded = null;
   public isLoading = true;
 
   constructor(
@@ -45,15 +45,9 @@ export class WeaponFixComponent implements OnInit {
 
         console.log('loadData: ');
         console.log(result);
-        this.displayErrorMessageInConsole(result.errorMessage);
+        this.gameUIService.displayErrorMessageInConsole(result.errorMessage);
 
       });
-  }
-
-  displayErrorMessageInConsole(errorMessage: any){
-    if( errorMessage !== null ){
-      console.log(errorMessage);
-    }
   }
 
   fixWeapon(){
@@ -65,14 +59,15 @@ export class WeaponFixComponent implements OnInit {
         this.resources = result.resources;
 
         if( result.success ){
-          this.gameUIService.heroInfoUpdate(result.resources);
           document.getElementById('weaponFixItem' + result.weapon.id).innerHTML =
             result.weapon.item.name + ' - ' + result.weapon.durability + ' / ' + result.weapon.durability_max;
+          this.gameUIService.heroInfoUpdate(result.resources);
+          this.gameUIService.openedBadgePopup.emit(result.receivedBadge);
         }
 
         console.log('loadData: ');
         console.log(result);
-        this.displayErrorMessageInConsole(result.errorMessage);
+        this.gameUIService.displayErrorMessageInConsole(result.errorMessage);
 
       });
   }

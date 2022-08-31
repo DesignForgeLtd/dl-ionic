@@ -48,6 +48,7 @@ export class WeaponFixService {
         'gold': number;
       };
       'available': boolean;
+      'receivedBadge': any;
     }>(
       AppSettings.API_ENDPOINT + '/weapon/fix',
       { weaponId }

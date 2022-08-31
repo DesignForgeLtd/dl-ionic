@@ -22,11 +22,18 @@ export class GameComponent implements OnInit {
 
   */
   public openedModal = null;
+  public openedBadgePopup = null;
   public heroEssentialData = null;
 
-  constructor(private mapService: MapService, private gameUIService: GameUIService) {
+  constructor(
+    private mapService: MapService,
+    private gameUIService: GameUIService
+  ) {
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
+    );
+    this.gameUIService.openedBadgePopup.subscribe(
+      (popup: string) => this.openedBadgePopup = popup
     );
     this.gameUIService.playerOccupiedWith.subscribe(
       (occupiedWith: string) => this.playerDataOccupiedWith = occupiedWith
@@ -36,6 +43,7 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     // MarrQ
     this.loadHeroEssentialData();console.log(this.playerDataOccupiedWith);
+    // this.gameUIService.openedBadgePopup.emit('receivedBadge');
   }
 
   closeModal(){
