@@ -45,6 +45,7 @@ import { MonsterComponent } from './game/map/monster/monster.component';
 import { BankComponent } from './game/map/bank/bank.component';
 import { WitchComponent } from './game/map/witch/witch.component';
 import { WeaponFixComponent } from './game/map/weapon-fix/weapon-fix.component';
+import { MiningComponent } from './game/mining/mining.component';
 
 
 
@@ -80,7 +81,8 @@ import { WeaponFixComponent } from './game/map/weapon-fix/weapon-fix.component';
     WitchComponent,
     WeaponFixComponent,
     BaggagePopoverComponent,
-    MonsterComponent
+    MonsterComponent,
+    MiningComponent
   ],
   entryComponents: [],
   imports: [
