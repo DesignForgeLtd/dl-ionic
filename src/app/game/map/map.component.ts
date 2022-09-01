@@ -211,6 +211,9 @@ console.log('this.columns: '+this.columns);
       case 79:
         this.gameUIService.openLocationModal('witch');
         break;
+      case 81:
+        this.gameUIService.openLocationModal('weapon-fix');
+        break;
       default:
         this.gameUIService.openLocationModal('map-location');
     }
