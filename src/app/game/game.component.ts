@@ -9,7 +9,7 @@ import { MapService } from './map/map.service';
 })
 export class GameComponent implements OnInit {
 
-  public playerDataOccupiedWith;//'journey';  // change null to 'journey' if you want to test journey
+  public playerDataOccupiedWith = null;//'journey';  // change null to 'journey' if you want to test journey
 
   /*
     TODO:
@@ -56,6 +56,7 @@ export class GameComponent implements OnInit {
     .subscribe(data => {
       this.heroEssentialData = data;
       this.playerDataOccupiedWith = data.playerData.occupied_with;
+      console.log(data);
     });
   }
 
