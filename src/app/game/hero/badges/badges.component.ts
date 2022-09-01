@@ -17,12 +17,10 @@ export class BadgesComponent implements OnInit {
     received: boolean;
     points: number;
     threshold: number;
-  }[];//dopisac szczegolowy interface
+  }[];
 
   public error = false;
   public message = null;
-
-  public heroAttributes = ['strength', 'dexterity', 'vitality', 'intelligence', 'endurance', 'quickness'];
 
   constructor(
     private heroService: HeroService

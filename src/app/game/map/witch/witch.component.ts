@@ -19,10 +19,11 @@ export class WitchComponent implements OnInit {
   actionData = null;
 
   public isLoading = true;
-  public actionList = [
-    {id:1, name:'ja chce jesc'},
-    {id:2, name:'jestes brzydka'}
-  ];
+
+  public actionList: {
+    id: number;
+    name: string;
+  }[];
 
   constructor(
     private gameUIService: GameUIService,

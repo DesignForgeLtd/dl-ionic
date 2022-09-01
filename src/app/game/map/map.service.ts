@@ -51,7 +51,6 @@ interface MapResponseData{
   'playerData': PlayerData;
   'foundLocation': FoundLocationData;
   'foundMonster': FoundMonsterData;
-  'receivedBadge': FoundMonsterData;
 }
 
 interface MineResponseData{
