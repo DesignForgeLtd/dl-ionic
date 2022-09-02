@@ -10,7 +10,7 @@ import { MapService } from '../map/map.service';
 export class JourneyComponent implements OnInit {
 
   destinationName: string;
-  arrivalTime: any;
+  arrivalTime: number;
 
   constructor(private mapService: MapService, private gameUIService: GameUIService) { }
 

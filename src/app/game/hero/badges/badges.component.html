@@ -1,0 +1,28 @@
+<ion-button *ngIf="message" expand="full" color="{{ error ? 'danger' : 'success' }}">{{ message }}</ion-button>
+
+<h1>Badges</h1>
+
+<div *ngIf="isLoading" style="text-align: center;">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+
+<div *ngIf="! isLoading" style="max-height:666px;overflow:auto">
+  <div *ngFor="let badge of badges">
+    <div class="badge-item" style="display: inline-flex;">
+      <div class="badge-image"
+        [style.opacity]="badge.received ? 1 : 0.5"
+        [style.background-position-y]="-1 * 150 * (badge.level - 1) + 'px'">
+        <div class="badge-image"
+          [style.background-position-y]="-450 - 1 * 150 * badge.image + 'px'"></div>
+      </div>
+      <div class="badge-description"
+        style="width:400px;">
+        <h2>{{ badge.name }}</h2>
+        {{ badge.description }}
+        <br>
+        Progress: {{badge.points}} / {{badge.threshold}}
+      </div>
+    </div>
+  </div>
+</div>
+

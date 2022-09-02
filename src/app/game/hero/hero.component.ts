@@ -13,6 +13,7 @@ export class HeroComponent implements OnInit {
     {label: 'skills', name: 'Skills'},
     {label: 'occupations', name: 'Occupations'},
     {label: 'active-elixirs', name: 'Active Elixirs'},
+    {label: 'badges', name: 'Badges'},
   ];
 
   public chosenTab = 'attributes';

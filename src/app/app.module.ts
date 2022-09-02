@@ -39,8 +39,12 @@ import { HeroComponent } from './game/hero/hero.component';
 import { HeroActiveElixirsComponent } from './game/hero/hero-active-elixirs/hero-active-elixirs.component';
 import { HeroOccupationsComponent } from './game/hero/hero-occupations/hero-occupations.component';
 import { HeroSkillsComponent } from './game/hero/hero-skills/hero-skills.component';
+import { BadgesComponent } from './game/hero/badges/badges.component';
 import { BaggagePopoverComponent } from './game/baggage/baggage-popover/baggage-popover.component';
 import { MonsterComponent } from './game/map/monster/monster.component';
+import { BankComponent } from './game/map/bank/bank.component';
+import { WitchComponent } from './game/map/witch/witch.component';
+import { WeaponFixComponent } from './game/map/weapon-fix/weapon-fix.component';
 import { MiningComponent } from './game/mining/mining.component';
 
 
@@ -70,8 +74,12 @@ import { MiningComponent } from './game/mining/mining.component';
     HeroAttributesComponent,
     HeroOccupationsComponent,
     HeroSkillsComponent,
+    BadgesComponent,
     JourneyComponent,
     ShopComponent,
+    BankComponent,
+    WitchComponent,
+    WeaponFixComponent,
     BaggagePopoverComponent,
     MonsterComponent,
     MiningComponent

@@ -184,6 +184,16 @@ console.log('this.columns: '+this.columns);
           this.monsterData = foundMonster;
           this.gameUIService.openMonsterModal();
           break;
+        case 14:
+          console.log('found Bank: ');
+          console.log(foundLocation);
+          this.gameUIService.openLocationModal('bank');
+          break;
+        case 8:
+          console.log('found Other Location: ');
+          console.log(foundLocation);
+          this.handleOtherLocation(foundLocation.id);
+          break;
         default:
           console.log('found Other Location: ');
           console.log(foundLocation);
@@ -193,6 +203,19 @@ console.log('this.columns: '+this.columns);
     }else{
       this.locationData = null;
       this.gameUIService.openLocationModal('');
+    }
+  }
+
+  handleOtherLocation(locationId: number){
+    switch (locationId) {
+      case 79:
+        this.gameUIService.openLocationModal('witch');
+        break;
+      case 81:
+        this.gameUIService.openLocationModal('weapon-fix');
+        break;
+      default:
+        this.gameUIService.openLocationModal('map-location');
     }
   }
 
@@ -563,7 +586,6 @@ console.log('this.columns: '+this.columns);
       if (data.success === true){
         console.log(data);
         this.loadHeroEssentialData();
-        this.gameUIService.openLocationModal('');
       }
       else {
         this.showError(data.errorMessage);
