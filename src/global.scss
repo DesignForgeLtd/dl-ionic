@@ -40,10 +40,23 @@ ion-content{
   width: 94vw;
   height: 94vh;
   //background-color: darkslategray;
-  z-index: 99999;
-  padding: 16px;
+  z-index: 9999;
+  // padding: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.26);
-  display: flex;
+  display: grid;
+
+}
+
+.popup-container {
+  position: fixed;
+  top: 6vh;
+  left: 6vw;
+  width: 88vw;
+  height: 88vh;
+  //background-color: darkslategray;
+  z-index: 99999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.26);
+  display: grid;
 
 }
 
@@ -55,6 +68,16 @@ ion-content{
   height: 100vh;
   background: rgba(0,0,0,0.75);
   z-index: 1000;
+}
+
+.backdrop-over{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.75);
+  z-index: 10000;
 }
 
 .productionLinesSeparator{

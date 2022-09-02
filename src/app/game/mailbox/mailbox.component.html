@@ -1,39 +1,40 @@
-<div id="mailbox-container">
+<div class="backdrop"></div>
+<div class="modal-container">
 
-<ion-card>
+  <ion-card>
 
-  <ion-card-header>
-    <ion-toolbar>
-      <ion-buttons>
-        <ion-button [fill]="mailbox==='inbox' ? 'outline' : 'solid'"
-            [color]="mailbox==='inbox' ? 'secondary' : 'primary'"
-            [disabled]="mailbox==='inbox'"
-            (click)="mailbox='inbox'">
-          Inbox
-        </ion-button>
-        <ion-button [fill]="mailbox==='create' ? 'outline' : 'solid'"
-            [color]="mailbox==='create' ? 'secondary' : 'primary'"
-            [disabled]="mailbox==='create'"
-            (click)="mailbox='create'">
-          Create
-        </ion-button>
-      </ion-buttons>
-      <ion-buttons slot="end">
-        <ion-button color="danger" (click)="closeFeature()">
-          <ion-icon name="close-circle" slot="icon-only"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-buttons>
+          <ion-button [fill]="mailbox==='inbox' ? 'outline' : 'solid'"
+              [color]="mailbox==='inbox' ? 'secondary' : 'primary'"
+              [disabled]="mailbox==='inbox'"
+              (click)="mailbox='inbox'">
+            Inbox
+          </ion-button>
+          <ion-button [fill]="mailbox==='create' ? 'outline' : 'solid'"
+              [color]="mailbox==='create' ? 'secondary' : 'primary'"
+              [disabled]="mailbox==='create'"
+              (click)="mailbox='create'">
+            Create
+          </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+          <ion-button color="danger" (click)="closeFeature()">
+            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
 
 
 
-    </ion-toolbar>
-  </ion-card-header>
-  <ion-card-content>
+      </ion-toolbar>
+    </ion-card-header>
+    <ion-card-content>
 
-    <app-inbox *ngIf="mailbox === 'inbox'" (chooseThread)="onChooseThread($event)"></app-inbox>
-    <app-msg-thread *ngIf="mailbox === 'thread'" [threadId]="threadId" [threadTitle]="threadTitle"></app-msg-thread>
-    <app-create-msg *ngIf="mailbox === 'create'"></app-create-msg>
+      <app-inbox *ngIf="mailbox === 'inbox'" (chooseThread)="onChooseThread($event)"></app-inbox>
+      <app-msg-thread *ngIf="mailbox === 'thread'" [threadId]="threadId" [threadTitle]="threadTitle"></app-msg-thread>
+      <app-create-msg *ngIf="mailbox === 'create'"></app-create-msg>
 
-  </ion-card-content>
-</ion-card>
+    </ion-card-content>
+  </ion-card>
 </div>
