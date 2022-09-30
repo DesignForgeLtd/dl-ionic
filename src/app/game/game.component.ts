@@ -22,6 +22,7 @@ export class GameComponent implements OnInit {
 
   */
   public openedModal = null;
+  public openedQuestModal = null;
   public openedBadgePopup = null;
   public heroEssentialData = null;
 
@@ -31,6 +32,9 @@ export class GameComponent implements OnInit {
   ) {
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
+    );
+    this.gameUIService.openedQuestModal.subscribe(
+      (modal: string) => this.openedQuestModal = modal
     );
     this.gameUIService.openedBadgePopup.subscribe(
       (popup: string) => this.openedBadgePopup = popup

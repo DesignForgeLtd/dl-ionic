@@ -51,6 +51,7 @@ interface MapResponseData{
   'playerData': PlayerData;
   'foundLocation': FoundLocationData;
   'foundMonster': FoundMonsterData;
+  'foundQuest': boolean;
 }
 
 interface MineResponseData{
@@ -60,13 +61,30 @@ interface MineResponseData{
   'foundResource': any;
 }
 
+interface QuestData{
+  'quest': {
+    'image': string;
+    'title': string;
+    'total_steps': number;
+  };
+  'image': string;
+  'description': string;
+  'step_number': number;
+}
+
 @Injectable({providedIn: 'root'})
 export class MapService {
   constructor(private http: HttpClient){}
 
   loadHeroEssentialData(){
     // eslint-disable-next-line max-len
-    return this.http.get<{'playerData': PlayerData; 'foundLocation': FoundLocationData; 'locationFullData': any; 'foundMonster': FoundMonsterData}>( // 'id': string;'position': number;'level': number
+    return this.http.get<{
+      'playerData': PlayerData;
+      'foundLocation': FoundLocationData;
+      'locationFullData': any;
+      'foundMonster': FoundMonsterData;
+      'foundQuest': boolean;
+    }>( // 'id': string;'position': number;'level': number
       AppSettings.API_ENDPOINT + '/hero/getEssentialData',
       {responseType: 'json'}
     );
@@ -148,4 +166,18 @@ export class MapService {
       {}
     );
   }
+
+  loadQuestData(){
+    // eslint-disable-next-line max-len
+    return this.http.get<{
+      'success': boolean;
+      'errorMessage': string;
+      'message': string;
+      'questData': QuestData;
+    }>(
+      AppSettings.API_ENDPOINT + '/quest/getData',
+      {responseType: 'json'}
+    );
+  }
+
 }

@@ -1,0 +1,33 @@
+<div class="backdrop-quest"></div>
+
+<div class="quest-modal-container">
+
+  <ion-card>
+
+    <ion-card-header>
+      <ion-card-title>
+        <img src="../../../assets/graphics/layout/game/quests/quest/{{ questImage }}" alt="quest image">
+        <h1>Here will be quest of {{ questSteps }}</h1>
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <h2>{{ description }}</h2>
+      content...
+
+    </ion-card-content>
+
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons>
+          <ion-button color="success" (click)="closeQuestModal()">
+            OK
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>
+
+  </ion-card>
+
+</div>

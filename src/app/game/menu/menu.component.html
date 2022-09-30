@@ -2,7 +2,9 @@
   <div class="menu-icon menu-icon-mailbox" (click)="onOpenMenu('mailbox')"></div>
   <div class="menu-icon" id="hero-attributes" (click)="onOpenMenu('hero')"></div>
   <div class="menu-icon menu-icon-baggage" (click)="onOpenMenu('baggage')"></div>
+  <div class="menu-icon menu-icon-quests" (click)="onOpenMenu('quests')"></div>
   <div *ngIf="atLocation" class="menu-icon menu-icon-location" (click)="showLocation()"></div>
+  <div *ngIf="foundQuest" class="menu-icon menu-icon-quest" (click)="showQuest()"></div>
   <div>
     <a (click)="onLogout()">Logout</a>
   </div>
