@@ -39,15 +39,16 @@
 
             <div *ngIf="weaponList.length; else noWeaponList">
               <h3>Choose weapon to fix:</h3>
-              <select #weaponFixItem>
-                <option *ngFor="let weapon of weaponList"
-                    value="{{weapon.id}}"
-                    id="weaponFixItem{{weapon.id}}">
-                  {{weapon.item.name}} - {{weapon.durability}} / {{weapon.durability_max}}
-                </option>
-              </select>
-              <div>
-                <button (click)="fixWeapon()">Fix Weapon</button>
+              <div *ngFor="let weapon of weaponList" class="baggage-item">
+                <div
+                  class="baggage-item-image"
+                  style="background-image: url('../../../assets/graphics/{{ weapon.item.image }}');"
+                ></div>
+                <b>{{ weapon.item.name }}</b>
+                <br>
+                <span id="weaponFixItemDurability{{weapon.id}}">{{weapon.durability}}</span> / {{weapon.durability_max}}
+                <br>
+                <button (click)="fixWeapon(weapon.id)">Fix Weapon</button>
               </div>
             </div>
 
