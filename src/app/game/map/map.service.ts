@@ -61,8 +61,18 @@ interface MineResponseData{
   'foundResource': any;
 }
 
+interface QuestResponseData {
+  'success': boolean;
+  'errorMessage': string;
+  'message': string;
+  'questData': QuestData;
+  'questIcon': boolean;
+}
+
 interface QuestData{
+  'id': number;
   'quest': {
+    'id': number;
     'image': string;
     'title': string;
     'total_steps': number;
@@ -70,6 +80,18 @@ interface QuestData{
   'image': string;
   'description': string;
   'step_number': number;
+  'requirements': boolean | {
+    'text': string;
+    'type': string;
+    'key': string | number;
+    'quantity': number;
+  };
+  'progress': number;
+  'answers': boolean | {
+    'nextQuestStepID': number;
+    'text': string;
+    'meetRequirements': boolean;
+  }[];
 }
 
 @Injectable({providedIn: 'root'})
@@ -168,15 +190,20 @@ export class MapService {
   }
 
   loadQuestData(){
-    // eslint-disable-next-line max-len
-    return this.http.get<{
-      'success': boolean;
-      'errorMessage': string;
-      'message': string;
-      'questData': QuestData;
-    }>(
+    return this.http.get<QuestResponseData>(
       AppSettings.API_ENDPOINT + '/quest/getData',
       {responseType: 'json'}
+    );
+  }
+
+  questAnswer(nextQuestStepID: number, prevQuestStepID: number){
+    return this.http.post<QuestResponseData>(
+      AppSettings.API_ENDPOINT + '/quest/makeAnswer',
+      {
+        nextQuestStepID,
+        prevQuestStepID,
+        responseType: 'json'
+      }
     );
   }
 
