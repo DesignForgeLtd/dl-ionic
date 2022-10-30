@@ -38,7 +38,6 @@ export class QuestModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    //TODO:MarrQ - dodaj pobieranie zawartosci questa
     this.mapService.loadQuestData().subscribe(data => {
       this.manageQuestData(data);
     });
