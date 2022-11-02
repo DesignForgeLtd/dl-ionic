@@ -16,6 +16,7 @@ export class MiningComponent extends MapComponent implements OnInit {
 
   columns   = 50;// columns and rows in map below
   rows      = 10;
+  portalData = null;
 
   constructor(
     public http: HttpClient,
@@ -40,6 +41,7 @@ export class MiningComponent extends MapComponent implements OnInit {
       this.setServerSavedNewPosition();
       if (data.success === true){
         this.player.incrementHeroStep();
+        this.gameUIService.openedModal.emit('');
         if (data.foundResource !== false){
           switch (data.foundResource)
           {
@@ -48,7 +50,8 @@ export class MiningComponent extends MapComponent implements OnInit {
               this.world.replaceTileInMap(this.player.position, 'p70');
               break;
             case 'portal':
-              console.log('Found portal!!!');
+              this.gameUIService.openedModal.emit('mine-portal-modal');
+              this.portalData = data.portalData;
               break;
           }
 

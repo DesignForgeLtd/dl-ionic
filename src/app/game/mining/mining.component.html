@@ -2,6 +2,11 @@
   <canvas #canvas></canvas>
 </div>
 
+<app-mine-portal
+  *ngIf="openedModal === 'mine-portal-modal'"
+  [data]="portalData"
+></app-mine-portal>
+
 <div id="location-info"></div>
 <div id="hero-info"></div>
 <div id="error-info" class="generic-info"></div>

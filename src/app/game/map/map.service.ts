@@ -58,6 +58,7 @@ interface MineResponseData{
   'errorMessage': string;
   'playerData': PlayerData;
   'foundResource': any;
+  'portalData': any;
 }
 
 @Injectable({providedIn: 'root'})

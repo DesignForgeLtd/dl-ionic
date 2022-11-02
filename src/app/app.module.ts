@@ -42,6 +42,7 @@ import { HeroSkillsComponent } from './game/hero/hero-skills/hero-skills.compone
 import { BaggagePopoverComponent } from './game/baggage/baggage-popover/baggage-popover.component';
 import { MonsterComponent } from './game/map/monster/monster.component';
 import { MiningComponent } from './game/mining/mining.component';
+import { MinePortalComponent } from './game/mining/mine-portal/mine-portal.component';
 
 
 
@@ -74,7 +75,8 @@ import { MiningComponent } from './game/mining/mining.component';
     ShopComponent,
     BaggagePopoverComponent,
     MonsterComponent,
-    MiningComponent
+    MiningComponent,
+    MinePortalComponent
   ],
   entryComponents: [],
   imports: [

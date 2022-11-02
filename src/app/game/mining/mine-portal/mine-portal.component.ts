@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { GameUIService } from '../../game-ui.service';
 
 @Component({
   selector: 'app-mine-portal',
@@ -7,8 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MinePortalComponent implements OnInit {
 
-  constructor() { }
+  @Input() data;
+  openEarlyPrice = 1; // TODO: make it depend on time
+
+  constructor(private gameUIService: GameUIService) { }
 
   ngOnInit() {}
+
+  closeFeature() {
+    this.gameUIService.openedModal.emit(null);
+  }
 
 }
