@@ -53,14 +53,6 @@ interface MapResponseData{
   'foundMonster': FoundMonsterData;
 }
 
-interface MineResponseData{
-  'success': boolean;
-  'errorMessage': string;
-  'playerData': PlayerData;
-  'foundResource': any;
-  'portalData': any;
-}
-
 @Injectable({providedIn: 'root'})
 export class MapService {
   constructor(private http: HttpClient){}
@@ -115,13 +107,6 @@ export class MapService {
     );
   }
 
-  stopMining(){
-    return this.http.post<MapResponseData>(
-      AppSettings.API_ENDPOINT + '/mine/stop-mining',
-      {responseType: 'json'}
-    );
-  }
-
   loadHeroFullData(){
     return this.http.get<{'heroFullData': HeroFullData}>(
       AppSettings.API_ENDPOINT + '/hero/getFullData',
@@ -136,17 +121,4 @@ export class MapService {
     );
   }
 
-  loadMineMap( playerPosition: number){
-    return this.http.get(
-      AppSettings.API_ENDPOINT + '/mine/map/' + playerPosition,
-      {responseType: 'text'}
-    );
-  }
-
-  updatePositionInMine(playerPosition){
-    return this.http.post<MineResponseData>(
-      AppSettings.API_ENDPOINT + '/mine/move/' + playerPosition,
-      {}
-    );
-  }
 }

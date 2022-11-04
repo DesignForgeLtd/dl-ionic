@@ -16,9 +16,9 @@
 
       <div *ngIf="data.opened === true">
         Portal is now opened <br /><br />
-        <button>
+        <ion-button color="primary" (click)="nextLevel()">
           Proceed to next mine level
-        </button>
+        </ion-button>
       </div>
 
       <div *ngIf="data.opened === false">

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { GameUIService } from '../game-ui.service';
 import { MapService } from '../map/map.service';
+import { MiningService } from '../mining/mining.service';
 
 @Component({
   selector: 'app-menu',
@@ -25,7 +26,8 @@ export class MenuComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private gameUIService: GameUIService,
-    private mapService: MapService) {
+    private mapService: MapService,
+    private miningService: MiningService) {
       console.log('A');
       console.log(this.occupiedWith);
       this.gameUIService.currentLocationEmitter.subscribe(
@@ -62,7 +64,7 @@ export class MenuComponent implements OnInit {
   }
 
   stopMining(){
-    this.mapService.stopMining().subscribe(data => {
+    this.miningService.stopMining().subscribe(data => {
       if (data.success === true){
         console.log('here!');
         console.log(data);

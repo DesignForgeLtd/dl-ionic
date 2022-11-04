@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
 import { GameUIService } from '../game-ui.service';
-import { MapService } from '../map/map.service';
 
 import { MapComponent } from '../map/map.component';
+
+import { MiningService } from './mining.service';
+import { MapService } from '../map/map.service';
 
 
 @Component({
@@ -21,13 +23,14 @@ export class MiningComponent extends MapComponent implements OnInit {
   constructor(
     public http: HttpClient,
     public mapService: MapService,
+    public miningService: MiningService,
     public gameUIService: GameUIService
   ) {
     super(http, mapService, gameUIService);
   }
 
   loadGameMap(level: number, originalPosition: number){
-    this.mapService.loadMineMap(originalPosition)
+    this.miningService.loadMineMap(originalPosition)
       .subscribe(data => {
         this.world.populateMap(data);
       });
@@ -37,7 +40,7 @@ export class MiningComponent extends MapComponent implements OnInit {
     // send info about player's new coords to the server
 
     this.playerSavedPosition = this.player.position;
-    this.mapService.updatePositionInMine(this.playerSavedPosition).subscribe(data => {
+    this.miningService.updatePositionInMine(this.playerSavedPosition).subscribe(data => {
       this.setServerSavedNewPosition();
       if (data.success === true){
         this.player.incrementHeroStep();
