@@ -1,5 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { GameUIService } from '../../game-ui.service';
+
+interface MineActionEvent{
+  name: string;
+  param: any;
+}
 
 @Component({
   selector: 'app-mine-portal',
@@ -9,7 +14,9 @@ import { GameUIService } from '../../game-ui.service';
 export class MinePortalComponent implements OnInit {
 
   @Input() data;
+  @Output() mineAction = new EventEmitter<MineActionEvent>();
   openEarlyPrice = 1; // TODO: make it depend on time
+
 
   constructor(private gameUIService: GameUIService) { }
 
@@ -17,6 +24,10 @@ export class MinePortalComponent implements OnInit {
 
   closeFeature() {
     this.gameUIService.openedModal.emit(null);
+  }
+
+  nextLevel() {
+    this.mineAction.emit({name: 'goToNextLevel', param: null});
   }
 
 }

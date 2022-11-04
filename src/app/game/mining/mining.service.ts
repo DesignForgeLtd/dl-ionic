@@ -25,6 +25,8 @@ interface MineResponseData{
   'playerData': PlayerData;
   'foundResource': any;
   'portalData': any;
+  'mineMap': any;
+  'heroPositionInMine': any; // can I take it from playerData instead, and remove this?
 }
 
 @Injectable({providedIn: 'root'})
@@ -48,6 +50,13 @@ export class MiningService {
   updatePositionInMine(playerPosition){
     return this.http.post<MineResponseData>(
       AppSettings.API_ENDPOINT + '/mine/move/' + playerPosition,
+      {}
+    );
+  }
+
+  goToNextLevel(playerPosition){
+    return this.http.post<MineResponseData>(
+      AppSettings.API_ENDPOINT + '/mine/next-level/' + playerPosition,
       {}
     );
   }

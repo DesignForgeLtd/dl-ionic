@@ -5,6 +5,7 @@
 <app-mine-portal
   *ngIf="openedModal === 'mine-portal-modal'"
   [data]="portalData"
+  (mineAction)="mineAction($event)"
 ></app-mine-portal>
 
 <div id="location-info"></div>
