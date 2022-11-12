@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GameUIService } from '../game-ui.service';
-import { MapService } from '../map/map.service';
+import { QuestService } from '../quests/quest.service';
 
 @Component({
   selector: 'app-quest-modal',
@@ -14,8 +14,8 @@ export class QuestModalComponent implements OnInit {
   public questID: number;
   public questImage = 'undefined.png';
   public questStepImage = 'undefined.png';
-  public questStep: number;
-  public questSteps: number;
+  public questStepNo: number;
+  public questStepsCount: number;
   public questTitle: string;
   public description: string;
   public requirements: {
@@ -33,18 +33,18 @@ export class QuestModalComponent implements OnInit {
   public requirementsMet = false;
 
   constructor(
-    private mapService: MapService,
+    private questService: QuestService,
     private gameUIService: GameUIService
   ) { }
 
   ngOnInit() {
-    this.mapService.loadQuestData().subscribe(data => {
+    this.questService.loadQuestData().subscribe(data => {
       this.manageQuestData(data);
     });
   }
 
   questAnswer(nextQuestStepID: number){
-    this.mapService.questAnswer(nextQuestStepID, this.questStepID).subscribe(data => {
+    this.questService.questAnswer(nextQuestStepID, this.questStepID).subscribe(data => {
       this.manageQuestData(data);
       this.gameUIService.showQuestIcon(data.questIcon);
     });
@@ -68,8 +68,8 @@ export class QuestModalComponent implements OnInit {
     this.questID = data.questData.quest.id;
     this.questImage = data.questData.quest.image;
     this.questStepImage = data.questData.image;
-    this.questStep = data.questData.step_number;
-    this.questSteps = data.questData.quest.total_steps;
+    this.questStepNo = data.questData.step_number;
+    this.questStepsCount = data.questData.quest.total_steps;
     this.questTitle = data.questData.quest.title;
     this.description = data.questData.description;
     this.requirements = data.questData.requirements;
