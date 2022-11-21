@@ -1,0 +1,18 @@
+<ng-container *ngIf="questsList; else noQuestsData">
+  <div *ngFor="let quest of questsList | keyvalue">
+    <h2>{{ quest.value.quest.title }}</h2>
+    <i>{{ quest.value.tip }}</i>
+    <br>
+    <label for="suspend-quest-{{ quest.value.id }}">Suspended</label>
+    <input type="checkbox"
+      id="suspend-quest-{{ quest.value.id }}"
+      [checked]="quest.value.suspended"
+      (click)="quest.value.suspended = suspendQuest(quest.value.id, ! quest.value.suspended)">
+    <hr>
+  </div>
+
+</ng-container>
+
+<ng-template #noQuestsData>
+  You have no quests started yet.
+</ng-template>
