@@ -49,6 +49,8 @@ import { ReceivedBadgeComponent } from './game/received-badge/received-badge.com
 import { MiningComponent } from './game/mining/mining.component';
 import { QuestsComponent } from './game/quests/quests.component';
 import { QuestModalComponent } from './game/quest-modal/quest-modal.component';
+import { DailyQuestsComponent } from './game/quests/daily-quests/daily-quests.component';
+import { RegularQuestsComponent } from './game/quests/regular-quests/regular-quests.component';
 
 
 
@@ -88,7 +90,9 @@ import { QuestModalComponent } from './game/quest-modal/quest-modal.component';
     ReceivedBadgeComponent,
     MiningComponent,
     QuestsComponent,
-    QuestModalComponent
+    QuestModalComponent,
+    DailyQuestsComponent,
+    RegularQuestsComponent
   ],
   entryComponents: [],
   imports: [

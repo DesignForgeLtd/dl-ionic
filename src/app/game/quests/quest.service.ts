@@ -36,6 +36,21 @@ interface QuestData{
   }[];
 }
 
+interface QuestsResponseData {
+  success: boolean;
+  errorMessage: string;
+  message: string;
+  dailyQuestsData: QuestData[];
+  regularQuestsData: QuestData[];
+  professionQuestsData: QuestData[];
+}
+
+interface SuspendQuestResponseData {
+  success: boolean;
+  errorMessage: string;
+  message: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -56,6 +71,24 @@ export class QuestService {
       {
         nextQuestStepID,
         prevQuestStepID,
+        responseType: 'json'
+      }
+    );
+  }
+
+  loadMyQuestsData(){
+    return this.http.get<QuestsResponseData>(
+      AppSettings.API_ENDPOINT + '/quest/getMyQuests',
+      {responseType: 'json'}
+    );
+  }
+
+  suspendQuest(questID: number, suspend: boolean){
+    return this.http.post<SuspendQuestResponseData>(
+      AppSettings.API_ENDPOINT + '/quest/suspendQuest',
+      {
+        questID,
+        suspend,
         responseType: 'json'
       }
     );

@@ -6,6 +6,20 @@
     <ion-card-header>
       <ion-toolbar>
         <h1>Quests</h1>
+        <ion-buttons>
+          <ion-button [fill]="questsList==='daily' ? 'outline' : 'solid'"
+              [color]="questsList==='daily' ? 'secondary' : 'primary'"
+              [disabled]="questsList==='daily'"
+              (click)="questsList='daily'">
+            Daily
+          </ion-button>
+          <ion-button [fill]="questsList==='regular' ? 'outline' : 'solid'"
+              [color]="questsList==='regular' ? 'secondary' : 'primary'"
+              [disabled]="questsList==='regular'"
+              (click)="questsList='regular'">
+            Regular
+          </ion-button>
+        </ion-buttons>
         <ion-buttons slot="end">
           <ion-button color="danger" (click)="closeModal()">
             <ion-icon name="close-circle" slot="icon-only"></ion-icon>
@@ -17,11 +31,15 @@
 
     <ion-card-content>
 
-          <ng-container>
-            <h2>Here will be your quests list.</h2>
-          </ng-container>
+      <app-daily-quests *ngIf="questsList === 'daily'"
+        [questsList]="dailyQuestsData"
+        (suspendingQuest)="suspendQuest($event)"></app-daily-quests>
 
-          <ion-button *ngIf="message" expand="full" color="warning">{{message}}</ion-button>
+      <app-regular-quests *ngIf="questsList === 'regular'"
+        [questsList]="regularQuestsData"
+        (suspendingQuest)="suspendQuest($event)"></app-regular-quests>
+
+      <ion-button *ngIf="message" expand="full" color="warning">{{message}}</ion-button>
 
     </ion-card-content>
 
