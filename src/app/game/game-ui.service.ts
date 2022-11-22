@@ -6,7 +6,9 @@ export class GameUIService {
 
   public currentLocation: string;
   currentLocationEmitter = new EventEmitter<string>();
+  foundQuestEmitter = new EventEmitter<boolean>();
   openedModal = new EventEmitter<string>();
+  openedQuestModal = new EventEmitter<boolean>();
   openedBadgePopup = new EventEmitter<any>();
   playerOccupiedWith = new EventEmitter<string>();
 
@@ -29,6 +31,19 @@ export class GameUIService {
       this.openedModal.emit(location);
       this.currentLocationEmitter.emit(location);
     }
+  }
+
+  openQuestModal(){
+    this.openedQuestModal.emit(true);
+  }
+
+  showLocationIcon(location: string){
+    this.currentLocation = location;
+    this.currentLocationEmitter.emit(location);
+  }
+
+  showQuestIcon(isQuest: boolean){
+    this.foundQuestEmitter.emit(isQuest);
   }
 
   changeHeroOccupation(occupation: string){

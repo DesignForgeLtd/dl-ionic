@@ -51,6 +51,7 @@ interface MapResponseData{
   'playerData': PlayerData;
   'foundLocation': FoundLocationData;
   'foundMonster': FoundMonsterData;
+  'foundQuest': boolean;
 }
 
 interface MineResponseData{
@@ -66,7 +67,13 @@ export class MapService {
 
   loadHeroEssentialData(){
     // eslint-disable-next-line max-len
-    return this.http.get<{'playerData': PlayerData; 'foundLocation': FoundLocationData; 'locationFullData': any; 'foundMonster': FoundMonsterData}>( // 'id': string;'position': number;'level': number
+    return this.http.get<{
+      'playerData': PlayerData;
+      'foundLocation': FoundLocationData;
+      'locationFullData': any;
+      'foundMonster': FoundMonsterData;
+      'foundQuest': boolean;
+    }>( // 'id': string;'position': number;'level': number
       AppSettings.API_ENDPOINT + '/hero/getEssentialData',
       {responseType: 'json'}
     );
@@ -148,4 +155,5 @@ export class MapService {
       {}
     );
   }
+
 }

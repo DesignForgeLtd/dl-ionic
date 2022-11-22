@@ -1,0 +1,54 @@
+<div class="backdrop-quest"></div>
+
+<div class="quest-modal-container">
+
+  <ion-card>
+
+    <ion-card-header>
+      <ion-card-title>
+        <img src="../../../assets/graphics/layout/game/quests/quest/{{ questImage }}" alt="quest image">
+        <h1>{{ questTitle }}</h1>
+        <i *ngIf="questStepsCount">Step {{ questStepNo }} of {{ questStepsCount }}.</i>
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <h2>{{ description }}</h2>
+      <hr>
+      <div *ngIf="requirements" style="color:royalblue">
+        {{ requirements.text }}
+        <br>
+        <b [style]="requirementsMet ? 'color:green' : 'color:red'">
+          {{ progress }} / {{ requirements.quantity }}
+        </b>
+      </div>
+      <hr>
+      <div *ngIf="answers">
+        <div *ngFor="let answer of answers">
+          <b *ngIf="!answer.meetRequirements || requirementsMet"
+              (click)="questAnswer(answer.nextQuestStepID)"
+              style="color:darkgreen">
+            {{ answer.text }}
+          </b>
+        </div>
+      </div>
+      content...
+
+    </ion-card-content>
+
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons>
+          <ion-button color="success" (click)="closeQuestModal()">
+            OK
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>
+
+    <ion-button *ngIf="message" expand="full" color="warning">{{message}}</ion-button>
+
+  </ion-card>
+
+</div>
