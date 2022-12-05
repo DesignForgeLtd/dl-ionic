@@ -1,13 +1,17 @@
-<ng-container *ngIf="questsList; else noQuestsData">
+<ng-container *ngIf="questsList && questsList.length !== 0; else noQuestsData">
   <div *ngFor="let quest of questsList | keyvalue">
     <h2>{{ quest.value.quest.title }}</h2>
     <i>{{ quest.value.tip }}</i>
-    <br>
-    <input type="checkbox"
-      id="suspend-quest-{{ quest.value.id }}"
-      [checked]="quest.value.suspended"
-      (click)="suspendQuest(quest.value.id, ! quest.value.suspended)">
-    <label for="suspend-quest-{{ quest.value.id }}">Suspended</label>
+    <div *ngIf="quest.value.quest_step_type_id === 1 || quest.value.quest_step_type_id === 2; else questFinished">
+      <input type="checkbox"
+        id="suspend-quest-{{ quest.value.id }}"
+        [checked]="quest.value.suspended"
+        (click)="suspendQuest(quest.value.id, ! quest.value.suspended)">
+      <label for="suspend-quest-{{ quest.value.id }}">Suspended</label>
+    </div>
+    <ng-template #questFinished>
+      <div>Finished</div>
+    </ng-template>
     <hr>
   </div>
 

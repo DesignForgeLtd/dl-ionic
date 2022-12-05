@@ -1,4 +1,4 @@
-<ng-container *ngIf="questsList; else noQuestsData">
+<ng-container *ngIf="questsList && questsList.length !== 0; else noQuestsData">
   <div *ngFor="let quest of questsList | keyvalue">
     <h2>{{ quest.value.quest.title }}</h2>
     <i>{{ quest.value.tip }}</i>
