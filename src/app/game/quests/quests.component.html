@@ -33,7 +33,10 @@
 
       <app-daily-quests *ngIf="questsList === 'daily'"
         [questsList]="dailyQuestsData"
-        (suspendingQuest)="suspendQuest($event)"></app-daily-quests>
+        [timeToNextDailyQuests]="timeToNextDailyQuests"
+        [priceForNextDailyQuests]="priceForNextDailyQuests"
+        (suspendingQuest)="suspendQuest($event)"
+        (getDailyQuests)="getNewDailyQuests()"></app-daily-quests>
 
       <app-regular-quests *ngIf="questsList === 'regular'"
         [questsList]="regularQuestsData"
