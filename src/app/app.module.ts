@@ -51,6 +51,7 @@ import { QuestsComponent } from './game/quests/quests.component';
 import { QuestModalComponent } from './game/quest-modal/quest-modal.component';
 import { DailyQuestsComponent } from './game/quests/daily-quests/daily-quests.component';
 import { RegularQuestsComponent } from './game/quests/regular-quests/regular-quests.component';
+import { QuickUseBeltComponent } from './game/quick-use-belt/quick-use-belt.component';
 
 
 
@@ -92,7 +93,8 @@ import { RegularQuestsComponent } from './game/quests/regular-quests/regular-que
     QuestsComponent,
     QuestModalComponent,
     DailyQuestsComponent,
-    RegularQuestsComponent
+    RegularQuestsComponent,
+    QuickUseBeltComponent
   ],
   entryComponents: [],
   imports: [

@@ -1,0 +1,10 @@
+<div class="belt-container">
+  <div *ngFor="let item of quickUseBeltItems"
+      class="baggage-item"
+      (click)="baggageUse(item)">
+    <ion-badge *ngIf="item.quantity > 1" color="secondary" style="position: absolute;">{{ item.quantity }}</ion-badge>
+    <div class="baggage-item-image {{ item.weapon }}"
+        style="background-image: url('../../../assets/graphics/items/{{ item.image }}');"></div>
+  </div>
+</div>
+

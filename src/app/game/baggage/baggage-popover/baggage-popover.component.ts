@@ -148,4 +148,20 @@ export class BaggagePopoverComponent implements OnInit {
     });
   }
 
+  quickUseBelt(){
+    console.log('Quick Use Belt ' + this.item.name);
+    this.baggageService.quickUseBelt(this.item.item_id).subscribe(data => {
+      console.log('data: ');
+      console.log(data);
+      if (data.success === true) {
+        this.presentToast('success', 'Added (or removed) ' + this.item.name);
+        // this.item.quantity -= data.quantity;
+        // this.gameUIService.heroInfoUpdate(data.hero_data_to_update);
+      } else {
+        this.presentToast('danger', 'Could not use ' + this.item.name);
+      }
+      this.baggageItemController.dismiss();
+    });
+  }
+
 }

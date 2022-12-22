@@ -72,4 +72,20 @@ export class BaggageService {
     );
   }
 
+  quickUseBelt(itemId: number){
+    return this.http.post<BaggageActionResponseData>(
+      AppSettings.API_ENDPOINT + '/baggage/quickUseBelt',
+      {
+        itemId
+      }
+    );
+  }
+
+  showQuickUseItems(){
+    return this.http.get<any>(
+      AppSettings.API_ENDPOINT + '/baggage/quickUseItems',
+      {responseType: 'json'}
+    );
+  }
+
 }
