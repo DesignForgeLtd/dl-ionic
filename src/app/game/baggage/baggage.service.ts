@@ -19,6 +19,12 @@ interface BaggageActionResponseData{
   'price': number;
 }
 
+interface QuickUseBeltResponseData{
+  'success': boolean;
+  'error_message': string;
+  'result': string;
+}
+
 @Injectable({providedIn: 'root'})
 export class BaggageService {
 
@@ -73,7 +79,7 @@ export class BaggageService {
   }
 
   quickUseBelt(itemId: number){
-    return this.http.post<BaggageActionResponseData>(
+    return this.http.post<QuickUseBeltResponseData>(
       AppSettings.API_ENDPOINT + '/baggage/quickUseBelt',
       {
         itemId

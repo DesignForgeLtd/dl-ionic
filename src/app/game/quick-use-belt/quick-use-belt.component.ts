@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController, PopoverController, ToastController } from '@ionic/angular';
 import { BaggageService } from '../baggage/baggage.service';
 import { GameUIService } from '../game-ui.service';
 
@@ -13,14 +14,19 @@ export class QuickUseBeltComponent implements OnInit {
 
   constructor(
     private gameUIService: GameUIService,
-    private baggageService: BaggageService
+    private baggageService: BaggageService,
+    // public baggageItemController: PopoverController,
+    public toastController: ToastController,
+    public alertController: AlertController
   ) { }
 
   ngOnInit() {
     this.initialize();
+    this.baggageService.baggageUpdated.subscribe(data => this.initialize());
   }
 
   initialize(){
+    this.quickUseBeltItems = [];
     this.baggageService.showQuickUseItems()
       .subscribe(data => {
 
@@ -43,16 +49,25 @@ export class QuickUseBeltComponent implements OnInit {
       console.log('data: ');
       console.log(data);
       if (data.success === true) {
-        // this.presentToast('success', 'Used ' + item.name);
+        this.presentToast('success', 'Used ' + item.name);
         item.quantity -= data.quantity;
         this.gameUIService.heroInfoUpdate(data.hero_data_to_update);
       } else {
-        // this.presentToast('danger', 'Could not use ' + this.item.name);
+        this.presentToast('danger', 'Could not use ' + item.name);
       }
-      // this.baggageItemController.dismiss();
     });
   }
 
   log(val) { console.log(val); }
+
+  async presentToast(color: string, message: string) {
+    const toast = await this.toastController.create({
+      message,
+      animated: true,
+      color,
+      duration: 2000
+    });
+    toast.present();
+  }
 
 }
