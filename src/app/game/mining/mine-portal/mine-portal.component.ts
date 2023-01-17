@@ -30,4 +30,8 @@ export class MinePortalComponent implements OnInit {
     this.mineAction.emit({name: 'goToNextLevel', param: null});
   }
 
+  openEarly() {
+    this.mineAction.emit({name: 'goToNextLevelEarly', param: null});
+  }
+
 }

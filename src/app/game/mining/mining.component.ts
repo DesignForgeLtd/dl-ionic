@@ -78,23 +78,32 @@ export class MiningComponent extends MapComponent implements OnInit {
       case 'goToNextLevel':
         this.goToNextLevel();
       break;
+      case 'goToNextLevelEarly':
+        this.goToNextLevelEarly();
+      break;
     }
   }
 
-  goToNextLevel(){
-    console.log('going to next level...');
+  goToNextLevelEarly(){
+    this.goToNextLevel(1);
+  }
 
-    this.miningService.goToNextLevel(this.playerSavedPosition).subscribe(data => {
+  goToNextLevel(mm = 0){
+    console.log('going to next level...' + (mm ? 'early' : ''));
+
+    this.miningService.goToNextLevel(this.playerSavedPosition, mm).subscribe(data => {
       if (data.success === true){
         console.log('went through portal!');
         console.log(data);
         this.player.position = data.heroPositionInMine;
+        this.player.updateCoordsAndPixels(
+          this.player.position % this.columns,
+          Math.floor(this.player.position / this.columns)
+        );
 
         this.world.populateMap(data.mineMap);
-        //this.loadHeroEssentialData(); -- this puts hero in correct positon but causes some issues (e.g. hero walking too fast)
 
-        //this.gameUIService.openedModal.emit('');
-
+        this.gameUIService.openedModal.emit('');
       }
       else {
         this.showError(data.errorMessage);

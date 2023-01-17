@@ -59,6 +59,13 @@ export class Player {
 
   }
 
+  updateCoordsAndPixels(x, y){
+    this.coord_x = x;
+    this.coord_y = y;
+    this.pixel_x = this.coord_x * this.scaled_size; // pixels
+    this.pixel_y = this.coord_y * this.scaled_size;
+  }
+
   // document.addEventListener('keydown', logKey);
 
   // function logKey(e) {

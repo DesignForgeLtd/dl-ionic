@@ -54,10 +54,12 @@ export class MiningService {
     );
   }
 
-  goToNextLevel(playerPosition){
+  goToNextLevel(playerPosition, mm: number){
     return this.http.post<MineResponseData>(
       AppSettings.API_ENDPOINT + '/mine/next-level/' + playerPosition,
-      {}
+      {
+        mm
+      }
     );
   }
 }

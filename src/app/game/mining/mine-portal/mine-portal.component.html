@@ -25,7 +25,9 @@
         Portal opens in: {{ data.opensIn }}s
 
         <button>
-          Open Early for {{ openEarlyPrice }} MM
+          <ion-button color="primary" (click)="openEarly()">
+            Open Early for {{ openEarlyPrice }} MM
+          </ion-button>
         </button>
       </div>
 
