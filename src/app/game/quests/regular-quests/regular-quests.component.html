@@ -2,7 +2,7 @@
   <div *ngFor="let quest of questsList | keyvalue">
     <h2>{{ quest.value.quest.title }}</h2>
     <i>{{ quest.value.tip }}</i>
-    <div *ngIf="quest.value.quest_step_type_id === questStepTypeOfStart || quest.value.quest_step_type_id === questStepTypeOfContinue; else questFinished">
+    <div *ngIf="quest.value.quest_step_type_id === questConstants.questStepTypeOfStart || quest.value.quest_step_type_id === questConstants.questStepTypeOfContinue; else questFinished">
       <input type="checkbox"
         id="suspend-quest-{{ quest.value.id }}"
         [checked]="quest.value.suspended"

@@ -34,6 +34,7 @@ export class BaggagePopoverComponent implements OnInit {
         this.presentToast('success', 'Used ' + this.item.name);
         this.item.quantity -= data.quantity;
         this.gameUIService.heroInfoUpdate(data.hero_data_to_update);
+        this.baggageService.baggageUpdated.emit(true);
       } else {
         this.presentToast('danger', 'Could not use ' + this.item.name);
       }
@@ -111,6 +112,7 @@ export class BaggagePopoverComponent implements OnInit {
               if (data.success === true) {
                 this.presentToast('success', 'Threw away ' + this.item.name);
                 this.item.quantity -= data.quantity;
+                this.baggageService.baggageUpdated.emit(true);
               } else {
                 this.presentToast('danger', 'Could not throw away ' + this.item.name);
               }
@@ -140,9 +142,25 @@ export class BaggagePopoverComponent implements OnInit {
         const gold = parseInt(document.getElementById('hero-gold').innerHTML, 10); // TODO: update this when HeroInfoComponent is created
         console.log('gold:' + gold);
         document.getElementById('hero-gold').innerHTML = (gold - data.price).toString();
-
+        this.baggageService.baggageUpdated.emit(true);
       } else {
         this.presentToast('danger', 'Could not buy ' + this.item.name);
+      }
+      this.baggageItemController.dismiss();
+    });
+  }
+
+  quickUseBelt(){
+    console.log('Quick Use Belt ' + this.item.name);
+    this.baggageService.quickUseBelt(this.item.item_id).subscribe(data => {
+      console.log('data: ');
+      console.log(data);
+      if (data.success === true) {
+        this.presentToast('success', data.result + ' ' + this.item.name);
+        this.baggageService.baggageUpdated.emit(true);
+        this.item.quick_belt = ! this.item.quick_belt;
+      } else {
+        this.presentToast('danger', 'Could not use ' + this.item.name);
       }
       this.baggageItemController.dismiss();
     });
