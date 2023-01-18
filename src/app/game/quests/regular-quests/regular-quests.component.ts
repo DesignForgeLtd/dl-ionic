@@ -10,8 +10,8 @@ export class RegularQuestsComponent implements OnInit {
   @Input() questsList: any[];
   @Output() suspendingQuest = new EventEmitter<{questID: number; suspend: boolean; type: string}>();
 
-  public questTypeOfStart = 1;
-  public questTypeOfContinue = 2;
+  public questStepTypeOfStart = 1;
+  public questStepTypeOfContinue = 2;
 
   constructor() { }
 

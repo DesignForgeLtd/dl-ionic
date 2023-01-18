@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { GameUIService } from '../../game-ui.service';
+import { QuestService } from '../quest.service';
+import { QuestConstants } from '../quest.constants';
 
 @Component({
   selector: 'app-daily-quests',
@@ -8,18 +11,27 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class DailyQuestsComponent implements OnInit {
 
   @Input() questsList: any[];
+  @Input() timeToNextDailyQuests: number;
+  @Input() priceForNextDailyQuests: number;
   @Output() suspendingQuest = new EventEmitter<{questID: number; suspend: boolean; type: string}>();
+  @Output() getDailyQuests = new EventEmitter();
 
-  public questTypeOfStart = 1;
-  public questTypeOfContinue = 2;
+  public questConstants = QuestConstants;
 
-  constructor() { }
+  constructor(
+    private questService: QuestService,
+    private gameUIService: GameUIService
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   suspendQuest(questID: number, suspend: boolean){
     const type = 'daily';
     this.suspendingQuest.emit({questID, suspend, type});
+  }
+
+  getNewDailyQuests(){
+    this.getDailyQuests.emit();
   }
 
 }

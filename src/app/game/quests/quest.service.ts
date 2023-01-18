@@ -45,12 +45,23 @@ interface QuestsResponseData {
   dailyQuestsData: QuestData[];
   regularQuestsData: QuestData[];
   professionQuestsData: QuestData[];
+  timeToNextDailyQuests: number;
+  priceForNextDailyQuests: number;
 }
 
 interface SuspendQuestResponseData {
   success: boolean;
   errorMessage: string;
   message: string;
+}
+
+interface NewDailyQuestsResponseData {
+  success: boolean;
+  errorMessage: string;
+  message: string;
+  dailyQuestsData: QuestData[];
+  timeToNextDailyQuests: number;
+  priceForNextDailyQuests: number;
 }
 
 @Injectable({
@@ -93,6 +104,13 @@ export class QuestService {
         suspend,
         responseType: 'json'
       }
+    );
+  }
+
+  getNewDailyQuestsData(){
+    return this.http.get<NewDailyQuestsResponseData>(
+      AppSettings.API_ENDPOINT + '/quest/getNewDailyQuests',
+      {responseType: 'json'}
     );
   }
 

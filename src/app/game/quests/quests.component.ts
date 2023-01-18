@@ -9,11 +9,14 @@ import { QuestService } from './quest.service';
 })
 export class QuestsComponent implements OnInit {
 
+  // showButton = true;
   message = null;
-  questsList = 'daily';
+  questsList = '';
   dailyQuestsData = [];
   regularQuestsData = [];
   professionQuestsData = [];
+  timeToNextDailyQuests = null;
+  priceForNextDailyQuests = null;
 
   constructor(
     private questService: QuestService,
@@ -30,6 +33,22 @@ export class QuestsComponent implements OnInit {
       this.dailyQuestsData = data.dailyQuestsData;
       this.regularQuestsData = data.regularQuestsData;
       this.professionQuestsData = data.professionQuestsData;
+      this.timeToNextDailyQuests = data.timeToNextDailyQuests;
+      this.priceForNextDailyQuests = data.priceForNextDailyQuests;
+      console.log(data);
+      this.questsList = 'daily';
+    });
+  }
+
+  getNewDailyQuests(){
+    this.questService.getNewDailyQuestsData().subscribe(data => {
+      this.timeToNextDailyQuests = data.timeToNextDailyQuests;
+      this.priceForNextDailyQuests = data.priceForNextDailyQuests;
+      this.message = data.message;
+
+      if(data.success){
+        this.dailyQuestsData = data.dailyQuestsData;
+      }
       console.log(data);
     });
   }
