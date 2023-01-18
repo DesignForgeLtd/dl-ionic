@@ -17,6 +17,7 @@ interface BaggageActionResponseData{
   'hero_data_to_update': any;
   'quantity': number;
   'price': number;
+  'quick_belt': number;
 }
 
 interface QuickUseBeltResponseData{

@@ -25,7 +25,7 @@
     <ion-item
         *ngIf="item.points !== null"
         (click)="quickUseBelt()">
-      <ion-icon name="star-outline"></ion-icon> Quick Use Belt
+      <ion-icon name="star{{ item.quick_belt ? '' : '-outline' }}"></ion-icon> Quick Use Belt
     </ion-item>
 
     <ion-item

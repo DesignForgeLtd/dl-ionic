@@ -158,6 +158,7 @@ export class BaggagePopoverComponent implements OnInit {
       if (data.success === true) {
         this.presentToast('success', data.result + ' ' + this.item.name);
         this.baggageService.baggageUpdated.emit(true);
+        this.item.quick_belt = ! this.item.quick_belt;
       } else {
         this.presentToast('danger', 'Could not use ' + this.item.name);
       }
