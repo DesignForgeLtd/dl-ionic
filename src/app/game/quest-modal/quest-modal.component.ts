@@ -31,6 +31,7 @@ export class QuestModalComponent implements OnInit {
     meetRequirements: boolean;
   }>;
   public requirementsMet = false;
+  public rewards = false;
 
   constructor(
     private questService: QuestService,
@@ -76,6 +77,8 @@ export class QuestModalComponent implements OnInit {
     this.progress = data.questData.progress;
     this.answers = data.questData.answers;
     this.requirementsMet = this.requirements ? (this.progress >= this.requirements.quantity ? true : false) : true;
+    this.rewards = data.questData.rewards;
+    this.gameUIService.openedBadgePopup.emit(data.receivedBadge);
   }
 
   closeQuestModal(){

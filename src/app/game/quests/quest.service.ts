@@ -9,6 +9,7 @@ interface QuestResponseData {
   message: string;
   questData: QuestData;
   questIcon: boolean;
+  receivedBadge: any;
 }
 
 interface QuestData{
@@ -34,6 +35,7 @@ interface QuestData{
     text: string;
     meetRequirements: boolean;
   }[];
+  quest_step_type_id: number;
 }
 
 interface QuestsResponseData {
