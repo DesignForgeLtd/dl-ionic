@@ -1,6 +1,6 @@
 <div class="belt-container">
   <div *ngFor="let item of quickUseBeltItems" class="baggage-item">
-    <div *ngIf="item.quantity > 0  || item.quantity === null"
+    <div *ngIf="item.quantity > 0"
         (click)="baggageUse(item)">
       <ion-badge *ngIf="item.quantity > 1" color="secondary" style="position: absolute;">
         {{ item.quantity }}
