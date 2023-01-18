@@ -4,41 +4,45 @@
 <ion-list class="baggage-popover-list">
 
   <ng-container *ngIf="area === 'shop'">
-    <ion-item
-      (click)="shopBuy(1)"
-    >
+
+    <ion-item (click)="shopBuy(1)">
       <ion-icon name="add-circle"></ion-icon> Buy 1
     </ion-item>
-    <ion-item
-      (click)="shopBuy(5)"
-    >
+    <ion-item (click)="shopBuy(5)">
       <ion-icon name="add-circle"></ion-icon> Buy 5
     </ion-item>
+
   </ng-container>
+
   <ng-container *ngIf="area !== 'shop'">
+
     <ion-item
-      *ngIf="item.points !== null"
-      (click)="baggageUse()"
-    >
+        *ngIf="item.points !== null"
+        (click)="baggageUse()">
       <ion-icon name="heart-outline"></ion-icon> Use
     </ion-item>
 
     <ion-item
-      *ngIf="item.weapon === 'weapon' && item.in_use === 0"
-      (click)="equipHero()"
-    >
+        *ngIf="item.points !== null"
+        (click)="quickUseBelt()">
+      <ion-icon name="star{{ item.quick_belt ? '' : '-outline' }}"></ion-icon> Quick Use Belt
+    </ion-item>
+
+    <ion-item
+        *ngIf="item.weapon === 'weapon' && item.in_use === 0"
+        (click)="equipHero()">
       <ion-icon name="person-add-outline"></ion-icon> Equip hero
     </ion-item>
 
     <ion-item
-      *ngIf="item.weapon === 'weapon' && item.in_use === 1"
-      (click)="unEquipHero()"
-    >
+        *ngIf="item.weapon === 'weapon' && item.in_use === 1"
+        (click)="unEquipHero()">
       <ion-icon name="person-remove-outline"></ion-icon> UnEquip hero
     </ion-item>
 
     <ion-item (click)="baggageThrowAway()">
       <ion-icon name="trash-outline"></ion-icon> Throw away
     </ion-item>
+
   </ng-container>
 </ion-list>

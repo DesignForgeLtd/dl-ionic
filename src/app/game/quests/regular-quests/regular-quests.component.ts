@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { QuestConstants } from '../quest.constants';
 
 @Component({
   selector: 'app-regular-quests',
@@ -10,8 +11,7 @@ export class RegularQuestsComponent implements OnInit {
   @Input() questsList: any[];
   @Output() suspendingQuest = new EventEmitter<{questID: number; suspend: boolean; type: string}>();
 
-  public questStepTypeOfStart = 1;
-  public questStepTypeOfContinue = 2;
+  public questConstants = QuestConstants;
 
   constructor() { }
 
