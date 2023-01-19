@@ -3,19 +3,38 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
 
+// TODO: remove duplication (copied from map.service.ts)
+interface PlayerData{
+  energy: number;
+  health: number;
+  id: number;
+  level: number;
+  hero_level: number;
+  name: string;
+  occupied_with: string;
+  occupation_start: string;
+  occupation_finish: string;
+  position: number;
+  stamina: number;
+  positionInMine: number;
+}
+
+interface MineResponseData{
+  'success': boolean;
+  'errorMessage': string;
+  'playerData': PlayerData;
+  'foundResource': any;
+  'portalData': any;
+  'mineMap': any;
+  'heroPositionInMine': any; // can I take it from playerData instead, and remove this?
+}
+
 @Injectable({providedIn: 'root'})
 export class MiningService {
   constructor(private http: HttpClient){}
 
-  startMining(position){
-    return this.http.post(
-      AppSettings.API_ENDPOINT + '/mine/start-mining/'+position,
-      {responseType: 'json'}
-    );
-  }
-
   stopMining(){
-    return this.http.post(
+    return this.http.post<MineResponseData>(
       AppSettings.API_ENDPOINT + '/mine/stop-mining',
       {responseType: 'json'}
     );
@@ -28,4 +47,19 @@ export class MiningService {
     );
   }
 
+  updatePositionInMine(playerPosition){
+    return this.http.post<MineResponseData>(
+      AppSettings.API_ENDPOINT + '/mine/move/' + playerPosition,
+      {}
+    );
+  }
+
+  goToNextLevel(playerPosition, mm: number){
+    return this.http.post<MineResponseData>(
+      AppSettings.API_ENDPOINT + '/mine/next-level/' + playerPosition,
+      {
+        mm
+      }
+    );
+  }
 }

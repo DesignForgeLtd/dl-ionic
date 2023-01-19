@@ -1,3 +1,37 @@
-<p>
-  mine-portal works!
-</p>
+<div id="mine-portal-container" class="modal-container">
+
+  <ion-card>
+
+    <ion-card-header>
+      <ion-toolbar>
+        <ion-buttons slot="end">
+          <ion-button color="danger" (click)="closeFeature()">
+            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <div *ngIf="data.opened === true">
+        Portal is now opened <br /><br />
+        <ion-button color="primary" (click)="nextLevel()">
+          Proceed to next mine level
+        </ion-button>
+      </div>
+
+      <div *ngIf="data.opened === false">
+        Portal opens in: {{ data.opensIn }}s
+
+        <button>
+          <ion-button color="primary" (click)="openEarly()">
+            Open Early for {{ openEarlyPrice }} MM
+          </ion-button>
+        </button>
+      </div>
+
+
+    </ion-card-content>
+  </ion-card>
+</div>

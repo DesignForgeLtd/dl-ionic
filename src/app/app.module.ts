@@ -47,6 +47,7 @@ import { WitchComponent } from './game/map/witch/witch.component';
 import { WeaponFixComponent } from './game/map/weapon-fix/weapon-fix.component';
 import { ReceivedBadgeComponent } from './game/received-badge/received-badge.component';
 import { MiningComponent } from './game/mining/mining.component';
+import { MinePortalComponent } from './game/mining/mine-portal/mine-portal.component';
 import { QuestsComponent } from './game/quests/quests.component';
 import { QuestModalComponent } from './game/quest-modal/quest-modal.component';
 import { DailyQuestsComponent } from './game/quests/daily-quests/daily-quests.component';
@@ -88,8 +89,9 @@ import { QuickUseBeltComponent } from './game/quick-use-belt/quick-use-belt.comp
     WeaponFixComponent,
     BaggagePopoverComponent,
     MonsterComponent,
-    ReceivedBadgeComponent,
     MiningComponent,
+    MinePortalComponent,
+    ReceivedBadgeComponent,
     QuestsComponent,
     QuestModalComponent,
     DailyQuestsComponent,
