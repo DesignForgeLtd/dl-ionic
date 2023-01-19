@@ -45,8 +45,13 @@ import { MonsterComponent } from './game/map/monster/monster.component';
 import { BankComponent } from './game/map/bank/bank.component';
 import { WitchComponent } from './game/map/witch/witch.component';
 import { WeaponFixComponent } from './game/map/weapon-fix/weapon-fix.component';
-import { ReceivedBadgeComponent } from './game/received-badge/received-badge/received-badge.component';
+import { ReceivedBadgeComponent } from './game/received-badge/received-badge.component';
 import { MiningComponent } from './game/mining/mining.component';
+import { QuestsComponent } from './game/quests/quests.component';
+import { QuestModalComponent } from './game/quest-modal/quest-modal.component';
+import { DailyQuestsComponent } from './game/quests/daily-quests/daily-quests.component';
+import { RegularQuestsComponent } from './game/quests/regular-quests/regular-quests.component';
+import { QuickUseBeltComponent } from './game/quick-use-belt/quick-use-belt.component';
 
 
 
@@ -84,7 +89,12 @@ import { MiningComponent } from './game/mining/mining.component';
     BaggagePopoverComponent,
     MonsterComponent,
     ReceivedBadgeComponent,
-    MiningComponent
+    MiningComponent,
+    QuestsComponent,
+    QuestModalComponent,
+    DailyQuestsComponent,
+    RegularQuestsComponent,
+    QuickUseBeltComponent
   ],
   entryComponents: [],
   imports: [

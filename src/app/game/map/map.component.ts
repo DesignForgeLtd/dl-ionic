@@ -145,6 +145,7 @@ console.log('this.columns: '+this.columns);
       this.animationFrame = window.requestAnimationFrame(() => this.loop());
 
       this.handleFoundLocation(data.foundLocation, data.foundMonster);
+      this.handleFoundQuest(data.foundQuest);
     });
   }
 
@@ -165,19 +166,19 @@ console.log('this.columns: '+this.columns);
           console.log('found Shop Location: ');
           console.log(foundLocation);
           this.locationData = foundLocation;
-          this.gameUIService.openLocationModal('shop');
+          this.gameUIService.showLocationIcon('shop');
           break;
         case 3:
           console.log('found Production Location: ');
           console.log(foundLocation);
           this.locationData = foundLocation;
-          this.gameUIService.openLocationModal('map-production-location');
+          this.gameUIService.showLocationIcon('map-production-location');
           break;
         case 4:
           console.log('found Mining Location: ');
           console.log(foundLocation);
           this.locationData = foundLocation;
-          this.gameUIService.openLocationModal('map-location');
+          this.gameUIService.showLocationIcon('map-location');
           break;
         case 6:
           console.log('found Monster');
@@ -187,36 +188,43 @@ console.log('this.columns: '+this.columns);
         case 14:
           console.log('found Bank: ');
           console.log(foundLocation);
-          this.gameUIService.openLocationModal('bank');
+          this.gameUIService.showLocationIcon('bank');
           break;
         case 8:
           console.log('found Other Location: ');
           console.log(foundLocation);
+          this.locationData = foundLocation;
           this.handleOtherLocation(foundLocation.id);
           break;
         default:
           console.log('found Other Location: ');
           console.log(foundLocation);
           this.locationData = foundLocation;
-          this.gameUIService.openLocationModal('map-location');
+          this.gameUIService.showLocationIcon('map-location');
       }
     }else{
       this.locationData = null;
-      this.gameUIService.openLocationModal('');
+      this.gameUIService.showLocationIcon('');
     }
   }
 
   handleOtherLocation(locationId: number){
     switch (locationId) {
       case 79:
-        this.gameUIService.openLocationModal('witch');
+        this.gameUIService.showLocationIcon('witch');
         break;
       case 81:
-        this.gameUIService.openLocationModal('weapon-fix');
+        this.gameUIService.showLocationIcon('weapon-fix');
         break;
       default:
-        this.gameUIService.openLocationModal('map-location');
+        this.gameUIService.showLocationIcon('map-location');
     }
+  }
+
+  handleFoundQuest(foundQuest: boolean){
+    this.gameUIService.showQuestIcon(foundQuest);
+    console.log('found Quest is: ');
+    console.log(foundQuest);
   }
 
 
@@ -331,6 +339,7 @@ console.log('this.columns: '+this.columns);
           }
 
           this.handleFoundLocation(data.foundLocation, data.foundMonster);
+          this.handleFoundQuest(data.foundQuest);
         }
         else {
           this.showError(data.errorMessage);

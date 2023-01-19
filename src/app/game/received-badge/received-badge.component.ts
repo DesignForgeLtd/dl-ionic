@@ -1,6 +1,5 @@
-import { NullTemplateVisitor } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
-import { GameUIService } from '../../game-ui.service';
+import { GameUIService } from '../game-ui.service';
 
 @Component({
   selector: 'app-received-badge',

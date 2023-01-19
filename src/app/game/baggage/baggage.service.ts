@@ -17,6 +17,13 @@ interface BaggageActionResponseData{
   'hero_data_to_update': any;
   'quantity': number;
   'price': number;
+  'quick_belt': number;
+}
+
+interface QuickUseBeltResponseData{
+  'success': boolean;
+  'error_message': string;
+  'result': string;
 }
 
 @Injectable({providedIn: 'root'})
@@ -69,6 +76,22 @@ export class BaggageService {
         shop_item_id: itemId,
         quantity
       }
+    );
+  }
+
+  quickUseBelt(itemId: number){
+    return this.http.post<QuickUseBeltResponseData>(
+      AppSettings.API_ENDPOINT + '/baggage/quickUseBelt',
+      {
+        itemId
+      }
+    );
+  }
+
+  showQuickUseItems(){
+    return this.http.get<any>(
+      AppSettings.API_ENDPOINT + '/baggage/quickUseItems',
+      {responseType: 'json'}
     );
   }
 

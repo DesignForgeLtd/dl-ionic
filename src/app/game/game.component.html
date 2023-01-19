@@ -7,10 +7,14 @@
 
 <app-menu [occupiedWith]="playerDataOccupiedWith"></app-menu>
 
+<app-quick-use-belt></app-quick-use-belt>
+
 <app-mailbox *ngIf="openedModal === 'mailbox'"></app-mailbox>
 <app-hero *ngIf="openedModal === 'hero'"></app-hero>
 <app-baggage *ngIf="openedModal === 'baggage'"></app-baggage>
+<app-quests *ngIf="openedModal === 'quests'"></app-quests>
 
+<app-quest-modal *ngIf="openedQuestModal"></app-quest-modal>
 <app-received-badge *ngIf="openedBadgePopup" [receivedBadge]="openedBadgePopup"></app-received-badge>
 
 

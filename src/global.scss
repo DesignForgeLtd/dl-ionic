@@ -40,6 +40,20 @@ ion-content{
   width: 94vw;
   height: 94vh;
   //background-color: darkslategray;
+  z-index: 999;
+  // padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.26);
+  display: grid;
+
+}
+
+.quest-modal-container {
+  position: fixed;
+  top: 3vh;
+  left: 3vw;
+  width: 94vw;
+  height: 94vh;
+  //background-color: darkslategray;
   z-index: 9999;
   // padding: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.26);
@@ -61,6 +75,16 @@ ion-content{
 }
 
 .backdrop{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.75);
+  z-index: 100;
+}
+
+.backdrop-quest{
   position: fixed;
   top: 0;
   left: 0;

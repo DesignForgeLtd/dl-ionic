@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { GameUIService } from '../../game-ui.service';
 import { WeaponFixService } from './weapon-fix.service';
 
@@ -10,7 +10,6 @@ import { WeaponFixService } from './weapon-fix.service';
 export class WeaponFixComponent implements OnInit {
 
   @Input() passedLocationData = null;
-  @ViewChild('weaponFixItem') weaponFixItem: ElementRef;
 
   public locationData = null;
   public message = null;
@@ -50,8 +49,8 @@ export class WeaponFixComponent implements OnInit {
       });
   }
 
-  fixWeapon(){
-    this.weaponFixService.fixWeapon(this.weaponFixItem.nativeElement.value)
+  fixWeapon(weaponId: number){
+    this.weaponFixService.fixWeapon(weaponId)
       .subscribe(result => {
         this.isLoading = false;
 
@@ -59,8 +58,7 @@ export class WeaponFixComponent implements OnInit {
         this.resources = result.resources;
 
         if( result.success ){
-          document.getElementById('weaponFixItem' + result.weapon.id).innerHTML =
-            result.weapon.item.name + ' - ' + result.weapon.durability + ' / ' + result.weapon.durability_max;
+          document.getElementById('weaponFixItemDurability' + result.weapon.id).textContent = result.weapon.durability;
           this.gameUIService.heroInfoUpdate(result.resources);
           this.gameUIService.openedBadgePopup.emit(result.receivedBadge);
         }

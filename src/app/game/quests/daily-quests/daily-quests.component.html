@@ -1,0 +1,39 @@
+<ng-container *ngIf="questsList && questsList.length !== 0">
+  <div *ngFor="let quest of questsList | keyvalue">
+    <h2>{{ quest.value.quest.title }}</h2>
+    <i>{{ quest.value.tip }}</i>
+
+    <div *ngIf="timeToNextDailyQuests > 0
+        && (quest.value.quest_step_type_id === questConstants.questStepTypeOfStart
+          || quest.value.quest_step_type_id === questConstants.questStepTypeOfContinue)">
+      <input type="checkbox"
+        id="suspend-quest-{{ quest.value.id }}"
+        [checked]="quest.value.suspended"
+        (click)="suspendQuest(quest.value.id, ! quest.value.suspended)">
+      <label for="suspend-quest-{{ quest.value.id }}">Suspended</label>
+    </div>
+
+    <div *ngIf="quest.value.quest_step_type_id === questConstants.questStepTypeOfFinish">
+      <span>Finished</span>
+    </div>
+
+    <div *ngIf="quest.value.quest_step_type_id === questConstants.questStepTypeOfReject">
+      <span>Rejected</span>
+    </div>
+
+    <div *ngIf="timeToNextDailyQuests <= 0
+        && (quest.value.quest_step_type_id === questConstants.questStepTypeOfStart
+          || quest.value.quest_step_type_id === questConstants.questStepTypeOfContinue)">
+          <span>Time Out</span>
+    </div>
+
+    <hr>
+  </div>
+
+</ng-container>
+
+<ng-container>
+  <input type="button"
+    (click)="getNewDailyQuests()"
+    value="Get New Daily Quests for {{ priceForNextDailyQuests > 0 ? priceForNextDailyQuests + ' MM' : 'FREE' }}">
+</ng-container>
