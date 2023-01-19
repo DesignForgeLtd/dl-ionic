@@ -2,7 +2,7 @@
 <div class="backdrop"></div>
 <div class="modal-container"  id="hero-container">
 
-  <ion-card style="min-width:340px">
+  <ion-card style="min-width:440px">
 
     <ion-card-header>
       <ion-toolbar>
@@ -39,6 +39,7 @@
       <app-hero-skills *ngIf="chosenTab === 'skills'"></app-hero-skills>
       <app-hero-occupations *ngIf="chosenTab === 'occupations'"></app-hero-occupations>
       <app-hero-active-elixirs *ngIf="chosenTab === 'active-elixirs'"></app-hero-active-elixirs>
+      <app-badges *ngIf="chosenTab === 'badges'"></app-badges>
 
 
 

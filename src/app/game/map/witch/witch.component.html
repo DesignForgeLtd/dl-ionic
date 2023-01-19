@@ -1,0 +1,68 @@
+<div class="backdrop"></div>
+<div class="modal-container">
+
+  <ion-card>
+
+    <ion-card-header>
+      <ion-toolbar>
+        <h1>Witch</h1>
+        <ion-buttons slot="end">
+          <ion-button color="danger" (click)="closeModal()">
+            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+
+
+    <ion-card-content>
+
+          <ng-container>
+
+            <h2>You are in Witch House.</h2>
+
+            <div *ngIf="!hoochGiven; else wishList">
+
+              <div *ngIf="hooch; else noHooch">
+                <button (click)="witchAction(0)">give a hooch for the witch</button>
+              </div>
+
+              <ng-template #noHooch>
+                You do not have hooch.
+              </ng-template>
+
+            </div>
+
+            <ng-template #wishList>
+
+              <div *ngIf="actionList; else performAction">
+                <div *ngFor="let action of actionList">
+                  <button (click)="witchAction(action.id)">
+                    {{action.name}}
+                  </button>
+                </div>
+              </div>
+
+              <ng-template #performAction>
+                <h3 *ngIf="actionData.text">{{actionData.text}}</h3>
+                <select *ngIf="actionData.list.length" #witchActionData>
+                  <option *ngFor="let item of actionData.list" value="{{item.id}}">{{item.name}}</option>
+                </select>
+                <div *ngIf="actionData.textbox">
+                  <input type="{{actionData.textbox}}" value="" #witchActionData>
+                </div>
+                <div *ngIf="actionData.button">
+                  <button (click)="witchAction(actionData.actionId+10)">{{actionData.button}}</button>
+                </div>
+              </ng-template>
+
+            </ng-template>
+
+          </ng-container>
+
+          <ion-button *ngIf="message" expand="full" color="warning">{{message}}</ion-button>
+
+    </ion-card-content>
+
+  </ion-card>
+</div>

@@ -24,6 +24,21 @@
   [passedLocationData]="locationData"
 ></app-shop>
 
+<app-bank
+  *ngIf="openedModal === 'bank'"
+  [passedLocationData]="locationData"
+></app-bank>
+
+<app-witch
+  *ngIf="openedModal === 'witch'"
+  [passedLocationData]="locationData"
+></app-witch>
+
+<app-weapon-fix
+  *ngIf="openedModal === 'weapon-fix'"
+  [passedLocationData]="locationData"
+></app-weapon-fix>
+
 <app-monster
   *ngIf="openedModal === 'monster'"
   [passedMonsterData]="monsterData"

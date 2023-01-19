@@ -22,6 +22,7 @@ export class MenuComponent implements OnInit {
 
   loggedIn = false;
   atLocation = false;
+  foundQuest = false;
 
   constructor(
     private authService: AuthService,
@@ -32,6 +33,9 @@ export class MenuComponent implements OnInit {
       console.log(this.occupiedWith);
       this.gameUIService.currentLocationEmitter.subscribe(
         (currentLocation: string) => this.atLocation = currentLocation !== ''
+      );
+      this.gameUIService.foundQuestEmitter.subscribe(
+        (foundQuest: boolean) => this.foundQuest = foundQuest
       );
       this.gameUIService.playerOccupiedWith.subscribe(
         (occupation: string) => this.occupiedWith = occupation
@@ -61,6 +65,9 @@ export class MenuComponent implements OnInit {
 
   showLocation(){
     this.gameUIService.openLocationModal('current-location');
+  }
+  showQuest(){
+    this.gameUIService.openQuestModal();
   }
 
   stopMining(){

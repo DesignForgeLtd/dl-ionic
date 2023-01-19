@@ -6,7 +6,10 @@ export class GameUIService {
 
   public currentLocation: string;
   currentLocationEmitter = new EventEmitter<string>();
+  foundQuestEmitter = new EventEmitter<boolean>();
   openedModal = new EventEmitter<string>();
+  openedQuestModal = new EventEmitter<boolean>();
+  openedBadgePopup = new EventEmitter<any>();
   playerOccupiedWith = new EventEmitter<string>();
 
   constructor() {
@@ -30,13 +33,26 @@ export class GameUIService {
     }
   }
 
+  openQuestModal(){
+    this.openedQuestModal.emit(true);
+  }
+
+  showLocationIcon(location: string){
+    this.currentLocation = location;
+    this.currentLocationEmitter.emit(location);
+  }
+
+  showQuestIcon(isQuest: boolean){
+    this.foundQuestEmitter.emit(isQuest);
+  }
+
   changeHeroOccupation(occupation: string){
       this.playerOccupiedWith.emit(occupation);
   }
 
   heroInfoInitialize(heroInfo){
     document.getElementById('hero-info').innerHTML =
-      '<b>' + heroInfo.name + '</b> (ID: ' + heroInfo.id + ')'
+      '<b id="hero-name">' + heroInfo.name + '</b> (ID: ' + heroInfo.id + ')'
       + ', Energy: ' + heroInfo.energy
       + ', Stamina: <span id="hero-stamina">' + heroInfo.stamina + '</span>'
       + ', Health: <span id="hero-health">' + heroInfo.health + '</span>'
@@ -60,6 +76,9 @@ export class GameUIService {
     if (typeof heroData.gold !== 'undefined'){
       document.getElementById('hero-gold').innerHTML = heroData.gold;
     }
+    if (typeof heroData.name !== 'undefined'){
+      document.getElementById('hero-name').innerHTML = heroData.name;
+    }
   }
 
   openMonsterModal(){
@@ -67,4 +86,17 @@ export class GameUIService {
 
     this.openedModal.emit('monster');
   }
+
+  openReceivedBadgeModal(){
+    console.log('opening received badge modal');
+
+    this.openedModal.emit('receivedBadge');
+  }
+
+  displayErrorMessageInConsole(errorMessage: any){
+    if( errorMessage !== null ){
+      console.log(errorMessage);
+    }
+  }
+
 }

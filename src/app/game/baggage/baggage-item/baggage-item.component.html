@@ -4,10 +4,11 @@
   (click)="baggageItemClick($event)"
 >
   <ion-badge *ngIf="item.in_use" color="success">Equipped</ion-badge>
+  <ion-badge *ngIf="item.quick_use_belt" color="success">QUB</ion-badge>
   <ion-badge *ngIf="item.quantity > 1" color="secondary">{{ item.quantity }}</ion-badge>
   <div
     class="baggage-item-image {{ item.weapon }}"
-    style="background-image: url('../../../assets/graphics/{{ item.image }}');"
+    style="background-image: url('../../../assets/graphics/items/{{ item.image }}');"
   ></div>
   {{ item.name }}
 </div>
