@@ -15,8 +15,6 @@ export class MinePortalComponent implements OnInit {
 
   @Input() data;
   @Output() mineAction = new EventEmitter<MineActionEvent>();
-  openEarlyPrice = 1; // TODO: make it depend on time
-
 
   constructor(private gameUIService: GameUIService) { }
 
