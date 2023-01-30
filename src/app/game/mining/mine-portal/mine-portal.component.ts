@@ -20,7 +20,10 @@ export class MinePortalComponent implements OnInit {
 
   constructor(private gameUIService: GameUIService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('portal data:');
+    console.log(this.data);
+  }
 
   closeFeature() {
     this.gameUIService.openedModal.emit(null);
