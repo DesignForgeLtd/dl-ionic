@@ -52,6 +52,9 @@ export class MiningComponent extends MapComponent implements OnInit {
               this.showSuccess('Collected resource: ' + data.foundResource);
               this.world.replaceTileInMap(this.player.position, 'p70');
               break;
+            case 'none':
+              this.showError('No free space in baggage.');
+              break;
             case 'portal':
               this.gameUIService.openedModal.emit('mine-portal-modal');
               this.portalData = data.portalData;
@@ -85,13 +88,13 @@ export class MiningComponent extends MapComponent implements OnInit {
   }
 
   goToNextLevelEarly(){
-    this.goToNextLevel(1);
+    this.goToNextLevel();
   }
 
-  goToNextLevel(mm = 0){
-    console.log('going to next level...' + (mm ? 'early' : ''));
+  goToNextLevel(){
+    console.log('going to next level...');
 
-    this.miningService.goToNextLevel(this.playerSavedPosition, mm).subscribe(data => {
+    this.miningService.goToNextLevel().subscribe(data => {
       if (data.success === true){
         console.log('went through portal!');
         console.log(data);

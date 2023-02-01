@@ -15,12 +15,13 @@ export class MinePortalComponent implements OnInit {
 
   @Input() data;
   @Output() mineAction = new EventEmitter<MineActionEvent>();
-  openEarlyPrice = 1; // TODO: make it depend on time
-
 
   constructor(private gameUIService: GameUIService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('portal data:');
+    console.log(this.data);
+  }
 
   closeFeature() {
     this.gameUIService.openedModal.emit(null);
