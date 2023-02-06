@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { GoogleLoginProvider, SocialAuthService, SocialUser } from 'angularx-social-login';
 
 @Component({
   selector: 'app-auth',
@@ -15,6 +16,8 @@ export class AuthComponent implements OnInit {
   public password;
   public confirmPassword;
 
+  socialUser!: SocialUser;
+
   isLoginMode = true;
   isLoading = false;
   error: string = null;
@@ -22,16 +25,34 @@ export class AuthComponent implements OnInit {
   registrationSuccessful = false;
   registrationUnsuccessful = false;
 
+
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private socialAuthService: SocialAuthService
   ) { }
 
   ngOnInit() {
     if (this.authService.user.value){
       this.router.navigate(['/game']);
     }
+
+    this.socialAuthService.authState.subscribe((user) => {
+      this.socialUser = user;
+      //this.isLoggedin = user != null;
+      console.log(this.socialUser);
+    });
   }
+
+
+  loginWithGoogle(): void {
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
+  logOut(): void {
+    this.socialAuthService.signOut();
+  }
+
 
   onSubmit(form: NgForm){
     if ( ! form.valid){

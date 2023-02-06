@@ -54,7 +54,14 @@ import { DailyQuestsComponent } from './game/quests/daily-quests/daily-quests.co
 import { RegularQuestsComponent } from './game/quests/regular-quests/regular-quests.component';
 import { QuickUseBeltComponent } from './game/quick-use-belt/quick-use-belt.component';
 
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+} from 'angularx-social-login';
+import { GoogleLoginProvider } from 'angularx-social-login';
 
+import { googleOAuth } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -101,6 +108,8 @@ import { QuickUseBeltComponent } from './game/quick-use-belt/quick-use-belt.comp
   entryComponents: [],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
+    SocialLoginModule,
     IonicModule.forRoot(),
     AppRoutingModule,
 //    StoreModule.forRoot({productionLocation: productionLocationReducer}),
@@ -117,7 +126,19 @@ import { QuickUseBeltComponent } from './game/quick-use-belt/quick-use-belt.comp
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(googleOAuth.clientId),
+          },
+        ],
+      } as SocialAuthServiceConfig,
+    },
   ],
   bootstrap: [AppComponent],
 })
