@@ -7,8 +7,13 @@ export const environment = {
 };
 
 export const googleOAuth = {
-  clientId: '1053696124194-5eafhms7jn90cn5feigsucb066k1u4eb.apps.googleusercontent.com',
-  clientSecret: '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'
+  clientId: '1053696124194-9le4tbck8ka8ahhuokt84431u7hi48dd.apps.googleusercontent.com',
+  clientSecret: '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'
+};
+
+export const facebookOAuth = {
+  clientId: 'clientId-Goes-Here',
+  clientSecret: 'clientSecret-Goes-Here'
 };
 
 /*

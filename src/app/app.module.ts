@@ -58,10 +58,16 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {
   SocialLoginModule,
   SocialAuthServiceConfig,
-} from 'angularx-social-login';
-import { GoogleLoginProvider } from 'angularx-social-login';
+} from '@abacritt/angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from '@abacritt/angularx-social-login';
 
-import { googleOAuth } from '../environments/environment';
+import {
+  googleOAuth,
+  facebookOAuth
+} from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -134,9 +140,16 @@ import { googleOAuth } from '../environments/environment';
         providers: [
           {
             id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(googleOAuth.clientId),
+            provider: new GoogleLoginProvider(googleOAuth.clientId)
           },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider(facebookOAuth.clientId)
+          }
         ],
+        onError: (err) => {
+          console.error(err);
+        }
       } as SocialAuthServiceConfig,
     },
   ],
