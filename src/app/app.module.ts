@@ -70,89 +70,88 @@ import {
 } from '../environments/environment';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    GameComponent,
-    MapComponent,
-    MapLocationComponent,
-    MapProductionLocationComponent,
-    ProductionLinesComponent,
-    ProductionLineComponent,
-    ProductionQueueComponent,
-    ProductionQueueItemComponent,
-    MenuComponent,
-    AuthComponent,
-    MailboxComponent,
-    InboxComponent,
-    MsgThreadComponent,
-    CreateMsgComponent,
-    BaggageComponent,
-    BaggageItemComponent,
-    LoadingSpinnerComponent,
-    HeroComponent,
-    HeroActiveElixirsComponent,
-    HeroAttributesComponent,
-    HeroOccupationsComponent,
-    HeroSkillsComponent,
-    BadgesComponent,
-    JourneyComponent,
-    ShopComponent,
-    BankComponent,
-    WitchComponent,
-    WeaponFixComponent,
-    BaggagePopoverComponent,
-    MonsterComponent,
-    MiningComponent,
-    MinePortalComponent,
-    ReceivedBadgeComponent,
-    QuestsComponent,
-    QuestModalComponent,
-    DailyQuestsComponent,
-    RegularQuestsComponent,
-    QuickUseBeltComponent
-  ],
-  entryComponents: [],
-  imports: [
-    BrowserModule,
-    ReactiveFormsModule,
-    SocialLoginModule,
-    IonicModule.forRoot(),
-    AppRoutingModule,
-//    StoreModule.forRoot({productionLocation: productionLocationReducer}),
-    HttpClientModule,
-    FormsModule,
-    CommonModule
-  ],
-  providers: [
-    {
-      provide: RouteReuseStrategy,
-      useClass: IonicRouteStrategy
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    },
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(googleOAuth.clientId)
-          },
-          {
-            id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider(facebookOAuth.clientId)
-          }
-        ],
-        onError: (err) => {
-          console.error(err);
-        }
-      } as SocialAuthServiceConfig,
-    },
-  ],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        GameComponent,
+        MapComponent,
+        MapLocationComponent,
+        MapProductionLocationComponent,
+        ProductionLinesComponent,
+        ProductionLineComponent,
+        ProductionQueueComponent,
+        ProductionQueueItemComponent,
+        MenuComponent,
+        AuthComponent,
+        MailboxComponent,
+        InboxComponent,
+        MsgThreadComponent,
+        CreateMsgComponent,
+        BaggageComponent,
+        BaggageItemComponent,
+        LoadingSpinnerComponent,
+        HeroComponent,
+        HeroActiveElixirsComponent,
+        HeroAttributesComponent,
+        HeroOccupationsComponent,
+        HeroSkillsComponent,
+        BadgesComponent,
+        JourneyComponent,
+        ShopComponent,
+        BankComponent,
+        WitchComponent,
+        WeaponFixComponent,
+        BaggagePopoverComponent,
+        MonsterComponent,
+        MiningComponent,
+        MinePortalComponent,
+        ReceivedBadgeComponent,
+        QuestsComponent,
+        QuestModalComponent,
+        DailyQuestsComponent,
+        RegularQuestsComponent,
+        QuickUseBeltComponent
+    ],
+    imports: [
+        BrowserModule,
+        ReactiveFormsModule,
+        SocialLoginModule,
+        IonicModule.forRoot(),
+        AppRoutingModule,
+        //    StoreModule.forRoot({productionLocation: productionLocationReducer}),
+        HttpClientModule,
+        FormsModule,
+        CommonModule
+    ],
+    providers: [
+        {
+            provide: RouteReuseStrategy,
+            useClass: IonicRouteStrategy
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        },
+        {
+            provide: 'SocialAuthServiceConfig',
+            useValue: {
+                autoLogin: false,
+                providers: [
+                    {
+                        id: GoogleLoginProvider.PROVIDER_ID,
+                        provider: new GoogleLoginProvider(googleOAuth.clientId)
+                    },
+                    {
+                        id: FacebookLoginProvider.PROVIDER_ID,
+                        provider: new FacebookLoginProvider(facebookOAuth.clientId)
+                    }
+                ],
+                onError: (err) => {
+                    console.error(err);
+                }
+            } as SocialAuthServiceConfig,
+        },
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}
