@@ -33,8 +33,8 @@ export class AuthComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router,
-    private socialAuthService: SocialAuthService
+    private router: Router
+    //, private socialAuthService: SocialAuthService
   ) { }
 
   ngOnInit() {
@@ -42,20 +42,20 @@ export class AuthComponent implements OnInit {
       this.router.navigate(['/game']);
     }
 
-    this.socialAuthService.authState.subscribe((user) => {
-      this.socialUser = user;
-      //this.isLoggedin = user != null;
-      console.log(this.socialUser);
-    });
+    // this.socialAuthService.authState.subscribe((user) => {
+    //   this.socialUser = user;
+    //   //this.isLoggedin = user != null;
+    //   console.log(this.socialUser);
+    // });
   }
 
-  loginWithFacebook(): void {
-    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
-  }
+  // loginWithFacebook(): void {
+  //   this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  // }
 
-  logOut(): void {
-    this.socialAuthService.signOut();
-  }
+  // logOut(): void {
+  //   this.socialAuthService.signOut();
+  // }
 
 
   onSubmit(form: NgForm){
