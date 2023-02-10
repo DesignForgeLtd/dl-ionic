@@ -13,6 +13,11 @@
   (mapLocationAction)="mapLocationAction($event)"
 ></app-map-location>
 
+<app-marketplace
+  *ngIf="openedModal === 'marketplace'"
+  [passedLocationData]="locationData"
+></app-marketplace>
+
 <app-map-production-location
   *ngIf="openedModal === 'map-production-location'"
   [passedLocationData]="locationData"

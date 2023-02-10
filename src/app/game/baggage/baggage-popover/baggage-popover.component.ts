@@ -12,6 +12,9 @@ export class BaggagePopoverComponent implements OnInit {
 
   @Input() item;
   @Input() area;
+  @Input() location;
+
+  inputAmount: number;
 
   constructor(
     private baggageService: BaggageService,
@@ -21,8 +24,20 @@ export class BaggagePopoverComponent implements OnInit {
     public alertController: AlertController) { }
 
   ngOnInit() {
+    if( this.location ){
+      if( this.area === 'baggage' ){
+        const locationCapacity = this.baggageService.capacity.location.max - this.baggageService.capacity.location.taken;
+        this.inputAmount = this.item.quantity > locationCapacity ? locationCapacity : this.item.quantity;
+      }
+      if( this.area === 'storage' || this.area === 'mySale' || this.area === 'market' ){
+        const baggageCapacity = this.baggageService.capacity.baggage.max - this.baggageService.capacity.baggage.taken;
+        this.inputAmount = this.item.quantity > baggageCapacity ? baggageCapacity : this.item.quantity;
+      }
+    }
     console.log(this.item);
-    console.log(this.area);
+    console.log('area: '+this.area);
+    console.log('location: '+this.location);
+    console.log(this.baggageService.capacity);
   }
 
   baggageUse(){
@@ -161,6 +176,64 @@ export class BaggagePopoverComponent implements OnInit {
         this.item.quick_belt = ! this.item.quick_belt;
       } else {
         this.presentToast('danger', 'Could not use ' + this.item.name);
+      }
+      this.baggageItemController.dismiss();
+    });
+  }
+
+  putOnSale(quantity: number, price: number){
+    console.log('put on sale ' + quantity + ' ' + this.item.name);
+    this.baggageService.putOnSale(this.item.hero_item_id, quantity, price).subscribe(data => {
+      console.log('data: ');
+      console.log(data);
+      if (data.success === true) {
+        this.presentToast('success', 'Puted on sale ' + this.item.name);
+        this.item.quantity -= data.quantity;
+        this.baggageService.capacity.baggage.taken -= data.quantity;
+        this.baggageService.capacity.location.taken += data.quantity;
+        this.baggageService.baggageUpdated.emit(true);
+      } else {
+        this.presentToast('danger', 'Could not put on sale ' + this.item.name);
+      }
+      this.baggageItemController.dismiss();
+    });
+  }
+
+  putToStorage(){
+    console.log('put to storage');
+  }
+
+  getBack(quantity: number){
+    console.log('get back ' + quantity + ' ' + this.item.name);
+    this.baggageService.getBack(this.item.hero_item_id, quantity).subscribe(data => {
+      console.log('data: ');
+      console.log(data);
+      if (data.success === true) {
+        this.presentToast('success', 'Removed ' + this.item.name);
+        this.item.quantity -= data.quantity;
+        this.baggageService.capacity.baggage.taken += data.quantity;
+        this.baggageService.capacity.location.taken -= data.quantity;
+        this.baggageService.baggageUpdated.emit(true);
+      } else {
+        this.presentToast('danger', 'Could not remove ' + this.item.name);
+      }
+      this.baggageItemController.dismiss();
+    });
+  }
+
+  buyFromMarketplace(quantity: number){
+    console.log('buy from marketplace ' + quantity + ' ' + this.item.name);
+    this.baggageService.buyFromMarketplace(this.item.hero_item_id, quantity).subscribe(data => {
+      console.log('data: ');
+      console.log(data);
+      if (data.success === true) {
+        this.presentToast('success', 'Bought ' + this.item.name);
+        this.item.quantity -= data.quantity;
+        this.baggageService.capacity.baggage.taken -= data.quantity;
+        this.baggageService.capacity.location.taken += data.quantity;
+        this.baggageService.baggageUpdated.emit(true);
+      } else {
+        this.presentToast('danger', 'Could not buy ' + this.item.name);
       }
       this.baggageItemController.dismiss();
     });
