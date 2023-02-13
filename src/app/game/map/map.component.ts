@@ -191,17 +191,23 @@ console.log('this.columns: '+this.columns);
           this.monsterData = foundMonster;
           this.gameUIService.openMonsterModal();
           break;
-        case 14:
-          console.log('found Bank: ');
-          console.log(foundLocation);
-          this.locationData = foundLocation;
-          this.gameUIService.showLocationIcon('bank');
-          break;
         case 8:
           console.log('found Other Location: ');
           console.log(foundLocation);
           this.locationData = foundLocation;
           this.handleOtherLocation(foundLocation.id);
+          break;
+        case 12:
+          console.log('found Warehouse Location: ');
+          console.log(foundLocation);
+          this.locationData = foundLocation;
+          this.gameUIService.showLocationIcon('warehouse');
+          break;
+        case 14:
+          console.log('found Bank: ');
+          console.log(foundLocation);
+          this.locationData = foundLocation;
+          this.gameUIService.showLocationIcon('bank');
           break;
         default:
           console.log('found Other Location: ');
