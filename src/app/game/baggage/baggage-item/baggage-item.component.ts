@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { BaggagePopoverComponent } from '../baggage-popover/baggage-popover.component';
 
@@ -9,8 +9,12 @@ import { BaggagePopoverComponent } from '../baggage-popover/baggage-popover.comp
 })
 export class BaggageItemComponent implements OnInit {
 
+  @Input() expand = false;
   @Input() item = null;
   @Input() area = null;
+  @Input() location = null;
+
+  @Output() loadListOfItems = new EventEmitter<number>();
 
   constructor(public baggageItemController: PopoverController) { }
 
@@ -21,11 +25,18 @@ export class BaggageItemComponent implements OnInit {
 
   async baggageItemClick(event){
     console.log(event);
+
+    if( this.expand ){
+      this.loadListOfItems.emit(this.item.item_id);
+      return;
+    }
+
     const popover = await this.baggageItemController.create({
       component: BaggagePopoverComponent,
       componentProps: {
         item: this.item,
-        area: this.area
+        area: this.area,
+        location: this.location
       },
       event
     });

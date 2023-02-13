@@ -162,6 +162,12 @@ console.log('this.columns: '+this.columns);
   handleFoundLocation(foundLocation, foundMonster = null){
     if (foundLocation !== null){
       switch (foundLocation.type) {
+        case 1:
+          console.log('found Marketplace Location: ');
+          console.log(foundLocation);
+          this.locationData = foundLocation;
+          this.gameUIService.showLocationIcon('marketplace');
+          break;
         case 2:
           console.log('found Shop Location: ');
           console.log(foundLocation);
@@ -188,6 +194,7 @@ console.log('this.columns: '+this.columns);
         case 14:
           console.log('found Bank: ');
           console.log(foundLocation);
+          this.locationData = foundLocation;
           this.gameUIService.showLocationIcon('bank');
           break;
         case 8:

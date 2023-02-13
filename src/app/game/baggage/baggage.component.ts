@@ -9,15 +9,22 @@ import { BaggageService } from './baggage.service';
 })
 export class BaggageComponent implements OnInit {
 
+  public location = null;
+  public source = 'baggage';
+  public tabTitle = 'Your baggage';
+
   public isLoading = true;
-  public baggageData = null;
+  // public baggageData = null;
+  public capacity = null;
   public baggageTypes = null;
   public baggageItems = null;
-  public currentParentId = null;
+  public categoryId = null;
+  public typeId: any = 'all';
+  public expand = false;
 
   constructor(
-    private gameUIService: GameUIService,
-    private baggageService: BaggageService) { }
+    protected gameUIService: GameUIService,
+    protected baggageService: BaggageService) { }
 
   ngOnInit() {
     this.initialize();
@@ -27,54 +34,79 @@ export class BaggageComponent implements OnInit {
     this.gameUIService.openedModal.emit(null);
   }
 
-  initialize(){
-    this.baggageService.loadBaggageData()
+  initialize(area?: string){
+    // this.categoryId = null;
+    this.baggageService.loadBaggageDataWithTypes(area)
       .subscribe(data => {
-        this.isLoading = false;
-        this.baggageData = data;
+        // this.baggageData = data;
         this.baggageItems = data.items.result;
         this.baggageTypes = data.types;
+        this.baggageService.capacity = data.capacity;
+        this.capacity = this.baggageService.capacity;
 
-        console.log('loadBaggageData: ');
+        console.log('loadBaggageDataWithTypes: ');
         console.log('loaded baggage types:');
         console.log(this.baggageTypes);
         console.log('loaded baggage items:');
         console.log(this.baggageItems);
-
+        console.log(data);
+        this.isLoading = false;
       });
   }
 
-  openCategory(id: number){
-    console.log('opening category id '+id);
-
-    this.currentParentId = id;
+  openCategory(categoryId: number){
+    this.categoryId = categoryId;
 
     const parentTypeWrappers = document.querySelectorAll('.baggage-parent-wrapper');
     parentTypeWrappers.forEach(element => {
       element.setAttribute('style', 'display: none');
     });
 
-    document.getElementById('baggage-parent-id-'+id).style.display = 'block';
-  }
+    const parentWrapper = document.getElementById('baggage-parent-id-'+this.categoryId);
+    parentWrapper.style.display = 'block';
 
-  filterSubtype(id: any){
-    console.log('opening subcategory id '+id);
-
-    const parentWrapper = document.getElementById('baggage-parent-id-'+this.currentParentId);
-    const childTypeWrappers = parentWrapper.querySelectorAll('.baggage-child-wrapper');
     const typeButtons = parentWrapper.querySelector('.baggage-subtypes').querySelectorAll('.button');
 
-    for(const element of childTypeWrappers){
-      if (id === 'all' || parseInt(element.getAttribute('catid'), 10) === id){
-        element.setAttribute('style', 'display: inline-block');
-      }
-      else{
-        element.setAttribute('style', 'display: none');
+    for(const element of typeButtons){
+      if ( element.getAttribute('color') === 'primary' ){
+        this.typeId = element.getAttribute('catid');
       }
     }
 
+    const childTypeWrappers = parentWrapper.querySelectorAll('.baggage-child-wrapper');
+
+    for(const element of childTypeWrappers){
+      if (element.getAttribute('catid') === this.typeId){
+        element.setAttribute('style', 'display: inline-block');
+      }
+    }
+
+    console.log('opening category id '+this.categoryId);
+    console.log('opening type id '+this.typeId);
+
+    if( this.location !== null ){
+      this.loadCategory();
+    }
+  }
+
+  filterSubtype(typeId: any){
+    this.typeId = typeId;
+
+    const parentWrapper = document.getElementById('baggage-parent-id-'+this.categoryId);
+    // const childTypeWrappers = parentWrapper.querySelectorAll('.baggage-child-wrapper');
+    const typeButtons = parentWrapper.querySelector('.baggage-subtypes').querySelectorAll('.button');
+
+    // for(const element of childTypeWrappers){
+    //   if (this.typeId === 'all' || parseInt(element.getAttribute('catid'), 10) === +this.typeId){
+    //     element.setAttribute('style', 'display: inline-block');
+    //   }
+    //   else{
+    //     element.setAttribute('style', 'display: none');
+    //   }
+    // }
+
     for(const element of typeButtons){
-      if (element.getAttribute('catid') === id){
+      if (element.getAttribute('catid') === String(this.typeId)){
         element.setAttribute('color', 'primary');
         element.setAttribute('ng-reflect-color', 'primary');
       }
@@ -83,6 +115,25 @@ export class BaggageComponent implements OnInit {
         element.setAttribute('ng-reflect-color', 'secondary');
       }
     }
+
+    console.log('opening category id '+this.categoryId);
+    console.log('opening type id '+this.typeId);
+
+    if( this.location !== null ){
+      this.loadCategory();
+    }
+  }
+
+  loadSource(source: string){
+    // just initialization for marketplace and warehouse components
+  }
+
+  loadCategory(){
+    // just initialization for marketplace component
+  }
+
+  loadListOfItems(itemId: number){
+    // just initialization for marketplace component
   }
 
 }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
 
@@ -8,6 +8,18 @@ interface BaggageData{
     'result': Array<string>;
   };
   'types': Array<string>;
+  'capacity': Capacity;
+}
+
+interface Capacity{
+  'baggage': {
+    'taken': number;
+    'max': number;
+  };
+  'location': {
+    'taken': number;
+    'max': number;
+  };
 }
 
 interface BaggageActionResponseData{
@@ -17,6 +29,8 @@ interface BaggageActionResponseData{
   'hero_data_to_update': any;
   'quantity': number;
   'price': number;
+  'priceMin': number;
+  'priceMax': number;
   'quick_belt': number;
 }
 
@@ -26,17 +40,70 @@ interface QuickUseBeltResponseData{
   'result': string;
 }
 
+interface BaggageItemsData{
+  'success': boolean;
+  'error_message': string;
+  'result': Array<string>;
+}
+
 @Injectable({providedIn: 'root'})
 export class BaggageService {
 
   baggageUpdated = new EventEmitter<boolean>();
 
+  capacity: Capacity;
+
   constructor(private http: HttpClient){}
 
-  loadBaggageData(){
+  loadBaggageDataWithTypes(area?: string){
+    const parameters = {origin: 'baggage', area};
+    const queryParams = new HttpParams({ fromObject: parameters });
+
     return this.http.get<BaggageData>(
       AppSettings.API_ENDPOINT + '/baggage/info',
-      {responseType: 'json'}
+      {
+        params: queryParams,
+        responseType: 'json'
+      }
+    );
+  }
+
+  loadBaggageData(area?: string){
+    const parameters = {origin: 'baggage', area};
+    const queryParams = new HttpParams({ fromObject: parameters });
+
+    return this.http.get<BaggageItemsData>(
+      AppSettings.API_ENDPOINT + '/baggage/show',
+      {
+        params: queryParams,
+        responseType: 'json'
+      }
+    );
+  }
+
+  loadMySaleData(){
+    const parameters = {origin: 'mySale'};
+    const queryParams = new HttpParams({ fromObject: parameters });
+
+    return this.http.get<BaggageItemsData>(
+      AppSettings.API_ENDPOINT + '/baggage/show',
+      {
+        params: queryParams,
+        responseType: 'json'
+      }
+    );
+  }
+
+  loadMarketData(typeId: number, itemId: number){
+    const parameters = {origin: 'marketplace', typeId, itemId};
+    const queryParams = new HttpParams({ fromObject: parameters });
+
+    return this.http.get<BaggageItemsData>(
+      AppSettings.API_ENDPOINT + '/baggage/show',
+      {
+        params: queryParams,
+        responseType: 'json'
+      }
     );
   }
 
@@ -92,6 +159,37 @@ export class BaggageService {
     return this.http.get<any>(
       AppSettings.API_ENDPOINT + '/baggage/quickUseItems',
       {responseType: 'json'}
+    );
+  }
+
+  putOnSale(baggageItemId: number, quantity: number, price: number){
+    return this.http.post<BaggageActionResponseData>(
+      AppSettings.API_ENDPOINT + '/baggage/deal',
+      {
+        baggageItemId,
+        quantity,
+        price
+      }
+    );
+  }
+
+  getBack(baggageItemId: number, quantity: number){
+    return this.http.post<BaggageActionResponseData>(
+      AppSettings.API_ENDPOINT + '/baggage/get',
+      {
+        baggageItemId,
+        quantity
+      }
+    );
+  }
+
+  buyFromMarketplace(baggageItemId: number, quantity: number){
+    return this.http.post<BaggageActionResponseData>(
+      AppSettings.API_ENDPOINT + '/baggage/buy',
+      {
+        baggageItemId,
+        quantity
+      }
     );
   }
 
