@@ -93,17 +93,7 @@ export class BaggageComponent implements OnInit {
     this.typeId = typeId;
 
     const parentWrapper = document.getElementById('baggage-parent-id-'+this.categoryId);
-    // const childTypeWrappers = parentWrapper.querySelectorAll('.baggage-child-wrapper');
     const typeButtons = parentWrapper.querySelector('.baggage-subtypes').querySelectorAll('.button');
-
-    // for(const element of childTypeWrappers){
-    //   if (this.typeId === 'all' || parseInt(element.getAttribute('catid'), 10) === +this.typeId){
-    //     element.setAttribute('style', 'display: inline-block');
-    //   }
-    //   else{
-    //     element.setAttribute('style', 'display: none');
-    //   }
-    // }
 
     for(const element of typeButtons){
       if (element.getAttribute('catid') === String(this.typeId)){

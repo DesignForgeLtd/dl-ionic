@@ -14,11 +14,11 @@ interface BaggageData{
 interface Capacity{
   'baggage': {
     'taken': number;
-    'max': number;
+    'total': number;
   };
   'location': {
     'taken': number;
-    'max': number;
+    'total': number;
   };
 }
 
@@ -83,6 +83,19 @@ export class BaggageService {
 
   loadMySaleData(){
     const parameters = {origin: 'mySale'};
+    const queryParams = new HttpParams({ fromObject: parameters });
+
+    return this.http.get<BaggageItemsData>(
+      AppSettings.API_ENDPOINT + '/baggage/show',
+      {
+        params: queryParams,
+        responseType: 'json'
+      }
+    );
+  }
+
+  loadStorageData(){
+    const parameters = {origin: 'storage'};
     const queryParams = new HttpParams({ fromObject: parameters });
 
     return this.http.get<BaggageItemsData>(
@@ -169,6 +182,16 @@ export class BaggageService {
         baggageItemId,
         quantity,
         price
+      }
+    );
+  }
+
+  putToStorage(baggageItemId: number, quantity: number){
+    return this.http.post<BaggageActionResponseData>(
+      AppSettings.API_ENDPOINT + '/baggage/put',
+      {
+        baggageItemId,
+        quantity
       }
     );
   }

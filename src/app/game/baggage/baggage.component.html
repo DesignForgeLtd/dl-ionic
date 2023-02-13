@@ -11,14 +11,14 @@
               <h1>{{ tabTitle }}</h1>
             </ion-col>
             <ion-col>
-              <ion-row>
+              <ion-row *ngIf="capacity">
                 <ion-col>
-                  Baggage: <b>{{ capacity.baggage.taken }}</b> / <b>{{ capacity.baggage.max }}</b>
+                  Baggage: <b>{{ capacity.baggage.taken }}</b> / <b>{{ capacity.baggage.total }}</b>
                 </ion-col>
               </ion-row>
-              <ion-row *ngIf="location">
+              <ion-row *ngIf="capacity && location">
                 <ion-col>
-                  {{ location | titlecase }}: <b>{{ capacity.location.taken }}</b> / <b>{{ capacity.location.max }}</b>
+                  {{ location | titlecase }}: <b>{{ capacity.location.taken }}</b> / <b>{{ capacity.location.total }}</b>
                 </ion-col>
               </ion-row>
             </ion-col>
@@ -35,6 +35,10 @@
     <app-marketplace-navigation
       *ngIf="location === 'marketplace'"
       (chooseSource)="loadSource($event)"></app-marketplace-navigation>
+
+    <app-warehouse-navigation
+      *ngIf="location === 'warehouse'"
+      (chooseSource)="loadSource($event)"></app-warehouse-navigation>
 
     <ion-card-content style="min-height:300px">
 

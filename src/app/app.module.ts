@@ -55,6 +55,8 @@ import { RegularQuestsComponent } from './game/quests/regular-quests/regular-que
 import { QuickUseBeltComponent } from './game/quick-use-belt/quick-use-belt.component';
 import { MarketplaceComponent } from './game/baggage/marketplace/marketplace.component';
 import { MarketplaceNavigationComponent } from './game/baggage/marketplace/marketplace-navigation/marketplace-navigation.component';
+import { WarehouseComponent } from './game/baggage/warehouse/warehouse.component';
+import { WarehouseNavigationComponent } from './game/baggage/warehouse/warehouse-navigation/warehouse-navigation.component';
 
 
 
@@ -100,7 +102,9 @@ import { MarketplaceNavigationComponent } from './game/baggage/marketplace/marke
     RegularQuestsComponent,
     QuickUseBeltComponent,
     MarketplaceComponent,
-    MarketplaceNavigationComponent
+    MarketplaceNavigationComponent,
+    WarehouseComponent,
+    WarehouseNavigationComponent
   ],
   entryComponents: [],
   imports: [

@@ -18,6 +18,11 @@
   [passedLocationData]="locationData"
 ></app-marketplace>
 
+<app-warehouse
+  *ngIf="openedModal === 'warehouse'"
+  [passedLocationData]="locationData"
+></app-warehouse>
+
 <app-map-production-location
   *ngIf="openedModal === 'map-production-location'"
   [passedLocationData]="locationData"
