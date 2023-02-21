@@ -31,6 +31,18 @@ export class AuthService {
     private router: Router
   ){}
 
+  socialAuth(socialUser){
+    return this.http.post<AuthResponseData>(
+      AppSettings.API_ENDPOINT + '/auth/social',
+      {
+        socialUser
+      }
+    )
+    .pipe(tap(response => { // catchError(this.handleError),
+      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in);
+    }));
+  }
+
   login(email: string, password: string){
     return this.http.post<AuthResponseData>(
       AppSettings.API_ENDPOINT + '/auth/login',
