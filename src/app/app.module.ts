@@ -143,7 +143,7 @@ import {
                     },
                     {
                         id: FacebookLoginProvider.PROVIDER_ID,
-                        provider: new FacebookLoginProvider(facebookOAuth.clientId)
+                        provider: new FacebookLoginProvider(facebookOAuth.appId)
                     }
                 ],
                 onError: (err) => {

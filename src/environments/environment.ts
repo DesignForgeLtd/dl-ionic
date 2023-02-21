@@ -12,8 +12,8 @@ export const googleOAuth = {
 };
 
 export const facebookOAuth = {
-  clientId: 'clientId-Goes-Here',
-  clientSecret: 'clientSecret-Goes-Here'
+  appId: '5857097207741607',
+  appSecret: 'd29abd9f64f66794849982ecb54680dd'
 };
 
 /*

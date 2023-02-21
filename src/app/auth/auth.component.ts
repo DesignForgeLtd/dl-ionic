@@ -30,11 +30,13 @@ export class AuthComponent implements OnInit {
   registrationSuccessful = false;
   registrationUnsuccessful = false;
 
+  private googleAccessToken = '';
+
 
   constructor(
     private authService: AuthService,
-    private router: Router
-    //, private socialAuthService: SocialAuthService
+    private router: Router,
+    private socialAuthService: SocialAuthService
   ) { }
 
   ngOnInit() {
@@ -42,20 +44,45 @@ export class AuthComponent implements OnInit {
       this.router.navigate(['/game']);
     }
 
-    // this.socialAuthService.authState.subscribe((user) => {
-    //   this.socialUser = user;
-    //   //this.isLoggedin = user != null;
-    //   console.log(this.socialUser);
-    // });
+    this.socialAuthService.authState.subscribe((user) => {
+      this.socialUser = user;
+      //this.isLoggedin = user != null;
+      console.log(this.socialUser);
+
+      if (this.socialUser !== null){
+        this.socialAuth();
+      }
+    });
   }
 
-  // loginWithFacebook(): void {
-  //   this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
-  // }
+  socialAuth(): void{
+    this.authService.socialAuth(this.socialUser).subscribe(
+      response => {
+        console.log(response);
+        this.router.navigate(['/game']);
+      },
+      error => {
+        console.log(error);
+        this.error = error;
+      }
+    );
+  }
 
-  // logOut(): void {
-  //   this.socialAuthService.signOut();
-  // }
+  getGoogleAccessToken(): void {
+    this.socialAuthService.getAccessToken(GoogleLoginProvider.PROVIDER_ID).then(accessToken => this.googleAccessToken = accessToken);
+  }
+  
+  refreshGoogleToken(): void {
+    this.socialAuthService.refreshAccessToken(GoogleLoginProvider.PROVIDER_ID);
+  }
+  
+  loginWithFacebook(): void {
+    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  }
+
+  logOut(): void {
+    this.socialAuthService.signOut();
+  }
 
 
   onSubmit(form: NgForm){
