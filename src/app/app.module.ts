@@ -57,6 +57,8 @@ import { MarketplaceComponent } from './game/baggage/marketplace/marketplace.com
 import { MarketplaceNavigationComponent } from './game/baggage/marketplace/marketplace-navigation/marketplace-navigation.component';
 import { WarehouseComponent } from './game/baggage/warehouse/warehouse.component';
 import { WarehouseNavigationComponent } from './game/baggage/warehouse/warehouse-navigation/warehouse-navigation.component';
+import { FindComponent } from './game/map/stroll-event/find/find.component';
+import { FightComponent } from './game/map/stroll-event/fight/fight.component';
 
 
 
@@ -104,7 +106,9 @@ import { WarehouseNavigationComponent } from './game/baggage/warehouse/warehouse
     MarketplaceComponent,
     MarketplaceNavigationComponent,
     WarehouseComponent,
-    WarehouseNavigationComponent
+    WarehouseNavigationComponent,
+    FindComponent,
+    FightComponent
   ],
   entryComponents: [],
   imports: [

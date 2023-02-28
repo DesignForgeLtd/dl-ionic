@@ -53,6 +53,10 @@ export class MapComponent implements OnInit, OnDestroy {
   locationFullData = null;
   monsterData = null;
 
+  strollEvent = [];
+  strollEventFind = [];
+  strollEventFight = null;
+
   tileSheet: HTMLImageElement;
   heroImage: HTMLImageElement;
 
@@ -341,7 +345,12 @@ console.log('this.columns: '+this.columns);
       this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
         this.setServerSavedNewPosition();
         if (data.success === true){
-
+          console.log('data.strollEvent:');
+          console.log(data.strollEvent);
+          console.log('data.foundLocation:');
+          console.log(data.foundLocation);
+          console.log('data:');
+          console.log(data);
           //this.handleFoundMonster(data.foundMonster);
 
           if (data.foundMonster !== null && data.foundMonster.alive === true){
@@ -353,6 +362,20 @@ console.log('this.columns: '+this.columns);
 
           this.handleFoundLocation(data.foundLocation, data.foundMonster);
           this.handleFoundQuest(data.foundQuest);
+
+          if (data.strollEvent !== null) {
+            if (data.strollEvent.type === 'find') {
+              this.strollEventFind.push(data.strollEvent.data);
+              console.log(data.strollEvent.data);
+            }
+
+            if (data.strollEvent.type === 'fight') {
+              this.openedModal = 'fight';
+              this.strollEventFight = data.strollEvent.data;
+              this.player.clearMovementParams();
+              this.player.stop();
+            }
+          }
         }
         else {
           this.showError(data.errorMessage);
