@@ -54,3 +54,13 @@
   [passedMonsterData]="monsterData"
   (mapLocationAction)="mapLocationAction($event)"
 ></app-monster>
+
+<app-find
+  *ngFor="let data of strollEventFind"
+  [data]="data"
+></app-find>
+
+<app-fight
+  *ngIf="openedModal === 'fight'"
+  [data]="strollEventFight"
+></app-fight>
