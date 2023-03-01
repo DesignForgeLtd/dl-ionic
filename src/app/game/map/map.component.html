@@ -56,8 +56,8 @@
 ></app-monster>
 
 <app-find
-  *ngFor="let data of strollEventFind"
-  [data]="data"
+  *ngIf="strollEventFind"
+  [strollEventFind]="strollEventFind"
 ></app-find>
 
 <app-fight

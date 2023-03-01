@@ -53,8 +53,8 @@ export class MapComponent implements OnInit, OnDestroy {
   locationFullData = null;
   monsterData = null;
 
-  strollEvent = [];
   strollEventFind = [];
+  strollEventInterval = null;
   strollEventFight = null;
 
   tileSheet: HTMLImageElement;
@@ -365,8 +365,14 @@ console.log('this.columns: '+this.columns);
 
           if (data.strollEvent !== null) {
             if (data.strollEvent.type === 'find') {
+              if(this.strollEventInterval) {
+                clearInterval(this.strollEventInterval);
+              }
               this.strollEventFind.push(data.strollEvent.data);
-              console.log(data.strollEvent.data);
+              this.strollEventInterval = setInterval(() => {
+                  this.strollEventFind = [];
+                  clearInterval(this.strollEventInterval);
+              }, 2222);
             }
 
             if (data.strollEvent.type === 'fight') {

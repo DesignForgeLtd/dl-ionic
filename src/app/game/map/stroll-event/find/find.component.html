@@ -1,4 +1,5 @@
-<div class="stroll-event-find">
+<div *ngFor="let data of strollEventFind"
+class="stroll-event-find">
   <div>+{{ data.quantity }}</div>
   <div
     class="baggage-item-image {{ data.weadivon }}"
