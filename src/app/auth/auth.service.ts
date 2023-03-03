@@ -39,7 +39,7 @@ export class AuthService {
       }
     )
     .pipe(tap(response => { // catchError(this.handleError),
-      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in);
+      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in, response.data.race_id);
     }));
   }
 
@@ -52,7 +52,7 @@ export class AuthService {
       }
     )
     .pipe(tap(response => { // catchError(this.handleError),
-      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in);
+      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in, response.data.race_id);
     }));
   }
 
@@ -66,7 +66,7 @@ export class AuthService {
       }
     )
     .pipe(tap(response => { // catchError(this.handleError),
-      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in);
+      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in, response.data.race_id);
     }));
   }
 
@@ -105,10 +105,11 @@ export class AuthService {
 
   }
 
-  private handleAuth(name: string, userId: number, token: string, expiresIn: number){
+  private handleAuth(name: string, userId: number, token: string, expiresIn: number, myHeroRace: string){
     const tokenExpirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(name, userId, token, tokenExpirationDate);
     localStorage.setItem('userData', JSON.stringify(user));
+    localStorage.setItem('raceId', myHeroRace);
 
     this.user.next(user);
   }

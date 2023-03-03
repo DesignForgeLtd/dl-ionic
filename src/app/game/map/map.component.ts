@@ -95,7 +95,11 @@ export class MapComponent implements OnInit, OnDestroy {
     //this.heroImage.src = '../assets/graphics/postacie/professor_walk_cycle_no_hat.png';
     this.heroImage.src = '../assets/graphics/postacie/dwarf_worker_sprite_sheet.png';
     //this.heroImage.src = '../assets/graphics/postacie/swarf_sheet_x2_v2.png';
-    
+    //this.heroImage.src = '../assets/graphics/postacie/Elven Archer Sprite Sheet - added left - x2.png';
+    //this.heroImage.src = '../assets/graphics/postacie/Elven Archer Sprite Sheet - added left.png';
+    //this.heroImage.src = '../assets/graphics/postacie/Adventurer Female Sprite Sheet (1) - added left (1).png';
+    //this.heroImage.src = '../assets/graphics/postacie/
+
     //this.tileSheet.addEventListener('load', (event) => { this.loop(); });
 
     //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
@@ -128,7 +132,7 @@ export class MapComponent implements OnInit, OnDestroy {
       console.log(data);
 
       const playerData = data.playerData;
-
+console.log(playerData);
       this.world = new World(playerData.level, this.columns, this.rows);
 
       const originalPosition = playerData.position;
@@ -536,8 +540,8 @@ console.log('this.columns: '+this.columns);
           sheetOffsetX = currentFrame * this.playerSize;
         break;
       case 'left':
-          sheetOffsetY = 1 * this.playerSize; // 1 * this.playerSize;
-          sheetOffsetX = currentFrame * this.playerSize;
+          sheetOffsetY = 2 * this.playerSize; // 1 * this.playerSize;
+          sheetOffsetX = (7 - currentFrame) * this.playerSize;
         break;
       default:
           switch(this.player.prev_direction)
