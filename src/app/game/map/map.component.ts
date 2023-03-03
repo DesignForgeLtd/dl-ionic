@@ -27,7 +27,7 @@ export class MapComponent implements OnInit, OnDestroy {
   scaledSize = 76;
   spriteSize = 76;
 
-  playerSize = 64;
+  playerSize = 32;
   playerScaledSize = 64;
 
   columns   = 200;// columns and rows in map below
@@ -88,7 +88,10 @@ export class MapComponent implements OnInit, OnDestroy {
     this.width  = document.documentElement.clientWidth;
 
     this.tileSheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
-    this.heroImage.src = '../assets/graphics/postacie/professor_walk_cycle_no_hat.png';
+    //this.heroImage.src = '../assets/graphics/postacie/professor_walk_cycle_no_hat.png';
+    this.heroImage.src = '../assets/graphics/postacie/dwarf_worker_sprite_sheet.png';
+    //this.heroImage.src = '../assets/graphics/postacie/swarf_sheet_x2_v2.png';
+    
     //this.tileSheet.addEventListener('load', (event) => { this.loop(); });
 
     //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
@@ -479,40 +482,41 @@ console.log('this.columns: '+this.columns);
     let sheetOffsetY = 0;
 
     const milisec = currentFrameTime % 1000;
-    const currentFrame = Math.floor(milisec / 130) + 1;
+    //const currentFrame = Math.floor(milisec / 130) + 1;
+    const currentFrame = Math.floor(milisec / 125);
 
     switch(this.player.direction)
     {
       case 'up':
           sheetOffsetY = 0;
-          sheetOffsetX = currentFrame * this.playerScaledSize;
+          sheetOffsetX = currentFrame * this.playerSize;
         break;
       case 'down':
-          sheetOffsetY = 2 * this.playerScaledSize;
-          sheetOffsetX = currentFrame * this.playerScaledSize;
+          sheetOffsetY = 0; // 2 * this.playerSize;
+          sheetOffsetX = currentFrame * this.playerSize;
         break;
       case 'right':
-          sheetOffsetY = 3 * this.playerScaledSize;
-          sheetOffsetX = currentFrame * this.playerScaledSize;
+          sheetOffsetY = 3 * this.playerSize;
+          sheetOffsetX = currentFrame * this.playerSize;
         break;
       case 'left':
-          sheetOffsetY = 1 * this.playerScaledSize;
-          sheetOffsetX = currentFrame * this.playerScaledSize;
+          sheetOffsetY = 0; // 1 * this.playerSize;
+          sheetOffsetX = currentFrame * this.playerSize;
         break;
       default:
           switch(this.player.prev_direction)
           {
             case 'up':
-                sheetOffsetY = 0;
+                sheetOffsetY = 0; //
               break;
             case 'down':
-                sheetOffsetY = 2 * this.playerScaledSize;
+                sheetOffsetY = 0; // 2 * this.playerSize;
               break;
             case 'right':
-                sheetOffsetY = 3 * this.playerScaledSize;
+                sheetOffsetY = 3 * this.playerSize;
               break;
             case 'left':
-                sheetOffsetY = 1 * this.playerScaledSize;
+                sheetOffsetY = 0; // 1 * this.playerSize;
               break;
           }
           sheetOffsetX = 0;

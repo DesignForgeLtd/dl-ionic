@@ -198,6 +198,18 @@ console.log('this.world.columns: '+this.world.columns);
 			case -1 * this.world.columns:
 				this.go('up');
 				break;
+      case this.world.columns - 1:
+        this.go('bottom-left');
+        break;
+			case -1 * this.world.columns - 1:
+				this.go('top-left');
+				break;
+			case -1 * this.world.columns + 1:
+				this.go('top-right');
+				break;
+			case this.world.columns + 1:
+				this.go('bottom-right');
+				break;
 		}
 	}
 
@@ -224,6 +236,27 @@ console.log('this.world.columns: '+this.world.columns);
         this.coord_x--;
         this.direction='left';
         break;
+      case 'top-left':
+        this.coord_x--;
+        this.coord_y--;
+        this.direction='left';
+        break;
+      case 'bottom-left':
+        this.coord_x--;
+        this.coord_y++;
+        this.direction='left';
+        break;
+      case 'top-right':
+        this.coord_x++;
+        this.coord_y--;
+        this.direction='right';
+        break;
+      case 'bottom-right':
+        this.coord_x++;
+        this.coord_y++;
+        this.direction='right';
+        break;
+              
     }
 
     this.position = this.coord_x + this.coord_y * this.world.columns;
