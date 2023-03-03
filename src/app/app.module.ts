@@ -53,6 +53,12 @@ import { QuestModalComponent } from './game/quest-modal/quest-modal.component';
 import { DailyQuestsComponent } from './game/quests/daily-quests/daily-quests.component';
 import { RegularQuestsComponent } from './game/quests/regular-quests/regular-quests.component';
 import { QuickUseBeltComponent } from './game/quick-use-belt/quick-use-belt.component';
+import { MarketplaceComponent } from './game/baggage/marketplace/marketplace.component';
+import { MarketplaceNavigationComponent } from './game/baggage/marketplace/marketplace-navigation/marketplace-navigation.component';
+import { WarehouseComponent } from './game/baggage/warehouse/warehouse.component';
+import { WarehouseNavigationComponent } from './game/baggage/warehouse/warehouse-navigation/warehouse-navigation.component';
+import { FindComponent } from './game/map/stroll-event/find/find.component';
+import { FightComponent } from './game/map/stroll-event/fight/fight.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {
@@ -70,88 +76,95 @@ import {
 } from '../environments/environment';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        GameComponent,
-        MapComponent,
-        MapLocationComponent,
-        MapProductionLocationComponent,
-        ProductionLinesComponent,
-        ProductionLineComponent,
-        ProductionQueueComponent,
-        ProductionQueueItemComponent,
-        MenuComponent,
-        AuthComponent,
-        MailboxComponent,
-        InboxComponent,
-        MsgThreadComponent,
-        CreateMsgComponent,
-        BaggageComponent,
-        BaggageItemComponent,
-        LoadingSpinnerComponent,
-        HeroComponent,
-        HeroActiveElixirsComponent,
-        HeroAttributesComponent,
-        HeroOccupationsComponent,
-        HeroSkillsComponent,
-        BadgesComponent,
-        JourneyComponent,
-        ShopComponent,
-        BankComponent,
-        WitchComponent,
-        WeaponFixComponent,
-        BaggagePopoverComponent,
-        MonsterComponent,
-        MiningComponent,
-        MinePortalComponent,
-        ReceivedBadgeComponent,
-        QuestsComponent,
-        QuestModalComponent,
-        DailyQuestsComponent,
-        RegularQuestsComponent,
-        QuickUseBeltComponent
-    ],
-    imports: [
-        BrowserModule,
-        ReactiveFormsModule,
-        SocialLoginModule,
-        IonicModule.forRoot(),
-        AppRoutingModule,
-        //    StoreModule.forRoot({productionLocation: productionLocationReducer}),
-        HttpClientModule,
-        FormsModule,
-        CommonModule
-    ],
-    providers: [
-        {
-            provide: RouteReuseStrategy,
-            useClass: IonicRouteStrategy
-        },
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthInterceptor,
-            multi: true
-        },
-        {
-            provide: 'SocialAuthServiceConfig',
-            useValue: {
-                autoLogin: false,
-                providers: [
-                    {
-                        id: GoogleLoginProvider.PROVIDER_ID,
-                        provider: new GoogleLoginProvider(googleOAuth.clientId)
-                    },
-                    {
-                        id: FacebookLoginProvider.PROVIDER_ID,
-                        provider: new FacebookLoginProvider(facebookOAuth.appId)
-                    }
-                ],
-                onError: (err) => {
-                    console.error(err);
+  declarations: [
+    AppComponent,
+    GameComponent,
+    MapComponent,
+    MapLocationComponent,
+    MapProductionLocationComponent,
+    ProductionLinesComponent,
+    ProductionLineComponent,
+    ProductionQueueComponent,
+    ProductionQueueItemComponent,
+    MenuComponent,
+    AuthComponent,
+    MailboxComponent,
+    InboxComponent,
+    MsgThreadComponent,
+    CreateMsgComponent,
+    BaggageComponent,
+    BaggageItemComponent,
+    LoadingSpinnerComponent,
+    HeroComponent,
+    HeroActiveElixirsComponent,
+    HeroAttributesComponent,
+    HeroOccupationsComponent,
+    HeroSkillsComponent,
+    BadgesComponent,
+    JourneyComponent,
+    ShopComponent,
+    BankComponent,
+    WitchComponent,
+    WeaponFixComponent,
+    BaggagePopoverComponent,
+    MonsterComponent,
+    MiningComponent,
+    MinePortalComponent,
+    ReceivedBadgeComponent,
+    QuestsComponent,
+    QuestModalComponent,
+    DailyQuestsComponent,
+    RegularQuestsComponent,
+    QuickUseBeltComponent,
+    MarketplaceComponent,
+    MarketplaceNavigationComponent,
+    WarehouseComponent,
+    WarehouseNavigationComponent,
+    FindComponent,
+    FightComponent
+  ],
+  entryComponents: [],
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule,
+    SocialLoginModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+//    StoreModule.forRoot({productionLocation: productionLocationReducer}),
+    HttpClientModule,
+    FormsModule,
+    CommonModule
+  ],
+  providers: [
+    {
+        provide: RouteReuseStrategy,
+        useClass: IonicRouteStrategy
+    },
+    {
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthInterceptor,
+        multi: true
+    },
+    {
+        provide: 'SocialAuthServiceConfig',
+        useValue: {
+            autoLogin: false,
+            providers: [
+                {
+                    id: GoogleLoginProvider.PROVIDER_ID,
+                    provider: new GoogleLoginProvider(googleOAuth.clientId)
+                },
+                {
+                    id: FacebookLoginProvider.PROVIDER_ID,
+                    provider: new FacebookLoginProvider(facebookOAuth.appId)
                 }
-            } as SocialAuthServiceConfig,
-        },
-    ],
-    bootstrap: [AppComponent]
+            ],
+            onError: (err) => {
+                console.error(err);
+            }
+        } as SocialAuthServiceConfig,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -129,3 +129,47 @@ ion-content{
   cursor: pointer;
 }
 
+/* The animation code */
+@keyframes strollEventFind {
+  0% {
+    opacity: 1;
+    top: 50%;
+    left: 50%;
+    margin-left: -50px;
+    margin-top: -50px;
+  }
+  20% {
+    top: 50%;
+    left: 50%;
+    transform: scale(1);
+  }
+  95% {
+    top: 0;
+    left: 0;
+    transform: scale(0.1);
+    margin-left: -50px;
+    margin-top: -50px;
+    opacity: 1;
+  }
+  100% {
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+}
+
+.stroll-event-find {
+  position: fixed;
+  display: grid;
+  opacity: 0;
+  z-index: 199999;
+  animation-name: strollEventFind;
+  animation-duration: 2s;
+}
+
+.stroll-event-find div {
+  margin: auto;
+  text-align: center;
+  color:goldenrod;
+  font-weight: bold;
+}

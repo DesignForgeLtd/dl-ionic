@@ -45,6 +45,11 @@ interface FoundMonsterData{
   alive: boolean;
 }
 
+interface StrollEventData{
+  type: string;
+  data: JSON;//json
+}
+
 interface MapResponseData{
   'success': boolean;
   'errorMessage': string;
@@ -52,6 +57,7 @@ interface MapResponseData{
   'foundLocation': FoundLocationData;
   'foundMonster': FoundMonsterData;
   'foundQuest': boolean;
+  'strollEvent': StrollEventData;
 }
 
 @Injectable({providedIn: 'root'})

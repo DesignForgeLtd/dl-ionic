@@ -5,44 +5,184 @@
 
   <ng-container *ngIf="area === 'shop'">
 
-    <ion-item (click)="shopBuy(1)">
+    <ion-item class="pointer" (click)="shopBuy(1)">
       <ion-icon name="add-circle"></ion-icon> Buy 1
     </ion-item>
-    <ion-item (click)="shopBuy(5)">
+    <ion-item class="pointer" (click)="shopBuy(5)">
       <ion-icon name="add-circle"></ion-icon> Buy 5
     </ion-item>
 
   </ng-container>
 
-  <ng-container *ngIf="area !== 'shop'">
+  <ng-container *ngIf="area === 'baggage'">
+
+    <ion-item *ngIf="location === 'marketplace'">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <span>Put on Sale</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-label position="stacked">Price</ion-label>
+              <ion-input
+                type="number"
+                value="{{ item.priceMin - 1 > 0 ? item.priceMin - 1 : 1 }}"
+                #putOnSalePrice></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-label position="stacked">Qty</ion-label>
+              <ion-input
+                type="number"
+                value="{{ inputAmount }}"
+                #putOnSaleQuantity></ion-input>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-label position="stacked"><ion-icon name="arrow-redo"></ion-icon></ion-label>
+            <ion-icon name="pricetag-outline" size="large" class="pointer"
+              (click)="putOnSale(+putOnSaleQuantity.value, +putOnSalePrice.value)"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+
+    <ion-item *ngIf="location === 'warehouse'">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <span>Put to Storage</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-label position="stacked">Qty</ion-label>
+            <ion-input
+              type="number"
+              value="{{ inputAmount }}"
+              #putToStorageQuantity></ion-input>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-label position="stacked"><ion-icon name="arrow-redo"></ion-icon></ion-label>
+            <ion-icon name="arrow-redo-outline" size="large" class="pointer"
+              (click)="putToStorage(+putToStorageQuantity.value)"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
 
     <ion-item
         *ngIf="item.points !== null"
-        (click)="baggageUse()">
+        class="pointer" (click)="baggageUse()">
       <ion-icon name="heart-outline"></ion-icon> Use
     </ion-item>
 
     <ion-item
         *ngIf="item.points !== null"
-        (click)="quickUseBelt()">
+        class="pointer" (click)="quickUseBelt()">
       <ion-icon name="star{{ item.quick_belt ? '' : '-outline' }}"></ion-icon> Quick Use Belt
     </ion-item>
 
     <ion-item
         *ngIf="item.weapon === 'weapon' && item.in_use === 0"
-        (click)="equipHero()">
+        class="pointer" (click)="equipHero()">
       <ion-icon name="person-add-outline"></ion-icon> Equip hero
     </ion-item>
 
     <ion-item
         *ngIf="item.weapon === 'weapon' && item.in_use === 1"
-        (click)="unEquipHero()">
+        class="pointer" (click)="unEquipHero()">
       <ion-icon name="person-remove-outline"></ion-icon> UnEquip hero
     </ion-item>
 
-    <ion-item (click)="baggageThrowAway()">
+    <ion-item class="pointer" (click)="baggageThrowAway()">
       <ion-icon name="trash-outline"></ion-icon> Throw away
     </ion-item>
 
   </ng-container>
+
+  <ng-container *ngIf="area === 'storage'">
+
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <span>Remove from Storage</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-label position="stacked">Qty</ion-label>
+            <ion-input
+              type="number"
+              value="{{ inputAmount }}"
+              #removeFromStorageQuantity></ion-input>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-label position="stacked"><ion-icon name="arrow-undo"></ion-icon></ion-label>
+            <ion-icon name="arrow-undo-outline" size="large" class="pointer"
+              (click)="getBack(+removeFromStorageQuantity.value)"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+
+  </ng-container>
+
+  <ng-container *ngIf="area === 'mySale'">
+
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <span>Remove from Sale</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-label position="stacked">Qty</ion-label>
+            <ion-input
+              type="number"
+              value="{{ inputAmount }}"
+              #removeFromSaleQuantity></ion-input>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-label position="stacked"><ion-icon name="arrow-undo"></ion-icon></ion-label>
+            <ion-icon name="arrow-undo-outline" size="large" class="pointer"
+              (click)="getBack(+removeFromSaleQuantity.value)"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+
+  </ng-container>
+
+  <ng-container *ngIf="area === 'market'">
+
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <span>Purchase</span>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-label position="stacked">Qty</ion-label>
+            <ion-input
+              type="number"
+              value="{{ inputAmount }}"
+              #buyFromMarketplaceQuantity></ion-input>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-label position="stacked"><ion-icon name="arrow-undo"></ion-icon></ion-label>
+            <ion-icon name="cart-outline" size="large" class="pointer"
+              (click)="buyFromMarketplace(+buyFromMarketplaceQuantity.value)"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+
+  </ng-container>
+
 </ion-list>

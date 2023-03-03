@@ -1,0 +1,19 @@
+<ion-toolbar>
+  <ion-buttons>
+
+    <ion-button [fill]="source==='baggage' ? 'outline' : 'solid'"
+        [color]="source==='baggage' ? 'secondary' : 'primary'"
+        [disabled]="source==='baggage'"
+        (click)="getSource('baggage')">
+      Baggage
+    </ion-button>
+
+    <ion-button [fill]="source==='storage' ? 'outline' : 'solid'"
+        [color]="source==='storage' ? 'secondary' : 'primary'"
+        [disabled]="source==='storage'"
+        (click)="getSource('storage')">
+      Storage
+    </ion-button>
+
+  </ion-buttons>
+</ion-toolbar>

@@ -5,7 +5,25 @@
 
     <ion-card-header>
       <ion-toolbar>
-        <h1>Your baggage</h1>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <h1>{{ tabTitle }}</h1>
+            </ion-col>
+            <ion-col>
+              <ion-row *ngIf="capacity">
+                <ion-col>
+                  Baggage: <b>{{ capacity.baggage.taken }}</b> / <b>{{ capacity.baggage.total }}</b>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngIf="capacity && location">
+                <ion-col>
+                  {{ location | titlecase }}: <b>{{ capacity.location.taken }}</b> / <b>{{ capacity.location.total }}</b>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
         <ion-buttons slot="end">
           <ion-button color="danger" (click)="closeFeature()">
             <ion-icon name="close-circle" slot="icon-only"></ion-icon>
@@ -14,21 +32,32 @@
       </ion-toolbar>
     </ion-card-header>
 
+    <app-marketplace-navigation
+      *ngIf="location === 'marketplace'"
+      (chooseSource)="loadSource($event)"></app-marketplace-navigation>
+
+    <app-warehouse-navigation
+      *ngIf="location === 'warehouse'"
+      (chooseSource)="loadSource($event)"></app-warehouse-navigation>
 
     <ion-card-content style="min-height:300px">
+
       <ion-tabs style="height:80px">
         <ion-tab-bar slot="top">
           <ion-tab-button
             *ngFor="let baggageType of baggageTypes"
             (click)="openCategory(baggageType.id)"
-            [selected]="currentParentId === baggageType.id"
+            [selected]="categoryId === baggageType.id"
           >
             <ion-icon name="calendar"></ion-icon>
             <ion-label>{{ baggageType.name }}</ion-label>
           </ion-tab-button>
         </ion-tab-bar>
       </ion-tabs>
-      <div *ngFor="let baggageType of baggageTypes" id="baggage-parent-id-{{ baggageType.id }}" class="baggage-parent-wrapper">
+
+      <div *ngFor="let baggageType of baggageTypes"
+        id="baggage-parent-id-{{ baggageType.id }}"
+        class="baggage-parent-wrapper">
         <div class="baggage-subtypes">
           <ion-button color="primary" (click)="filterSubtype('all')" catid="all">All</ion-button>
           <ion-button
@@ -41,18 +70,30 @@
           </ion-button>
         </div>
 
-        <div
-          *ngFor="let baggageTypeChild of baggageType.children"
-          class="baggage-child-wrapper"
-          attr.catid="{{ baggageTypeChild.id }}"
-          id="baggage-child-id-{{ baggageTypeChild.id }}"
-        >
-          <app-baggage-item
-            *ngFor="let baggageItem of baggageItems[baggageTypeChild.id] | keyvalue"
-            [item]="baggageItem">
-          </app-baggage-item>
+        <div *ngIf=" ! isLoading">
+          <div
+            *ngFor="let baggageTypeChild of baggageType.children"
+            class="baggage-child-wrapper"
+            attr.catid="{{ baggageTypeChild.id }}"
+            [ngClass]="baggageTypeChild.id*1 === typeId*1 || typeId === 'all' ? 'showItems' : 'hideItems'"
+            id="baggage-child-id-{{ baggageTypeChild.id }}"
+          >
+            <app-baggage-item
+              *ngFor="let baggageItem of baggageItems[baggageTypeChild.id] | keyvalue"
+              [expand]="expand"
+              [item]="baggageItem"
+              [area]="source"
+              [location]="location"
+              (loadListOfItems)="loadListOfItems($event)">
+            </app-baggage-item>
+          </div>
         </div>
       </div>
+
+      <div *ngIf="isLoading" style="text-align: center;">
+        <app-loading-spinner></app-loading-spinner>
+      </div>
+
     </ion-card-content>
   </ion-card>
 </div>

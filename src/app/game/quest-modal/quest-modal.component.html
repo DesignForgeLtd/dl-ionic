@@ -8,16 +8,17 @@
       <ion-card-title>
         <img src="../../../assets/graphics/layout/game/quests/quest/{{ questImage }}" alt="quest image">
         <h1>{{ questTitle }}</h1>
-        <i *ngIf="questStepsCount">Step {{ questStepNo }} of {{ questStepsCount }}.</i>
+        <i *ngIf="questStepNo">Step {{ questStepNo }}</i>
+        <i *ngIf="questStepNo && questStepsCount"> of {{ questStepsCount }}.</i>
       </ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
 
-      <h2>{{ description }}</h2>
+      <p style="white-space: pre-wrap;">{{ description }}</p>
       <hr>
       <div *ngIf="requirements" style="color:royalblue">
-        {{ requirements.text }}
+        <span [innerHTML]="requirements.text"></span>
         <br>
         <b [style]="requirementsMet ? 'color:green' : 'color:red'">
           {{ progress }} / {{ requirements.quantity }}

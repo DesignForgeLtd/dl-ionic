@@ -10,5 +10,9 @@
     class="baggage-item-image {{ item.weapon }}"
     style="background-image: url('../../../assets/graphics/items/{{ item.image }}');"
   ></div>
-  {{ item.name }}
+  <b>{{ item.name }}</b>
+  <span *ngIf="item.price">
+    <br>
+    Price: <b>{{ item.priceMin && item.priceMin !== item.priceMax ? item.priceMin + ' - ' + item.priceMax : item.price }}</b>
+  </span>
 </div>

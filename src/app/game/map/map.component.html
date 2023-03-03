@@ -13,6 +13,16 @@
   (mapLocationAction)="mapLocationAction($event)"
 ></app-map-location>
 
+<app-marketplace
+  *ngIf="openedModal === 'marketplace'"
+  [passedLocationData]="locationData"
+></app-marketplace>
+
+<app-warehouse
+  *ngIf="openedModal === 'warehouse'"
+  [passedLocationData]="locationData"
+></app-warehouse>
+
 <app-map-production-location
   *ngIf="openedModal === 'map-production-location'"
   [passedLocationData]="locationData"
@@ -44,3 +54,13 @@
   [passedMonsterData]="monsterData"
   (mapLocationAction)="mapLocationAction($event)"
 ></app-monster>
+
+<app-find
+  *ngFor="let data of strollEventFind"
+  [data]="data"
+></app-find>
+
+<app-fight
+  *ngIf="openedModal === 'fight'"
+  [data]="strollEventFight"
+></app-fight>
