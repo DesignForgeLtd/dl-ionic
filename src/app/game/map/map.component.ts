@@ -524,19 +524,19 @@ console.log('this.columns: '+this.columns);
     switch(this.player.direction)
     {
       case 'up':
-          sheetOffsetY = 0;
+          sheetOffsetY = 1 * this.playerSize;
           sheetOffsetX = currentFrame * this.playerSize;
         break;
       case 'down':
-          sheetOffsetY = 0; // 2 * this.playerSize;
+          sheetOffsetY = 1 * this.playerSize; // 2 * this.playerSize;
           sheetOffsetX = currentFrame * this.playerSize;
         break;
       case 'right':
-          sheetOffsetY = 3 * this.playerSize;
+          sheetOffsetY = 1 * this.playerSize;
           sheetOffsetX = currentFrame * this.playerSize;
         break;
       case 'left':
-          sheetOffsetY = 0; // 1 * this.playerSize;
+          sheetOffsetY = 1 * this.playerSize; // 1 * this.playerSize;
           sheetOffsetX = currentFrame * this.playerSize;
         break;
       default:
@@ -549,7 +549,7 @@ console.log('this.columns: '+this.columns);
                 sheetOffsetY = 0; // 2 * this.playerSize;
               break;
             case 'right':
-                sheetOffsetY = 3 * this.playerSize;
+                sheetOffsetY = 0 * this.playerSize;
               break;
             case 'left':
                 sheetOffsetY = 0; // 1 * this.playerSize;
