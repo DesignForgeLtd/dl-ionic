@@ -18,6 +18,7 @@ interface AuthResponseData{
     user_id: number;
     user_name: string;
     expires_in: number;
+    race_id: number;
   };
 }
 
@@ -105,11 +106,11 @@ export class AuthService {
 
   }
 
-  private handleAuth(name: string, userId: number, token: string, expiresIn: number, myHeroRace: string){
+  private handleAuth(name: string, userId: number, token: string, expiresIn: number, myHeroRaceId: number){
     const tokenExpirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(name, userId, token, tokenExpirationDate);
     localStorage.setItem('userData', JSON.stringify(user));
-    localStorage.setItem('raceId', myHeroRace);
+    localStorage.setItem('raceId', myHeroRaceId.toString());
 
     this.user.next(user);
   }
