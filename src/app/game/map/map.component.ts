@@ -372,7 +372,8 @@ console.log('this.columns: '+this.columns);
               console.log(data.strollEvent.data);
             }
 
-            if (data.strollEvent.type === 'fight') {
+            // add 'false &&' to disable fight stroll 
+            if ( data.strollEvent.type === 'fight') {
               this.openedModal = 'fight';
               this.strollEventFight = data.strollEvent.data;
               this.player.clearMovementParams();

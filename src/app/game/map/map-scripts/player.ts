@@ -21,13 +21,19 @@ export class Player {
   public position: number;
   public scaled_size: number;
   public direction: string;
-  public prev_direction: string;
+  public orientation: string;
 
   public hero_path = null;
   public hero_path_step = 0;
 
   private world: World;
   private heroImage: HTMLImageElement;
+  private heroSSIdleFrameCount: number;
+  private heroSSFrameTotalCount: number;
+  private heroSSIdleLeftRow: number;
+  private heroSSIdleRightRow: number;
+  private heroSSWalkingLeftRow: number;
+  private heroSSWalkingRightRow: number;
 
   constructor(
     public coord_x: number, 
@@ -39,6 +45,10 @@ export class Player {
     viewport, 
     scaled_size
   ) {
+    
+    // TODO: REMOVE THIS LINE
+    //this.raceId = 6;
+
     console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     console.log('INIT: this.raceId: ' + this.raceId);
 
@@ -50,7 +60,7 @@ export class Player {
     this.height = document.documentElement.clientHeight;
     this.width  = document.documentElement.clientWidth;
 
-    this.heroImage.src = '../assets/graphics/postacie/' + this.getHeroSpriteSheetName();
+    this.getHeroSpriteSheetAttributesBAsedOnRace();
 
     this.sizeX = 32;
     this.sizeY = 32;
@@ -64,26 +74,67 @@ export class Player {
     this.pixel_y = this.coord_y * this.scaled_size;
     this.position = this.coord_x + this.coord_y * this.world.columns;
     this.direction = null;
-    this.prev_direction = 'down';
+    this.orientation = 'right';
     this.level = level;
     console.log('INIT: position: ' + this.position);
   };
 
-  getHeroSpriteSheetName() { 
+  getHeroSpriteSheetAttributesBAsedOnRace() { 
     switch (this.raceId) {
       case 1: // halfling
-        return 'dl-characters-halfling-female.png';
+        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-halfling-female.png';
+        this.heroSSFrameTotalCount = 9;
+        this.heroSSIdleFrameCount = 6;
+        this.heroSSIdleLeftRow = 7;
+        this.heroSSIdleRightRow = 0;
+        this.heroSSWalkingLeftRow = 8;
+        this.heroSSWalkingRightRow = 1;
+        break;
       case 2: // elf
-        return 'dl-characters-elf-female.png';
+        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-elf-female.png';
+        this.heroSSFrameTotalCount = 8;
+        this.heroSSIdleFrameCount = 4;
+        this.heroSSIdleLeftRow = 5;
+        this.heroSSIdleRightRow = 0;
+        this.heroSSWalkingLeftRow = 6;
+        this.heroSSWalkingRightRow = 1;
+        break;
       case 3: // human
-        return 'dl-characters-human-male.png';
+        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-human-male.png';
+        this.heroSSFrameTotalCount = 8;
+        this.heroSSIdleFrameCount = 4;
+        this.heroSSIdleLeftRow = 5;
+        this.heroSSIdleRightRow = 0;
+        this.heroSSWalkingLeftRow = 6;
+        this.heroSSWalkingRightRow = 1;
+        break;
       case 4: // dwarf
-        return 'dl-characters-dwarf-male.png';
+        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-dwarf-male.png';
+        this.heroSSFrameTotalCount = 8;
+        this.heroSSIdleFrameCount = 8;
+        this.heroSSIdleLeftRow = 7;
+        this.heroSSIdleRightRow = 0;
+        this.heroSSWalkingLeftRow = 8;
+        this.heroSSWalkingRightRow = 1;
+        break;
       case 5: // troll
-        return 'dl-characters-troll-male.png';
+        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-troll-male.png';
+        this.heroSSFrameTotalCount = 8;
+        this.heroSSIdleFrameCount = 4;
+        this.heroSSIdleLeftRow = 8;
+        this.heroSSIdleRightRow = 0;
+        this.heroSSWalkingLeftRow = 10;
+        this.heroSSWalkingRightRow = 2;
+        break;
       case 6: // vampire
-        return 'dl-characters-vampire-male.png';
-
+        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-vampire-male.png';
+        this.heroSSFrameTotalCount = 12;
+        this.heroSSIdleFrameCount = 10;
+        this.heroSSIdleLeftRow = 7;
+        this.heroSSIdleRightRow = 0;
+        this.heroSSWalkingLeftRow = 8;
+        this.heroSSWalkingRightRow = 1;
+        break;
     }
   }
 
@@ -268,9 +319,12 @@ console.log('this.world.columns: '+this.world.columns);
 		}
 	}
 
+  setOrientation(orientation){
+    this.orientation = orientation;
+  }
+
   go(direction){
 
-    this.prev_direction=this.direction;
     console.log('before move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     //console.log('go ' + direction);
     switch (direction)
@@ -286,30 +340,36 @@ console.log('this.world.columns: '+this.world.columns);
       case 'right':
         this.coord_x++;
         this.direction='right';
+        this.setOrientation('right');
         break;
       case 'left':
         this.coord_x--;
         this.direction='left';
+        this.setOrientation('left');
         break;
       case 'top-left':
         this.coord_x--;
         this.coord_y--;
         this.direction='left';
+        this.setOrientation('left');
         break;
       case 'bottom-left':
         this.coord_x--;
         this.coord_y++;
         this.direction='left';
+        this.setOrientation('left');
         break;
       case 'top-right':
         this.coord_x++;
         this.coord_y--;
         this.direction='right';
+        this.setOrientation('right');
         break;
       case 'bottom-right':
         this.coord_x++;
         this.coord_y++;
         this.direction='right';
+        this.setOrientation('right');
         break;
               
     }
@@ -322,7 +382,6 @@ console.log('this.world.columns: '+this.world.columns);
   stop(){
     if (this.direction!=null)
     {
-      this.prev_direction=this.direction;
       this.direction=null;
       //console.log('stop');
     }
@@ -341,49 +400,41 @@ console.log('this.world.columns: '+this.world.columns);
    
        const milisec = currentFrameTime % 1000;
        //const currentFrame = Math.floor(milisec / 130) + 1;
-       const currentFrame = Math.floor(milisec / 125);
-   
+       let currentFrame = Math.floor(milisec / 125);
+
+       sheetOffsetX = currentFrame * this.sizeX;
+
        switch(this.direction)
        {
-         case 'up':
-             sheetOffsetY = 1 * this.sizeY;
-             sheetOffsetX = currentFrame * this.sizeX;
-           break;
-         case 'down':
-             sheetOffsetY = 1 * this.sizeY; // 2 * this.sizeX;
-             sheetOffsetX = currentFrame * this.sizeX;
-           break;
-         case 'right':
-             sheetOffsetY = 1 * this.sizeY;
-             sheetOffsetX = currentFrame * this.sizeX;
-           break;
-         case 'left':
-             sheetOffsetY = 2 * this.sizeY; // 1 * this.sizeX;
-             sheetOffsetX = (7 - currentFrame) * this.sizeX;
-           break;
-         default:
-             switch(this.prev_direction)
-             {
-               case 'up':
-                   sheetOffsetY = 0; //
-                   sheetOffsetX = currentFrame * this.sizeX;
-                 break;
-               case 'down':
-                   sheetOffsetY = 0; // 2 * this.sizeY;
-                   sheetOffsetX = currentFrame * this.sizeX;
-                 break;
-               case 'right':
-                   sheetOffsetY = 0 * this.sizeY;
-                   sheetOffsetX = (currentFrame % 4) * this.sizeX;
-                 break;
-               case 'left':
-                   sheetOffsetY = 0; // 1 * this.sizeX;
-                   sheetOffsetX = currentFrame * this.sizeX;
-                 break;
-             }
-             //sheetOffsetX = 0;
+          case 'up':
+          case 'down':
+            if(this.orientation == 'right') {
+              sheetOffsetY = this.heroSSWalkingRightRow * this.sizeY;
+            } else {
+              sheetOffsetY = this.heroSSWalkingLeftRow * this.sizeY;
+              sheetOffsetX = (this.heroSSFrameTotalCount - 1 - currentFrame) * this.sizeX;
+            }
+            break;
+          case 'right':
+            sheetOffsetY = this.heroSSWalkingRightRow * this.sizeY;
+            break;
+          case 'left':
+            sheetOffsetY = this.heroSSWalkingLeftRow * this.sizeY; // 1 * this.sizeX;
+            sheetOffsetX = (this.heroSSFrameTotalCount - 1 - currentFrame) * this.sizeX;
+            break;
+          default:
+            currentFrame = Math.floor(milisec / Math.round(1000 / this.heroSSIdleFrameCount));
+
+            sheetOffsetX = currentFrame * this.sizeX;
+            if (this.orientation == 'right')
+            {
+              sheetOffsetY = this.heroSSIdleRightRow * this.sizeY;
+            } else {
+              sheetOffsetX = (this.heroSSFrameTotalCount - 1 - currentFrame) * this.sizeX;
+              sheetOffsetY = this.heroSSIdleLeftRow * this.sizeY;
+            }
+            break;
        }
-   
    
        this.context.drawImage(
          this.heroImage,
