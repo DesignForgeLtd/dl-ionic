@@ -1,12 +1,23 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import { HeroPath } from './heropath';
+import { Viewport } from './viewport';
 import { World } from './world';
 
 export class Player {
+  
+  height: number;
+  width: number;
+  
+  viewport: Viewport;
+  context: CanvasRenderingContext2D;
 
   public pixel_x: number;
   public pixel_y: number;
+  public sizeX: number;
+  public sizeY: number;
+  public scaledSizeX: number;
+  public scaledSizeY: number;
   public position: number;
   public scaled_size: number;
   public direction: string;
@@ -16,9 +27,35 @@ export class Player {
   public hero_path_step = 0;
 
   private world: World;
+  private heroImage: HTMLImageElement;
 
-  constructor(public coord_x: number, public coord_y: number, public level: number, world, scaled_size) {
+  constructor(
+    public coord_x: number, 
+    public coord_y: number, 
+    public level: number, 
+    public raceId: number, 
+    world, 
+    context, 
+    viewport, 
+    scaled_size
+  ) {
     console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
+    console.log('INIT: this.raceId: ' + this.raceId);
+
+    this.context = context;
+    this.viewport = viewport;
+    this.heroImage = new Image();
+    
+    /* The width and height of the inside of the browser window */
+    this.height = document.documentElement.clientHeight;
+    this.width  = document.documentElement.clientWidth;
+
+    this.heroImage.src = '../assets/graphics/postacie/' + this.getHeroSpriteSheetName();
+
+    this.sizeX = 32;
+    this.sizeY = 32;
+    this.scaledSizeX = 64;
+    this.scaledSizeY = 64;
 
 
     this.scaled_size = scaled_size;
@@ -31,6 +68,24 @@ export class Player {
     this.level = level;
     console.log('INIT: position: ' + this.position);
   };
+
+  getHeroSpriteSheetName() { 
+    switch (this.raceId) {
+      case 1: // halfling
+        return 'dl-characters-halfling-female.png';
+      case 2: // elf
+        return 'dl-characters-elf-female.png';
+      case 3: // human
+        return 'dl-characters-human-male.png';
+      case 4: // dwarf
+        return 'dl-characters-dwarf-male.png';
+      case 5: // troll
+        return 'dl-characters-troll-male.png';
+      case 6: // vampire
+        return 'dl-characters-vampire-male.png';
+
+    }
+  }
 
   animate() {
 
@@ -272,5 +327,75 @@ console.log('this.world.columns: '+this.world.columns);
       //console.log('stop');
     }
   }
+
+  drawHero(currentFrameTime){
+
+    /* This bit of code gets the this's position in the world in terms of
+       columns and rows and converts it to an index in the map array */
+       // let this_index =
+       //   Math.floor((this.pixel_y + this.scaledSize * 0.5) / this.scaledSize) * columns
+       //   + Math.floor((this.pixel_x + this.scaledSize * 0.5) / this.scaledSize); // ????
+   
+       let sheetOffsetX = 0;
+       let sheetOffsetY = 0;
+   
+       const milisec = currentFrameTime % 1000;
+       //const currentFrame = Math.floor(milisec / 130) + 1;
+       const currentFrame = Math.floor(milisec / 125);
+   
+       switch(this.direction)
+       {
+         case 'up':
+             sheetOffsetY = 1 * this.sizeY;
+             sheetOffsetX = currentFrame * this.sizeX;
+           break;
+         case 'down':
+             sheetOffsetY = 1 * this.sizeY; // 2 * this.sizeX;
+             sheetOffsetX = currentFrame * this.sizeX;
+           break;
+         case 'right':
+             sheetOffsetY = 1 * this.sizeY;
+             sheetOffsetX = currentFrame * this.sizeX;
+           break;
+         case 'left':
+             sheetOffsetY = 2 * this.sizeY; // 1 * this.sizeX;
+             sheetOffsetX = (7 - currentFrame) * this.sizeX;
+           break;
+         default:
+             switch(this.prev_direction)
+             {
+               case 'up':
+                   sheetOffsetY = 0; //
+                   sheetOffsetX = currentFrame * this.sizeX;
+                 break;
+               case 'down':
+                   sheetOffsetY = 0; // 2 * this.sizeY;
+                   sheetOffsetX = currentFrame * this.sizeX;
+                 break;
+               case 'right':
+                   sheetOffsetY = 0 * this.sizeY;
+                   sheetOffsetX = (currentFrame % 4) * this.sizeX;
+                 break;
+               case 'left':
+                   sheetOffsetY = 0; // 1 * this.sizeX;
+                   sheetOffsetX = currentFrame * this.sizeX;
+                 break;
+             }
+             //sheetOffsetX = 0;
+       }
+   
+   
+       this.context.drawImage(
+         this.heroImage,
+         sheetOffsetX,
+         sheetOffsetY,
+         this.sizeX,
+         this.sizeY,
+         Math.round(this.pixel_x - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5),
+         Math.round(this.pixel_y - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5),
+         this.scaledSizeX,
+         this.scaledSizeY
+       );
+     }
 
 }

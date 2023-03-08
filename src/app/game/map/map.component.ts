@@ -28,7 +28,7 @@ export class MapComponent implements OnInit, OnDestroy {
   spriteSize = 76;
 
   playerSize = 32;
-  playerScaledSize = 64;
+  playerScaledSize = 32;
 
   columns   = 200;// columns and rows in map below
   rows      = 200;
@@ -92,13 +92,6 @@ export class MapComponent implements OnInit, OnDestroy {
     this.width  = document.documentElement.clientWidth;
 
     this.tileSheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
-    //this.heroImage.src = '../assets/graphics/postacie/professor_walk_cycle_no_hat.png';
-    this.heroImage.src = '../assets/graphics/postacie/dwarf_worker_sprite_sheet.png';
-    //this.heroImage.src = '../assets/graphics/postacie/swarf_sheet_x2_v2.png';
-    //this.heroImage.src = '../assets/graphics/postacie/Elven Archer Sprite Sheet - added left - x2.png';
-    //this.heroImage.src = '../assets/graphics/postacie/Elven Archer Sprite Sheet - added left.png';
-    //this.heroImage.src = '../assets/graphics/postacie/Adventurer Female Sprite Sheet (1) - added left (1).png';
-    //this.heroImage.src = '../assets/graphics/postacie/
 
     //this.tileSheet.addEventListener('load', (event) => { this.loop(); });
 
@@ -145,7 +138,10 @@ console.log('this.columns: '+this.columns);
         playerData.position % this.columns,
         Math.floor(playerData.position / this.columns),
         playerData.level,
+        playerData.race_id,
         this.world,
+        this.context,
+        this.viewport,
         this.scaledSize
       );
       this.playerSavedPosition = this.player.position;
@@ -511,69 +507,7 @@ console.log('this.columns: '+this.columns);
   /* Draw the this.player. Remember to offset by the viewport position and
     center screen position. (???) */
   drawHero(currentFrameTime){
-
- /* This bit of code gets the this.player's position in the world in terms of
-    columns and rows and converts it to an index in the map array */
-    // let this.player_index =
-    //   Math.floor((this.player.pixel_y + this.scaledSize * 0.5) / this.scaledSize) * columns
-    //   + Math.floor((this.player.pixel_x + this.scaledSize * 0.5) / this.scaledSize); // ????
-
-    let sheetOffsetX = 0;
-    let sheetOffsetY = 0;
-
-    const milisec = currentFrameTime % 1000;
-    //const currentFrame = Math.floor(milisec / 130) + 1;
-    const currentFrame = Math.floor(milisec / 125);
-
-    switch(this.player.direction)
-    {
-      case 'up':
-          sheetOffsetY = 1 * this.playerSize;
-          sheetOffsetX = currentFrame * this.playerSize;
-        break;
-      case 'down':
-          sheetOffsetY = 1 * this.playerSize; // 2 * this.playerSize;
-          sheetOffsetX = currentFrame * this.playerSize;
-        break;
-      case 'right':
-          sheetOffsetY = 1 * this.playerSize;
-          sheetOffsetX = currentFrame * this.playerSize;
-        break;
-      case 'left':
-          sheetOffsetY = 2 * this.playerSize; // 1 * this.playerSize;
-          sheetOffsetX = (7 - currentFrame) * this.playerSize;
-        break;
-      default:
-          switch(this.player.prev_direction)
-          {
-            case 'up':
-                sheetOffsetY = 0; //
-              break;
-            case 'down':
-                sheetOffsetY = 0; // 2 * this.playerSize;
-              break;
-            case 'right':
-                sheetOffsetY = 0 * this.playerSize;
-              break;
-            case 'left':
-                sheetOffsetY = 0; // 1 * this.playerSize;
-              break;
-          }
-          sheetOffsetX = 0;
-    }
-
-
-    this.context.drawImage(
-      this.heroImage,
-      sheetOffsetX,
-      sheetOffsetY,
-      this.playerSize,
-      this.playerSize,
-      Math.round(this.player.pixel_x - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5),
-      Math.round(this.player.pixel_y - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5),
-      this.playerScaledSize,
-      this.playerScaledSize
-    );
+    this.player.drawHero(currentFrameTime);
   }
 
   showError(errorMessage){
