@@ -142,10 +142,10 @@ console.log('result', result);
     this.animationFrame = window.requestAnimationFrame(() => this.loop());
     const currentFrameTime = Date.now();
 
-    this.gfxLoop();
+    this.gfxLoop(currentFrameTime);
   }
 
-  gfxLoop(){
+  gfxLoop(currentFrameTime){
     this.height = document.documentElement.clientHeight;
     this.width  = document.documentElement.clientWidth;
 
@@ -158,6 +158,10 @@ console.log('result', result);
     this.viewport.scrollTo(this.player.pixel_x, this.player.pixel_y);
 
     this.drawTerrain();
+
+    /* Draw the this.player. Remember to offset by the viewport position and
+       center screen position. (???) */
+    this.drawHero(currentFrameTime);    
   }
 
   drawTerrain(){
@@ -252,5 +256,23 @@ console.log('result', result);
 
     return (11 * this.scaledSize)+'|'+(imagePosition * this.scaledSize);
   }
+
+  drawHero(currentFrameTime){
+
+    var varsToDraw = this.player.getVarsToDrawHero(currentFrameTime);
+
+    this.context.drawImage(
+        varsToDraw.heroImage,
+        varsToDraw.sheetOffsetX,
+        varsToDraw.sheetOffsetY,
+        varsToDraw.sizeX,
+        varsToDraw.sizeY,
+        Math.round(varsToDraw.pixel_x - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5),
+        Math.round(varsToDraw.pixel_y - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5),
+        varsToDraw.scaledSizeX,
+        varsToDraw.scaledSizeY
+    );
+  }
+
 
 }

@@ -43,8 +43,6 @@ export class Player {
     public level: number, 
     public raceId: number, 
     world, 
-    context, 
-    viewport, 
     scaled_size
   ) {
     
@@ -54,8 +52,6 @@ export class Player {
     console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     console.log('INIT: this.raceId: ' + this.raceId);
 
-    this.context = context;
-    this.viewport = viewport;
     this.heroImage = new Image();
     
     /* The width and height of the inside of the browser window */
@@ -389,7 +385,7 @@ console.log('this.world.columns: '+this.world.columns);
     }
   }
 
-  drawHero(currentFrameTime){
+  getVarsToDrawHero(currentFrameTime){
 
     /* This bit of code gets the players's position in the world in terms of
        columns and rows and converts it to an index in the map array */
@@ -437,18 +433,19 @@ console.log('this.world.columns: '+this.world.columns);
             }
             break;
        }
-   
-       this.context.drawImage(
-         this.heroImage,
-         sheetOffsetX,
-         sheetOffsetY,
-         this.sizeX,
-         this.sizeY,
-         Math.round(this.pixel_x - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5),
-         Math.round(this.pixel_y - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5),
-         this.scaledSizeX,
-         this.scaledSizeY
-       );
+
+       return {
+        'heroImage': this.heroImage,
+        'sheetOffsetX': sheetOffsetX,
+        'sheetOffsetY': sheetOffsetY,
+        'sizeX': this.sizeX,
+        'sizeY': this.sizeY,
+        'pixel_x': this.pixel_x,
+        'pixel_y': this.pixel_y,
+        'scaledSizeX': this.scaledSizeX,
+        'scaledSizeY': this.scaledSizeY
+       };
+
      }
 
 }

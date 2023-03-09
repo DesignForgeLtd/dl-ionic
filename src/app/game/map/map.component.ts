@@ -106,8 +106,6 @@ console.log('this.columns: '+this.columns);
         playerData.level,
         playerData.race_id,
         this.world,
-        0, //this.context,
-        0, //this.viewport,
         this.scaledSize
       );
       this.playerSavedPosition = this.player.position;
@@ -117,7 +115,7 @@ console.log('this.columns: '+this.columns);
       this.heroInfoUpdate(playerData);
 
       // this.loop();
-      this.animationFrame = window.requestAnimationFrame(() => this.loop());
+      //this.animationFrame = window.requestAnimationFrame(() => this.loop());
 
       this.handleFoundLocation(data.foundLocation, data.foundMonster);
       this.handleFoundQuest(data.foundQuest);
@@ -216,19 +214,18 @@ console.log('this.columns: '+this.columns);
   }
 
 
-  loop() {// The game loop
+  // loop() {// The game loop
 
-    this.animationFrame = window.requestAnimationFrame(() => this.loop());
-    const currentFrameTime = Date.now();
+  //   this.animationFrame = window.requestAnimationFrame(() => this.loop());
+  //   const currentFrameTime = Date.now();
 
-    // TODO: uncomment 
-    this.heroLoop();
-    // console.log('this.player.pixel_x, this.player.pixel_y: ' + this.player.pixel_x, this.player.pixel_y);
+  //   // TODO: uncomment 
+  //   this.heroLoop();
+  //   // console.log('this.player.pixel_x, this.player.pixel_y: ' + this.player.pixel_x, this.player.pixel_y);
    
-    // TODO: uncomment both
-    this.drawHero(currentFrameTime);
-    this.infolocationUpdate();
-  }
+  //   // TODO: uncomment
+  //   this.infolocationUpdate();
+  // }
 
   heroLoop(){
     // if animation of the current step complete
@@ -335,12 +332,6 @@ console.log('this.columns: '+this.columns);
 
   heroInfoUpdate(heroInfo){
     this.gameUIService.heroInfoInitialize(heroInfo);
-  }
-
-  /* Draw the this.player. Remember to offset by the viewport position and
-    center screen position. (???) */
-  drawHero(currentFrameTime){
-    this.player.drawHero(currentFrameTime);
   }
 
   mapLocationAction(action) {
