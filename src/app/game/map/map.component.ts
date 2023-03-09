@@ -18,7 +18,7 @@ import { GameUIService } from '../game-ui.service';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, OnDestroy {
+export class MapComponent implements OnInit {
 
   playerSubject: Subject<Player> = new Subject();
 
@@ -32,7 +32,7 @@ export class MapComponent implements OnInit, OnDestroy {
   columns   = 200;// columns and rows in map below
   rows      = 200;
 
-  playerSavedPosition: number;
+
   player: Player;
 
   // TODO: remove after MiningComponent fixed
@@ -51,9 +51,6 @@ export class MapComponent implements OnInit, OnDestroy {
   // // TODO: remove 
   heroImage: HTMLImageElement;
 
-
-  animationFrame;
-  serverSavedNewPosition = true;
 
 
 
@@ -76,10 +73,6 @@ export class MapComponent implements OnInit, OnDestroy {
     this.loadHeroEssentialData();
   }
 
-  ngOnDestroy(): void {
-    console.log('Map component destroyed');
-    cancelAnimationFrame(this.animationFrame);
-  }
 
   loadHeroEssentialData(){
     this.mapService.loadHeroEssentialData()
@@ -108,7 +101,7 @@ console.log('this.columns: '+this.columns);
         this.world,
         this.scaledSize
       );
-      this.playerSavedPosition = this.player.position;
+      
 
       this.playerSubject.next(this.player);
 
@@ -120,6 +113,10 @@ console.log('this.columns: '+this.columns);
       this.handleFoundLocation(data.foundLocation, data.foundMonster);
       this.handleFoundQuest(data.foundQuest);
     });
+  }
+  
+  heroInfoUpdate(heroInfo){
+    this.gameUIService.heroInfoInitialize(heroInfo);
   }
 
   // handleFoundMonster(foundMonster){
@@ -227,112 +224,6 @@ console.log('this.columns: '+this.columns);
   //   this.infolocationUpdate();
   // }
 
-  heroLoop(){
-    // if animation of the current step complete
-    if (this.player.coord_x * this.scaledSize === this.player.pixel_x
-      && this.player.coord_y * this.scaledSize === this.player.pixel_y)
-    {
-      if (this.serverSavedNewPosition === true){
-        this.tryHeroNextStep();
-      }
-      else{
-        console.log('Hero stuck due to serverSavedNewPosition === false');
-        // TODO: after 5s (?) of API not responding, player.revertHeroLastStep()
-        // keep in mind, hero might simply not be moving (no lag)... do not revert then
-      }
-    }
-    else
-    {
-      this.player.animate();
-    }
-  }
-
-  tryHeroNextStep(){
-    if (this.player.hero_path != null)
-    {
-      // proceed with next step
-      this.setServerSavedNewPositionToFalse();
-      this.player.moveHeroStep();
-      this.player.animate();
-      this.updateHeroPosition();
-    }
-    else
-    {
-      // or make hero stand still
-      this.player.stop();
-    }
-  }
-
-  updateHeroPosition(){
-    // send info about player's new coords to the server
-
-      this.playerSavedPosition = this.player.position;
-      this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
-        this.setServerSavedNewPosition();
-        if (data.success === true){
-          console.log('data.strollEvent:');
-          console.log(data.strollEvent);
-          console.log('data.foundLocation:');
-          console.log(data.foundLocation);
-          console.log('data:');
-          console.log(data);
-          //this.handleFoundMonster(data.foundMonster);
-
-          if (data.foundMonster !== null && data.foundMonster.alive === true){
-            console.log('Monster is alive!!!');
-            this.player.revertHeroLastStep();
-          } else {
-            this.player.incrementHeroStep();
-          }
-
-          this.handleFoundLocation(data.foundLocation, data.foundMonster);
-          this.handleFoundQuest(data.foundQuest);
-
-          if (data.strollEvent !== null) {
-            if (data.strollEvent.type === 'find') {
-              this.strollEventFind.push(data.strollEvent.data);
-              console.log(data.strollEvent.data);
-            }
-
-            // TODO: remove 'false &&' to enable fight stroll 
-            if (false && data.strollEvent.type === 'fight') {
-              this.openedModal = 'fight';
-              this.strollEventFight = data.strollEvent.data;
-              this.player.clearMovementParams();
-              this.player.stop();
-            }
-          }
-        }
-        else {
-          this.gameUIService.showError(data.errorMessage);
-          console.log('HERE');
-          this.player.revertHeroLastStep();
-          this.player.stop();
-        }
-
-        this.heroInfoUpdate(data.playerData);
-      });
-  }
-
-  setServerSavedNewPosition(){
-    this.serverSavedNewPosition = true;
-    //console.log('this.serverSavedNewPosition = true;');
-  }
-
-  setServerSavedNewPositionToFalse(){
-    this.serverSavedNewPosition = false;
-    //console.log('this.serverSavedNewPosition = false;');
-  }
-
-  infolocationUpdate(){
-    document.getElementById('location-info').innerHTML =
-      this.world.locationInfo(this.player.coord_x + this.player.coord_y * this.columns)
-      + ' ('+this.player.coord_x+','+this.player.coord_y+')';
-  }
-
-  heroInfoUpdate(heroInfo){
-    this.gameUIService.heroInfoInitialize(heroInfo);
-  }
 
   mapLocationAction(action) {
 

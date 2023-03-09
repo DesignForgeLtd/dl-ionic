@@ -20,6 +20,10 @@ export class MiningComponent extends MapComponent implements OnInit {
   rows      = 10;
   portalData = null;
 
+  // TODO: removed those two, when Mining uses MapGfx
+  playerSavedPosition: number;
+  serverSavedNewPosition = true;
+
   constructor(
     public http: HttpClient,
     public mapService: MapService,
@@ -34,6 +38,16 @@ export class MiningComponent extends MapComponent implements OnInit {
       .subscribe(data => {
         this.world.populateMap(data);
       });
+  }
+  
+  setServerSavedNewPosition(){
+    this.serverSavedNewPosition = true;
+    //console.log('this.serverSavedNewPosition = true;');
+  }
+
+  setServerSavedNewPositionToFalse(){
+    this.serverSavedNewPosition = false;
+    //console.log('this.serverSavedNewPosition = false;');
   }
 
   updateHeroPosition(){
