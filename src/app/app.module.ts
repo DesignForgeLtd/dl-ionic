@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { GameComponent } from './game/game.component';
 import { MapComponent } from './game/map/map.component';
+import { MapGfxComponent } from './game/map/map-gfx/map-gfx.component';
 import { MapLocationComponent } from './game/map/map-location/map-location.component';
 import { MenuComponent } from './game/menu/menu.component';
 import { AuthComponent } from './auth/auth.component';
@@ -80,6 +81,7 @@ import {
     AppComponent,
     GameComponent,
     MapComponent,
+    MapGfxComponent,
     MapLocationComponent,
     MapProductionLocationComponent,
     ProductionLinesComponent,

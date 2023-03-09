@@ -49,11 +49,11 @@ export class MiningComponent extends MapComponent implements OnInit {
           switch (data.foundResource)
           {
             case 'wood':
-              this.showSuccess('Collected resource: ' + data.foundResource);
+              this.gameUIService.showSuccess('Collected resource: ' + data.foundResource);
               this.world.replaceTileInMap(this.player.position, 'p70');
               break;
             case 'none':
-              this.showError('No free space in baggage.');
+              this.gameUIService.showError('No free space in baggage.');
               break;
             case 'portal':
               this.gameUIService.openedModal.emit('mine-portal-modal');
@@ -66,7 +66,7 @@ export class MiningComponent extends MapComponent implements OnInit {
         }
       }
       else {
-        this.showError(data.errorMessage);
+        this.gameUIService.showError(data.errorMessage);
         console.log('HERE');
         this.player.revertHeroLastStep();
         this.player.stop();
@@ -109,7 +109,7 @@ export class MiningComponent extends MapComponent implements OnInit {
         this.gameUIService.openedModal.emit('');
       }
       else {
-        this.showError(data.errorMessage);
+        this.gameUIService.showError(data.errorMessage);
       }
 
       //this.heroInfoUpdate(data.playerData);

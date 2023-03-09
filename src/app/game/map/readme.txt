@@ -13,6 +13,7 @@ Class responsibilities
 
 3. HeroPath
   - responsible for calculating hero path based on current position and requested destination
+    - used by Player
 
 4. World
   - stores information about the whole world's terrain (map)

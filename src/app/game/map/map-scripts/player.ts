@@ -9,8 +9,10 @@ export class Player {
   height: number;
   width: number;
   
-  viewport: Viewport;
-  context: CanvasRenderingContext2D;
+  // viewport: Viewport;
+  // context: CanvasRenderingContext2D;
+  viewport: number;
+  context: number;
 
   public pixel_x: number;
   public pixel_y: number;
@@ -47,7 +49,7 @@ export class Player {
   ) {
     
     // TODO: REMOVE THIS LINE
-    //this.raceId = 6;
+    this.raceId = 4;
 
     console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     console.log('INIT: this.raceId: ' + this.raceId);
@@ -60,7 +62,7 @@ export class Player {
     this.height = document.documentElement.clientHeight;
     this.width  = document.documentElement.clientWidth;
 
-    this.getHeroSpriteSheetAttributesBAsedOnRace();
+    this.getHeroSpriteSheetAttributesBasedOnRace();
 
     this.sizeX = 32;
     this.sizeY = 32;
@@ -79,7 +81,7 @@ export class Player {
     console.log('INIT: position: ' + this.position);
   };
 
-  getHeroSpriteSheetAttributesBAsedOnRace() { 
+  getHeroSpriteSheetAttributesBasedOnRace() { 
     switch (this.raceId) {
       case 1: // halfling
         this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-halfling-female.png';
@@ -389,7 +391,7 @@ console.log('this.world.columns: '+this.world.columns);
 
   drawHero(currentFrameTime){
 
-    /* This bit of code gets the this's position in the world in terms of
+    /* This bit of code gets the players's position in the world in terms of
        columns and rows and converts it to an index in the map array */
        // let this_index =
        //   Math.floor((this.pixel_y + this.scaledSize * 0.5) / this.scaledSize) * columns
