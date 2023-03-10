@@ -1,49 +1,30 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import { HeroPath } from './heropath';
-import { Viewport } from './viewport';
+import { HeroSprite } from './HeroSprite';
 import { World } from './world';
 
 export class Player {
   
-  height: number;
-  width: number;
-  
-  // viewport: Viewport;
-  // context: CanvasRenderingContext2D;
-  viewport: number;
-  context: number;
-
   public pixel_x: number;
   public pixel_y: number;
-  public sizeX: number;
-  public sizeY: number;
-  public scaledSizeX: number;
-  public scaledSizeY: number;
+
   public position: number;
-  public scaled_size: number;
   public direction: string;
   public orientation: string;
 
   public hero_path = null;
   public hero_path_step = 0;
 
-  private world: World;
-  private heroImage: HTMLImageElement;
-  private heroSSIdleFrameCount: number;
-  private heroSSFrameTotalCount: number;
-  private heroSSIdleLeftRow: number;
-  private heroSSIdleRightRow: number;
-  private heroSSWalkingLeftRow: number;
-  private heroSSWalkingRightRow: number;
+  private heroSprite: HeroSprite;
 
   constructor(
     public coord_x: number, 
     public coord_y: number, 
     public level: number, 
     public raceId: number, 
-    world, 
-    scaled_size
+    private world: World,
+    public scaled_size: number
   ) {
     
     // TODO: REMOVE THIS LINE
@@ -52,22 +33,8 @@ export class Player {
     console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     console.log('INIT: this.raceId: ' + this.raceId);
 
-    this.heroImage = new Image();
-    
-    /* The width and height of the inside of the browser window */
-    this.height = document.documentElement.clientHeight;
-    this.width  = document.documentElement.clientWidth;
+    this.heroSprite = new HeroSprite(this.raceId, scaled_size);
 
-    this.getHeroSpriteSheetAttributesBasedOnRace();
-
-    this.sizeX = 32;
-    this.sizeY = 32;
-    this.scaledSizeX = 64;
-    this.scaledSizeY = 64;
-
-
-    this.scaled_size = scaled_size;
-    this.world = world;
     this.pixel_x = this.coord_x * this.scaled_size; // pixels
     this.pixel_y = this.coord_y * this.scaled_size;
     this.position = this.coord_x + this.coord_y * this.world.columns;
@@ -76,65 +43,6 @@ export class Player {
     this.level = level;
     console.log('INIT: position: ' + this.position);
   };
-
-  getHeroSpriteSheetAttributesBasedOnRace() { 
-    switch (this.raceId) {
-      case 1: // halfling
-        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-halfling-female.png';
-        this.heroSSFrameTotalCount = 9;
-        this.heroSSIdleFrameCount = 6;
-        this.heroSSIdleLeftRow = 7;
-        this.heroSSIdleRightRow = 0;
-        this.heroSSWalkingLeftRow = 8;
-        this.heroSSWalkingRightRow = 1;
-        break;
-      case 2: // elf
-        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-elf-female.png';
-        this.heroSSFrameTotalCount = 8;
-        this.heroSSIdleFrameCount = 4;
-        this.heroSSIdleLeftRow = 5;
-        this.heroSSIdleRightRow = 0;
-        this.heroSSWalkingLeftRow = 6;
-        this.heroSSWalkingRightRow = 1;
-        break;
-      case 3: // human
-        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-human-male.png';
-        this.heroSSFrameTotalCount = 8;
-        this.heroSSIdleFrameCount = 4;
-        this.heroSSIdleLeftRow = 5;
-        this.heroSSIdleRightRow = 0;
-        this.heroSSWalkingLeftRow = 6;
-        this.heroSSWalkingRightRow = 1;
-        break;
-      case 4: // dwarf
-        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-dwarf-male.png';
-        this.heroSSFrameTotalCount = 8;
-        this.heroSSIdleFrameCount = 8;
-        this.heroSSIdleLeftRow = 7;
-        this.heroSSIdleRightRow = 0;
-        this.heroSSWalkingLeftRow = 8;
-        this.heroSSWalkingRightRow = 1;
-        break;
-      case 5: // troll
-        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-troll-male.png';
-        this.heroSSFrameTotalCount = 8;
-        this.heroSSIdleFrameCount = 4;
-        this.heroSSIdleLeftRow = 8;
-        this.heroSSIdleRightRow = 0;
-        this.heroSSWalkingLeftRow = 10;
-        this.heroSSWalkingRightRow = 2;
-        break;
-      case 6: // vampire
-        this.heroImage.src = '../assets/graphics/postacie/' + 'dl-characters-vampire-male.png';
-        this.heroSSFrameTotalCount = 12;
-        this.heroSSIdleFrameCount = 10;
-        this.heroSSIdleLeftRow = 7;
-        this.heroSSIdleRightRow = 0;
-        this.heroSSWalkingLeftRow = 8;
-        this.heroSSWalkingRightRow = 1;
-        break;
-    }
-  }
 
   animate() {
 
@@ -169,27 +77,6 @@ export class Player {
     this.pixel_x = this.coord_x * this.scaled_size; // pixels
     this.pixel_y = this.coord_y * this.scaled_size;
   }
-
-  // document.addEventListener('keydown', logKey);
-
-  // function logKey(e) {
-  //   if (`${e.code}` == 'ArrowRight')
-  //   {
-  //     player.repositionTo(++player.coord_x, player.coord_y);
-  //   }
-  //   if (`${e.code}` == 'ArrowDown')
-  //   {
-  //     player.repositionTo(player.coord_x, ++player.coord_y);
-  //   }
-  //   if (`${e.code}` == 'ArrowLeft')
-  //   {
-  //     player.repositionTo(--player.coord_x, player.coord_y);
-  //   }
-  //   if (`${e.code}` == 'ArrowUp')
-  //   {
-  //     player.repositionTo(player.coord_x, --player.coord_y);
-  //   }
-  // }
 
   moveHero(move_x, move_y)
 	{
@@ -287,9 +174,11 @@ export class Player {
     if (this.hero_path == null){
       return;
     }
-console.log('this.world.rows: '+this.world.rows);
-console.log('this.world.columns: '+this.world.columns);
-		switch(this.hero_path[this.hero_path_step])
+
+    // console.log('this.world.rows: '+this.world.rows);
+    // console.log('this.world.columns: '+this.world.columns);
+		
+    switch(this.hero_path[this.hero_path_step])
 		{
 			case 1:
 				this.go('right');
@@ -388,65 +277,44 @@ console.log('this.world.columns: '+this.world.columns);
 
   getVarsToDrawHero(currentFrameTime){
 
-    /* This bit of code gets the players's position in the world in terms of
-       columns and rows and converts it to an index in the map array */
-       // let this_index =
-       //   Math.floor((this.pixel_y + this.scaledSize * 0.5) / this.scaledSize) * columns
-       //   + Math.floor((this.pixel_x + this.scaledSize * 0.5) / this.scaledSize); // ????
-   
-       let sheetOffsetX = 0;
-       let sheetOffsetY = 0;
-   
-       const milisec = currentFrameTime % 1000;
-       //const currentFrame = Math.floor(milisec / 130) + 1;
-       let currentFrame = Math.floor(milisec / 125);
+    let vars = this.heroSprite.getVarsToDrawHero(
+      currentFrameTime,
+      this.direction,
+      this.orientation
+    );
 
-       sheetOffsetX = currentFrame * this.sizeX;
+    return {
+      'heroImage': vars.heroImage,
+      'sheetOffsetX': vars.sheetOffsetX,
+      'sheetOffsetY': vars.sheetOffsetY,
+      'sizeX': vars.sizeX,
+      'sizeY': vars.sizeY,
+      'pixel_x': this.pixel_x,
+      'pixel_y': this.pixel_y,
+      'scaledSizeX': vars.scaledSizeX,
+      'scaledSizeY': vars.scaledSizeY
+    };
+  
+  }
 
-       switch(this.direction)
-       {
-          case 'up':
-          case 'down':
-            if(this.orientation == 'right') {
-              sheetOffsetY = this.heroSSWalkingRightRow * this.sizeY;
-            } else {
-              sheetOffsetY = this.heroSSWalkingLeftRow * this.sizeY;
-              sheetOffsetX = (this.heroSSFrameTotalCount - 1 - currentFrame) * this.sizeX;
-            }
-            break;
-          case 'right':
-            sheetOffsetY = this.heroSSWalkingRightRow * this.sizeY;
-            break;
-          case 'left':
-            sheetOffsetY = this.heroSSWalkingLeftRow * this.sizeY; // 1 * this.sizeX;
-            sheetOffsetX = (this.heroSSFrameTotalCount - 1 - currentFrame) * this.sizeX;
-            break;
-          default:
-            currentFrame = Math.floor(milisec / Math.round(1000 / this.heroSSIdleFrameCount));
+  // document.addEventListener('keydown', logKey);
 
-            sheetOffsetX = currentFrame * this.sizeX;
-            if (this.orientation == 'right')
-            {
-              sheetOffsetY = this.heroSSIdleRightRow * this.sizeY;
-            } else {
-              sheetOffsetX = (this.heroSSFrameTotalCount - 1 - currentFrame) * this.sizeX;
-              sheetOffsetY = this.heroSSIdleLeftRow * this.sizeY;
-            }
-            break;
-       }
-
-       return {
-        'heroImage': this.heroImage,
-        'sheetOffsetX': sheetOffsetX,
-        'sheetOffsetY': sheetOffsetY,
-        'sizeX': this.sizeX,
-        'sizeY': this.sizeY,
-        'pixel_x': this.pixel_x,
-        'pixel_y': this.pixel_y,
-        'scaledSizeX': this.scaledSizeX,
-        'scaledSizeY': this.scaledSizeY
-       };
-
-     }
-
+  // function logKey(e) {
+  //   if (`${e.code}` == 'ArrowRight')
+  //   {
+  //     player.repositionTo(++player.coord_x, player.coord_y);
+  //   }
+  //   if (`${e.code}` == 'ArrowDown')
+  //   {
+  //     player.repositionTo(player.coord_x, ++player.coord_y);
+  //   }
+  //   if (`${e.code}` == 'ArrowLeft')
+  //   {
+  //     player.repositionTo(--player.coord_x, player.coord_y);
+  //   }
+  //   if (`${e.code}` == 'ArrowUp')
+  //   {
+  //     player.repositionTo(player.coord_x, --player.coord_y);
+  //   }
+  // }
 }

@@ -76,9 +76,11 @@ export class MapComponent implements OnInit {
       console.log(data);
 
       const playerData = data.playerData;
-console.log(playerData);
-//       console.log('HERE: this.columns: ' + this.columns);
-//  console.log('HERE: this.rows: ' + this.rows);
+
+      //console.log(playerData);
+      //       console.log('HERE: this.columns: ' + this.columns);
+      //  console.log('HERE: this.rows: ' + this.rows);
+      
       this.world = new World(playerData.level, this.columns, this.rows);
 
       const originalPosition = playerData.position;
