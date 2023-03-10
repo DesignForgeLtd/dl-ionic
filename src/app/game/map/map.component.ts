@@ -4,7 +4,6 @@ import {Subject} from 'rxjs';
 
 import { Player } from './map-scripts/player';
 import { World } from './map-scripts/world';
-import { WorldService } from './map-scripts/world.service';
 import { MapService } from './map.service';
 import { GameUIService } from '../game-ui.service';
 
@@ -34,10 +33,7 @@ export class MapComponent implements OnInit {
 
 
   player: Player;
-
-  // TODO: remove after MiningComponent fixed
   world: World;
-  worldService: WorldService;
 
   openedModal = null;
   locationData = null;
@@ -51,8 +47,8 @@ export class MapComponent implements OnInit {
   // // TODO: remove 
   heroImage: HTMLImageElement;
 
-
-
+  serverSavedNewPosition = true;
+  playerSavedPosition: number;
 
   constructor(
     public http: HttpClient,
@@ -60,7 +56,6 @@ export class MapComponent implements OnInit {
     public gameUIService: GameUIService    
   ) {
     this.heroImage = new Image();
-    //this.gameUIService = new GameUIService();
 
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
@@ -82,17 +77,17 @@ export class MapComponent implements OnInit {
 
       const playerData = data.playerData;
 console.log(playerData);
-      
-      //this.worldService = new WorldService(playerData.level, this.columns, this.rows);
+//       console.log('HERE: this.columns: ' + this.columns);
+//  console.log('HERE: this.rows: ' + this.rows);
       this.world = new World(playerData.level, this.columns, this.rows);
 
       const originalPosition = playerData.position;
       if (playerData.occupied_with === 'mining'){
         playerData.position = playerData.positionInMine;
       }
-console.log('this.rows: '+this.rows);
-console.log('this.columns: '+this.columns);
-// TODO: uncomment
+      // console.log('this.rows: '+this.rows);
+      // console.log('this.columns: '+this.columns);
+
       this.player = new Player(
         playerData.position % this.columns,
         Math.floor(playerData.position / this.columns),
@@ -102,32 +97,136 @@ console.log('this.columns: '+this.columns);
         this.scaledSize
       );
       
+      this.loadGameMap(this.player.level, this.player.position);
 
       this.playerSubject.next(this.player);
 
       this.heroInfoUpdate(playerData);
-
-      // this.loop();
-      //this.animationFrame = window.requestAnimationFrame(() => this.loop());
 
       this.handleFoundLocation(data.foundLocation, data.foundMonster);
       this.handleFoundQuest(data.foundQuest);
     });
   }
   
+  loadGameMap(level: number, originalPosition: number = null){
+    this.http.get(
+      'assets/detailedMap'+(level+1)+'.txt',
+      {responseType: 'text'}
+    )
+    .subscribe(data => {
+        this.world.populateMap(data);
+        console.log('MAP LOADED');
+    });
+  }
+
   heroInfoUpdate(heroInfo){
     this.gameUIService.heroInfoInitialize(heroInfo);
   }
 
-  // handleFoundMonster(foundMonster){
-  //   if (foundMonster === null) {
-  //     return;
-  //   }
+  setServerSavedNewPosition(){
+    this.serverSavedNewPosition = true;
+    //console.log('this.serverSavedNewPosition = true;');
+  }
 
-  //   if (foundMonster.alive){
-  //     console.log('MONSTER ZYJE!!!');
-  //   }
-  // }
+  setServerSavedNewPositionToFalse(){
+    this.serverSavedNewPosition = false;
+    //console.log('this.serverSavedNewPosition = false;');
+  }
+
+  heroLoop(){
+    
+    // if animation of the current step complete
+    if (this.player.coord_x * this.scaledSize === this.player.pixel_x
+      && this.player.coord_y * this.scaledSize === this.player.pixel_y)
+    {
+      if (this.serverSavedNewPosition === true){
+        this.tryHeroNextStep();
+      }
+      else{
+        console.log('Hero stuck due to serverSavedNewPosition === false');
+        // TODO: after 5s (?) of API not responding, player.revertHeroLastStep()
+        // keep in mind, hero might simply not be moving (no lag)... do not revert then
+      }
+    }
+    else
+    {
+      this.player.animate();
+    }
+  }
+
+  tryHeroNextStep(){
+    if (this.player.hero_path != null)
+    {
+      // proceed with next step
+      this.setServerSavedNewPositionToFalse();
+      this.player.moveHeroStep();
+      this.player.animate();
+      this.updateHeroPosition();
+    }
+    else
+    {
+      // or make hero stand still
+      this.player.stop();
+    }
+  }
+
+  
+  updateHeroPosition(){
+    // send info about player's new coords to the server
+      this.playerSavedPosition = this.player.position;
+      this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
+        this.setServerSavedNewPosition();
+        if (data.success === true){
+          console.log('data.strollEvent:');
+          console.log(data.strollEvent);
+          console.log('data.foundLocation:');
+          console.log(data.foundLocation);
+          console.log('data:');
+          console.log(data);
+          //this.handleFoundMonster(data.foundMonster);
+
+          this.processMapResponse(data);
+        }
+        else {
+          this.gameUIService.showError(data.errorMessage);
+          console.log('HERE');
+          this.player.revertHeroLastStep();
+          this.player.stop();
+        }
+
+        this.heroInfoUpdate(data.playerData);
+      });
+  }
+
+  processMapResponse(data){
+    console.log('RECEIVED FROM MAP-GFX:');
+    console.log(data);
+
+    if (data.foundMonster !== null && data.foundMonster.alive === true){
+      console.log('Monster is alive!!!');
+      this.player.revertHeroLastStep();
+    } else {
+      this.player.incrementHeroStep();
+    }
+
+    this.handleFoundLocation(data.foundLocation, data.foundMonster);
+    this.handleFoundQuest(data.foundQuest);
+
+    if (data.strollEvent !== null) {
+      if (data.strollEvent.type === 'find') {
+        this.strollEventFind.push(data.strollEvent.data);
+        console.log(data.strollEvent.data);
+      }
+
+      // TODO: remove 'false &&' to enable fight stroll 
+      if (false && data.strollEvent.type === 'fight') {
+        this.openedModal = 'fight';
+        this.strollEventFight = data.strollEvent.data;
+        this.player.clearMovementParams();
+        this.player.stop();
+      }
+    }
+  }
 
   handleFoundLocation(foundLocation, foundMonster = null){
     if (foundLocation !== null){
@@ -210,21 +309,6 @@ console.log('this.columns: '+this.columns);
     console.log(foundQuest);
   }
 
-
-  // loop() {// The game loop
-
-  //   this.animationFrame = window.requestAnimationFrame(() => this.loop());
-  //   const currentFrameTime = Date.now();
-
-  //   // TODO: uncomment 
-  //   this.heroLoop();
-  //   // console.log('this.player.pixel_x, this.player.pixel_y: ' + this.player.pixel_x, this.player.pixel_y);
-   
-  //   // TODO: uncomment
-  //   this.infolocationUpdate();
-  // }
-
-
   mapLocationAction(action) {
 
     console.log('mapLocationAction in MapComponent:');
@@ -258,7 +342,7 @@ console.log('this.columns: '+this.columns);
         this.player.level = data.playerData.level;
         this.world.setLevel(this.player.level);
         // TODO: uncomment / call from MapGfx
-        //this.loadGameMap(data.playerData.level);
+        this.loadGameMap(data.playerData.level);
 
         this.handleFoundLocation(data.foundLocation);
       }
@@ -300,6 +384,7 @@ console.log('this.columns: '+this.columns);
   startMining(position: number){
     this.mapService.startMining(position).subscribe(data => {
       if (data.success === true){
+        console.log('MINING STARTED');
         console.log(data);
         this.heroInfoUpdate(data.playerData);
         this.gameUIService.changeHeroOccupation('mining');

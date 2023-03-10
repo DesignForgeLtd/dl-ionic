@@ -37,6 +37,9 @@ export class MiningComponent extends MapComponent implements OnInit {
     this.miningService.loadMineMap(originalPosition)
       .subscribe(data => {
         this.world.populateMap(data);
+        
+        this.world.columns = this.columns;
+        this.world.rows = this.rows;
       });
   }
   
@@ -52,7 +55,6 @@ export class MiningComponent extends MapComponent implements OnInit {
 
   updateHeroPosition(){
     // send info about player's new coords to the server
-
     this.playerSavedPosition = this.player.position;
     this.miningService.updatePositionInMine(this.playerSavedPosition).subscribe(data => {
       this.setServerSavedNewPosition();

@@ -2,10 +2,17 @@ Class responsibilities
 =============================
 1. MapComponent:
   - I/O (user input, output to screen)
+  - displays quests, locations (inside)
+  - handles actions like "subway", travel, startMining
+
+  
+1b. MapGfxComponent (child of MapComponent)
+  - game loop
   - render World, render Hero
   - animation (moves Hero on the screen, 1 pixel at a time)
   - sends Request to API when new move (step is initiated)
   - receives Response from API to update Hero stats and correct Hero position (if illegal move)
+
 
 2. Player
   - stores Hero path, direction, current step in that path
@@ -17,8 +24,9 @@ Class responsibilities
 
 4. World
   - stores information about the whole world's terrain (map)
+  - stores information about all monsters
   - determines if a position is reachable (used by: HeroPath)
-  - USED BY: MapComponent, Player and HeroPath
+  - USED BY: MapComponent, MapGfxComponent, Player and HeroPath
 
 
 

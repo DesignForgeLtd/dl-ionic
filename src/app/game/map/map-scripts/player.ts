@@ -287,6 +287,7 @@ export class Player {
     if (this.hero_path == null){
       return;
     }
+console.log('this.world.rows: '+this.world.rows);
 console.log('this.world.columns: '+this.world.columns);
 		switch(this.hero_path[this.hero_path_step])
 		{
