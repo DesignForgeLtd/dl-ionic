@@ -24,6 +24,8 @@ export class GameComponent implements OnInit {
   public openedModal = null;
   public openedQuestModal = null;
   public openedBadgePopup = null;
+  public openedLevelUpHeroPopup = null;
+  public openedLevelUpOccupationPopup = null;
   public heroEssentialData = null;
 
   constructor(
@@ -38,6 +40,12 @@ export class GameComponent implements OnInit {
     );
     this.gameUIService.openedBadgePopup.subscribe(
       (popup: string) => this.openedBadgePopup = popup
+    );
+    this.gameUIService.openedLevelUpHeroPopup.subscribe(
+      (popup: JSON) => this.openedLevelUpHeroPopup = popup
+    );
+    this.gameUIService.openedLevelUpOccupationPopup.subscribe(
+      (popup: JSON) => this.openedLevelUpOccupationPopup = popup
     );
     this.gameUIService.playerOccupiedWith.subscribe(
       (occupiedWith: string) => this.playerDataOccupiedWith = occupiedWith

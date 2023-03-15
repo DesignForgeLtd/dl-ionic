@@ -10,6 +10,8 @@ export class GameUIService {
   openedModal = new EventEmitter<string>();
   openedQuestModal = new EventEmitter<boolean>();
   openedBadgePopup = new EventEmitter<any>();
+  openedLevelUpHeroPopup = new EventEmitter<any>();
+  openedLevelUpOccupationPopup = new EventEmitter<any>();
   playerOccupiedWith = new EventEmitter<string>();
 
   constructor() {

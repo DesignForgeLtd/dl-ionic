@@ -59,6 +59,8 @@ import { WarehouseComponent } from './game/baggage/warehouse/warehouse.component
 import { WarehouseNavigationComponent } from './game/baggage/warehouse/warehouse-navigation/warehouse-navigation.component';
 import { FindComponent } from './game/map/stroll-event/find/find.component';
 import { FightComponent } from './game/map/stroll-event/fight/fight.component';
+import { LevelUpHeroComponent } from './game/level-up-hero/level-up-hero.component';
+import { LevelUpOccupationComponent } from './game/level-up-occupation/level-up-occupation.component';
 
 
 
@@ -108,7 +110,9 @@ import { FightComponent } from './game/map/stroll-event/fight/fight.component';
     WarehouseComponent,
     WarehouseNavigationComponent,
     FindComponent,
-    FightComponent
+    FightComponent,
+    LevelUpHeroComponent,
+    LevelUpOccupationComponent
   ],
   entryComponents: [],
   imports: [

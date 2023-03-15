@@ -51,6 +51,15 @@ export class MiningComponent extends MapComponent implements OnInit {
             case 'wood':
               this.showSuccess('Collected resource: ' + data.foundResource);
               this.world.replaceTileInMap(this.player.position, 'p70');
+              console.log(data);
+              if( data.levelUp ) {
+                if( data.levelUp.hero ) {
+                  this.gameUIService.openedLevelUpHeroPopup.emit(data.levelUp.hero);
+                }
+                if( data.levelUp.occupation ) {
+                  this.gameUIService.openedLevelUpOccupationPopup.emit(data.levelUp.occupation);
+                }
+              }
               break;
             case 'none':
               this.showError('No free space in baggage.');
