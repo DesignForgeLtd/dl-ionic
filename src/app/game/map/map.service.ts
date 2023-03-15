@@ -8,6 +8,7 @@ interface PlayerData{
   health: number;
   id: number;
   level: number;
+  race_id: number;
   hero_level: number;
   name: string;
   occupied_with: string;

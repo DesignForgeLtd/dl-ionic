@@ -60,7 +60,20 @@ import { WarehouseNavigationComponent } from './game/baggage/warehouse/warehouse
 import { FindComponent } from './game/map/stroll-event/find/find.component';
 import { FightComponent } from './game/map/stroll-event/fight/fight.component';
 
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+} from '@abacritt/angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from '@abacritt/angularx-social-login';
 
+import {
+  googleOAuth,
+  facebookOAuth
+} from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -113,6 +126,8 @@ import { FightComponent } from './game/map/stroll-event/fight/fight.component';
   entryComponents: [],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
+    SocialLoginModule,
     IonicModule.forRoot(),
     AppRoutingModule,
 //    StoreModule.forRoot({productionLocation: productionLocationReducer}),
@@ -122,14 +137,33 @@ import { FightComponent } from './game/map/stroll-event/fight/fight.component';
   ],
   providers: [
     {
-      provide: RouteReuseStrategy,
-      useClass: IonicRouteStrategy
+        provide: RouteReuseStrategy,
+        useClass: IonicRouteStrategy
     },
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthInterceptor,
+        multi: true
+    },
+    {
+        provide: 'SocialAuthServiceConfig',
+        useValue: {
+            autoLogin: false,
+            providers: [
+                {
+                    id: GoogleLoginProvider.PROVIDER_ID,
+                    provider: new GoogleLoginProvider(googleOAuth.clientId)
+                },
+                {
+                    id: FacebookLoginProvider.PROVIDER_ID,
+                    provider: new FacebookLoginProvider(facebookOAuth.appId)
+                }
+            ],
+            onError: (err) => {
+                console.error(err);
+            }
+        } as SocialAuthServiceConfig,
+    },
   ],
   bootstrap: [AppComponent],
 })

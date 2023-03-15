@@ -6,6 +6,16 @@ export const environment = {
   production: false
 };
 
+export const googleOAuth = {
+  clientId: '1053696124194-9le4tbck8ka8ahhuokt84431u7hi48dd.apps.googleusercontent.com',
+  clientSecret: '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'
+};
+
+export const facebookOAuth = {
+  appId: '5857097207741607',
+  appSecret: 'd29abd9f64f66794849982ecb54680dd'
+};
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

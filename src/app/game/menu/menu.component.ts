@@ -1,3 +1,4 @@
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import { GameUIService } from '../game-ui.service';
@@ -28,6 +29,7 @@ export class MenuComponent implements OnInit {
     private authService: AuthService,
     private gameUIService: GameUIService,
     private mapService: MapService,
+    private socialAuthService: SocialAuthService, 
     private miningService: MiningService) {
       console.log('A');
       console.log(this.occupiedWith);
@@ -60,6 +62,7 @@ export class MenuComponent implements OnInit {
   }
 
   onLogout(){
+    this.socialAuthService.signOut();
     this.authService.logout();
   }
 

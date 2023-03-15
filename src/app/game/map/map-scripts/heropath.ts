@@ -100,6 +100,22 @@ export class HeroPath
 					continue; // skip the rest as we don't need neighbours for 'finish'
 				}
 
+				if (x !== this.max_x && y !== this.min_y) // North-East
+				{
+					this.addNeighbourIfValid(-1 * this.world.columns + 1);
+				}
+				if (x !== this.min_x && y !== this.min_y) // North-West
+				{
+					this.addNeighbourIfValid(-1 * this.world.columns - 1);
+				}
+				if (x !== this.max_x && y !== this.max_y) // South-East
+				{
+					this.addNeighbourIfValid(this.world.columns + 1);
+				}
+				if (x !== this.min_x && y !== this.max_y) // South-West
+				{
+					this.addNeighbourIfValid(this.world.columns - 1);
+				}												
 				if (x !== this.max_x) // East
 				{
 					this.addNeighbourIfValid(1);
@@ -213,15 +229,19 @@ export class HeroPath
 				prev_posi = this.start_position;
 			}
 
-      const difference = posi - prev_posi;
-      if (difference === 1
-        || difference === -1
-        || difference === this.world.columns
-        || difference === -1 * this.world.columns
-        )
-      {
-			  steps.push(difference);
-      }
+			const difference = posi - prev_posi;
+			if (difference === 1
+				|| difference === -1
+				|| difference === this.world.columns
+				|| difference === -1 * this.world.columns
+				|| difference === -1 * this.world.columns + 1
+				|| difference === -1 * this.world.columns - 1
+				|| difference === this.world.columns - 1
+				|| difference === this.world.columns + 1
+				)
+			{
+					steps.push(difference);
+			}
 
 			// possible elements:
 	 		// this.steps.push(1); // right

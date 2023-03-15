@@ -1,0 +1,13 @@
+version: "2"
+services:
+  node:
+    image: "node:16"
+    user: "node"
+    working_dir: /home/sachem/Dev/dl-ionic
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./:/home/node/app
+    expose:
+      - "8100"
+    command: "npm start"

@@ -27,8 +27,8 @@ export class MapComponent implements OnInit, OnDestroy {
   scaledSize = 76;
   spriteSize = 76;
 
-  playerSize = 64;
-  playerScaledSize = 64;
+  playerSize = 32;
+  playerScaledSize = 32;
 
   columns   = 200;// columns and rows in map below
   rows      = 200;
@@ -92,7 +92,7 @@ export class MapComponent implements OnInit, OnDestroy {
     this.width  = document.documentElement.clientWidth;
 
     this.tileSheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
-    this.heroImage.src = '../assets/graphics/postacie/professor_walk_cycle_no_hat.png';
+
     //this.tileSheet.addEventListener('load', (event) => { this.loop(); });
 
     //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
@@ -125,7 +125,7 @@ export class MapComponent implements OnInit, OnDestroy {
       console.log(data);
 
       const playerData = data.playerData;
-
+console.log(playerData);
       this.world = new World(playerData.level, this.columns, this.rows);
 
       const originalPosition = playerData.position;
@@ -138,7 +138,10 @@ console.log('this.columns: '+this.columns);
         playerData.position % this.columns,
         Math.floor(playerData.position / this.columns),
         playerData.level,
+        playerData.race_id,
         this.world,
+        this.context,
+        this.viewport,
         this.scaledSize
       );
       this.playerSavedPosition = this.player.position;
@@ -369,7 +372,8 @@ console.log('this.columns: '+this.columns);
               console.log(data.strollEvent.data);
             }
 
-            if (data.strollEvent.type === 'fight') {
+            // add 'false &&' to disable fight stroll 
+            if ( data.strollEvent.type === 'fight') {
               this.openedModal = 'fight';
               this.strollEventFight = data.strollEvent.data;
               this.player.clearMovementParams();
@@ -504,68 +508,7 @@ console.log('this.columns: '+this.columns);
   /* Draw the this.player. Remember to offset by the viewport position and
     center screen position. (???) */
   drawHero(currentFrameTime){
-
- /* This bit of code gets the this.player's position in the world in terms of
-    columns and rows and converts it to an index in the map array */
-    // let this.player_index =
-    //   Math.floor((this.player.pixel_y + this.scaledSize * 0.5) / this.scaledSize) * columns
-    //   + Math.floor((this.player.pixel_x + this.scaledSize * 0.5) / this.scaledSize); // ????
-
-    let sheetOffsetX = 0;
-    let sheetOffsetY = 0;
-
-    const milisec = currentFrameTime % 1000;
-    const currentFrame = Math.floor(milisec / 130) + 1;
-
-    switch(this.player.direction)
-    {
-      case 'up':
-          sheetOffsetY = 0;
-          sheetOffsetX = currentFrame * this.playerScaledSize;
-        break;
-      case 'down':
-          sheetOffsetY = 2 * this.playerScaledSize;
-          sheetOffsetX = currentFrame * this.playerScaledSize;
-        break;
-      case 'right':
-          sheetOffsetY = 3 * this.playerScaledSize;
-          sheetOffsetX = currentFrame * this.playerScaledSize;
-        break;
-      case 'left':
-          sheetOffsetY = 1 * this.playerScaledSize;
-          sheetOffsetX = currentFrame * this.playerScaledSize;
-        break;
-      default:
-          switch(this.player.prev_direction)
-          {
-            case 'up':
-                sheetOffsetY = 0;
-              break;
-            case 'down':
-                sheetOffsetY = 2 * this.playerScaledSize;
-              break;
-            case 'right':
-                sheetOffsetY = 3 * this.playerScaledSize;
-              break;
-            case 'left':
-                sheetOffsetY = 1 * this.playerScaledSize;
-              break;
-          }
-          sheetOffsetX = 0;
-    }
-
-
-    this.context.drawImage(
-      this.heroImage,
-      sheetOffsetX,
-      sheetOffsetY,
-      this.playerSize,
-      this.playerSize,
-      Math.round(this.player.pixel_x - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5),
-      Math.round(this.player.pixel_y - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5),
-      this.playerScaledSize,
-      this.playerScaledSize
-    );
+    this.player.drawHero(currentFrameTime);
   }
 
   showError(errorMessage){
