@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Input } from '@angular/core';
-import { GameUIService } from '../game-ui.service';
-
+import {Subject} from 'rxjs';
 
 import { Player } from './map-scripts/player';
-import { Viewport } from './map-scripts/viewport';
 import { World } from './map-scripts/world';
 import { MapService } from './map.service';
+import { GameUIService } from '../game-ui.service';
 
 // interface MonstersData{
 //   positions: any;
@@ -18,12 +17,11 @@ import { MapService } from './map.service';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, OnDestroy {
+export class MapComponent implements OnInit {
 
-  @ViewChild('canvas', { static: true })
-  canvas: ElementRef<HTMLCanvasElement>;
+  playerSubject: Subject<Player> = new Subject();
 
-
+ //TODO: see which properties can be deleted
   scaledSize = 76;
   spriteSize = 76;
 
@@ -33,19 +31,8 @@ export class MapComponent implements OnInit, OnDestroy {
   columns   = 200;// columns and rows in map below
   rows      = 200;
 
-  // from session
-  gamemapSize = '17x11';
-  kraina = 1;
-
-  height: number;
-  width: number;
-
-  playerSavedPosition: number;
-
-  pointer = { x:100, y:100 };// The adjusted mouse position
 
   player: Player;
-  viewport: Viewport;
   world: World;
 
   openedModal = null;
@@ -57,26 +44,18 @@ export class MapComponent implements OnInit, OnDestroy {
   strollEventFind = [];
   strollEventFight = null;
 
-  tileSheet: HTMLImageElement;
+  // // TODO: remove 
   heroImage: HTMLImageElement;
 
-  monsters: any;
-
-  context: CanvasRenderingContext2D;
-
-  animationFrame;
   serverSavedNewPosition = true;
-
-
+  playerSavedPosition: number;
 
   constructor(
     public http: HttpClient,
     public mapService: MapService,
-    public gameUIService: GameUIService
+    public gameUIService: GameUIService    
   ) {
-    this.tileSheet = new Image();
     this.heroImage = new Image();
-    //this.gameUIService = new GameUIService();
 
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
@@ -85,38 +64,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     console.log('Map component initialized');
-    this.context = this.canvas.nativeElement.getContext('2d');
 
-    /* The width and height of the inside of the browser window */
-    this.height = document.documentElement.clientHeight;
-    this.width  = document.documentElement.clientWidth;
-
-    this.tileSheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
-
-    //this.tileSheet.addEventListener('load', (event) => { this.loop(); });
-
-    //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
-    this.viewport = new Viewport(0, 0, this.width, this.height);
     this.loadHeroEssentialData();
-    this.loadMonsters();
-
-    this.addCanvasClickListener();
   }
 
-  ngOnDestroy(): void {
-    console.log('Map component destroyed');
-    cancelAnimationFrame(this.animationFrame);
-  }
-
-  loadGameMap(level: number, originalPosition: number = null){
-    this.http.get(
-      'assets/detailedMap'+(level+1)+'.txt',
-      {responseType: 'text'}
-    )
-    .subscribe(data => {
-        this.world.populateMap(data);
-    });
-  }
 
   loadHeroEssentialData(){
     this.mapService.loadHeroEssentialData()
@@ -125,46 +76,159 @@ export class MapComponent implements OnInit, OnDestroy {
       console.log(data);
 
       const playerData = data.playerData;
-console.log(playerData);
+
+      //console.log(playerData);
+      //       console.log('HERE: this.columns: ' + this.columns);
+      //  console.log('HERE: this.rows: ' + this.rows);
+      
       this.world = new World(playerData.level, this.columns, this.rows);
 
       const originalPosition = playerData.position;
       if (playerData.occupied_with === 'mining'){
         playerData.position = playerData.positionInMine;
       }
-console.log('this.rows: '+this.rows);
-console.log('this.columns: '+this.columns);
+      // console.log('this.rows: '+this.rows);
+      // console.log('this.columns: '+this.columns);
+
       this.player = new Player(
         playerData.position % this.columns,
         Math.floor(playerData.position / this.columns),
         playerData.level,
         playerData.race_id,
         this.world,
-        this.context,
-        this.viewport,
         this.scaledSize
       );
-      this.playerSavedPosition = this.player.position;
-      this.loadGameMap(this.player.level, originalPosition);
-      this.heroInfoUpdate(playerData);
+      
+      this.loadGameMap(this.player.level, this.player.position);
 
-      // this.loop();
-      this.animationFrame = window.requestAnimationFrame(() => this.loop());
+      this.playerSubject.next(this.player);
+
+      this.heroInfoUpdate(playerData);
 
       this.handleFoundLocation(data.foundLocation, data.foundMonster);
       this.handleFoundQuest(data.foundQuest);
     });
   }
+  
+  loadGameMap(level: number, originalPosition: number = null){
+    this.http.get(
+      'assets/detailedMap'+(level+1)+'.txt',
+      {responseType: 'text'}
+    )
+    .subscribe(data => {
+        this.world.populateMap(data);
+        console.log('MAP LOADED');
+    });
+  }
 
-  // handleFoundMonster(foundMonster){
-  //   if (foundMonster === null) {
-  //     return;
-  //   }
+  heroInfoUpdate(heroInfo){
+    this.gameUIService.heroInfoInitialize(heroInfo);
+  }
 
-  //   if (foundMonster.alive){
-  //     console.log('MONSTER ZYJE!!!');
-  //   }
-  // }
+  setServerSavedNewPosition(){
+    this.serverSavedNewPosition = true;
+    //console.log('this.serverSavedNewPosition = true;');
+  }
+
+  setServerSavedNewPositionToFalse(){
+    this.serverSavedNewPosition = false;
+    //console.log('this.serverSavedNewPosition = false;');
+  }
+
+  heroLoop(){
+    
+    // if animation of the current step complete
+    if (this.player.coord_x * this.scaledSize === this.player.pixel_x
+      && this.player.coord_y * this.scaledSize === this.player.pixel_y)
+    {
+      if (this.serverSavedNewPosition === true){
+        this.tryHeroNextStep();
+      }
+      else{
+        console.log('Hero stuck due to serverSavedNewPosition === false');
+        // TODO: after 5s (?) of API not responding, player.revertHeroLastStep()
+        // keep in mind, hero might simply not be moving (no lag)... do not revert then
+      }
+    }
+    else
+    {
+      this.player.animate();
+    }
+  }
+
+  tryHeroNextStep(){
+    if (this.player.hero_path != null)
+    {
+      // proceed with next step
+      this.setServerSavedNewPositionToFalse();
+      this.player.moveHeroStep();
+      this.player.animate();
+      this.updateHeroPosition();
+    }
+    else
+    {
+      // or make hero stand still
+      this.player.stop();
+    }
+  }
+
+  
+  updateHeroPosition(){
+    // send info about player's new coords to the server
+      this.playerSavedPosition = this.player.position;
+      this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
+        this.setServerSavedNewPosition();
+        if (data.success === true){
+          console.log('data.strollEvent:');
+          console.log(data.strollEvent);
+          console.log('data.foundLocation:');
+          console.log(data.foundLocation);
+          console.log('data:');
+          console.log(data);
+          //this.handleFoundMonster(data.foundMonster);
+
+          this.processMapResponse(data);
+        }
+        else {
+          this.gameUIService.showError(data.errorMessage);
+          console.log('HERE');
+          this.player.revertHeroLastStep();
+          this.player.stop();
+        }
+
+        this.heroInfoUpdate(data.playerData);
+      });
+  }
+
+  processMapResponse(data){
+    console.log('RECEIVED FROM MAP-GFX:');
+    console.log(data);
+
+    if (data.foundMonster !== null && data.foundMonster.alive === true){
+      console.log('Monster is alive!!!');
+      this.player.revertHeroLastStep();
+    } else {
+      this.player.incrementHeroStep();
+    }
+
+    this.handleFoundLocation(data.foundLocation, data.foundMonster);
+    this.handleFoundQuest(data.foundQuest);
+
+    if (data.strollEvent !== null) {
+      if (data.strollEvent.type === 'find') {
+        this.strollEventFind.push(data.strollEvent.data);
+        console.log(data.strollEvent.data);
+      }
+
+      // TODO: remove 'false &&' to enable fight stroll 
+      if (false && data.strollEvent.type === 'fight') {
+        this.openedModal = 'fight';
+        this.strollEventFight = data.strollEvent.data;
+        this.player.clearMovementParams();
+        this.player.stop();
+      }
+    }
+  }
 
   handleFoundLocation(foundLocation, foundMonster = null){
     if (foundLocation !== null){
@@ -247,285 +311,6 @@ console.log('this.columns: '+this.columns);
     console.log(foundQuest);
   }
 
-
-  loadMonsters(){
-    this.mapService.loadMonstersData()
-    .subscribe(data => {
-      this.monsters = data.monsters;
-      //console.log(this.monsters);
-    });
-  }
-
-  addCanvasClickListener(){
-    this.context.canvas.addEventListener('click', (event) => {
-
-      this.pointer.x =
-        event.pageX
-        + this.viewport.x
-        - this.width * 0.5
-        + this.viewport.w * 0.5;
-      this.pointer.y =
-        event.pageY
-        + this.viewport.y
-        - this.height * 0.5
-        + this.viewport.h * 0.5;
-
-      const result = this.player.moveHero(
-        Math.floor(this.pointer.x / this.scaledSize),
-        Math.floor(this.pointer.y / this.scaledSize)
-      );
-
-      if (result !== true && result !== false)
-      {
-        this.showError(result);
-      }
-
-    });
-  }
-
-  loop() {// The game loop
-
-    this.animationFrame = window.requestAnimationFrame(() => this.loop());
-    const currentFrameTime = Date.now();
-
-    this.height = document.documentElement.clientHeight;
-    this.width  = document.documentElement.clientWidth;
-
-    /* Resize canvas on every frame */
-    this.context.canvas.height = this.height;
-    this.context.canvas.width  = this.width;
-    // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
-
-    this.heroLoop();
-    // console.log('this.player.pixel_x, this.player.pixel_y: ' + this.player.pixel_x, this.player.pixel_y);
-    this.viewport.scrollTo(this.player.pixel_x, this.player.pixel_y);
-
-    this.drawTerrain();
-    this.drawHero(currentFrameTime);
-    this.infolocationUpdate();
-  }
-
-  heroLoop(){
-    // if animation of the current step complete
-    if (this.player.coord_x * this.scaledSize === this.player.pixel_x
-      && this.player.coord_y * this.scaledSize === this.player.pixel_y)
-    {
-      if (this.serverSavedNewPosition === true){
-        this.tryHeroNextStep();
-      }
-      else{
-        console.log('Hero stuck due to serverSavedNewPosition === false');
-        // TODO: after 5s (?) of API not responding, player.revertHeroLastStep()
-        // keep in mind, hero might simply not be moving (no lag)... do not revert then
-      }
-    }
-    else
-    {
-      this.player.animate();
-    }
-  }
-
-  tryHeroNextStep(){
-    if (this.player.hero_path != null)
-    {
-      // proceed with next step
-      this.setServerSavedNewPositionToFalse();
-      this.player.moveHeroStep();
-      this.player.animate();
-      this.updateHeroPosition();
-    }
-    else
-    {
-      // or make hero stand still
-      this.player.stop();
-    }
-  }
-
-  updateHeroPosition(){
-    // send info about player's new coords to the server
-
-      this.playerSavedPosition = this.player.position;
-      this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
-        this.setServerSavedNewPosition();
-        if (data.success === true){
-          console.log('data.strollEvent:');
-          console.log(data.strollEvent);
-          console.log('data.foundLocation:');
-          console.log(data.foundLocation);
-          console.log('data:');
-          console.log(data);
-          //this.handleFoundMonster(data.foundMonster);
-
-          if (data.foundMonster !== null && data.foundMonster.alive === true){
-            console.log('Monster is alive!!!');
-            this.player.revertHeroLastStep();
-          } else {
-            this.player.incrementHeroStep();
-          }
-
-          this.handleFoundLocation(data.foundLocation, data.foundMonster);
-          this.handleFoundQuest(data.foundQuest);
-
-          if (data.strollEvent !== null) {
-            if (data.strollEvent.type === 'find') {
-              this.strollEventFind.push(data.strollEvent.data);
-              console.log(data.strollEvent.data);
-            }
-
-            // add 'false &&' to disable fight stroll 
-            if ( data.strollEvent.type === 'fight') {
-              this.openedModal = 'fight';
-              this.strollEventFight = data.strollEvent.data;
-              this.player.clearMovementParams();
-              this.player.stop();
-            }
-          }
-        }
-        else {
-          this.showError(data.errorMessage);
-          console.log('HERE');
-          this.player.revertHeroLastStep();
-          this.player.stop();
-        }
-
-        this.heroInfoUpdate(data.playerData);
-      });
-  }
-
-  setServerSavedNewPosition(){
-    this.serverSavedNewPosition = true;
-    //console.log('this.serverSavedNewPosition = true;');
-  }
-
-  setServerSavedNewPositionToFalse(){
-    this.serverSavedNewPosition = false;
-    //console.log('this.serverSavedNewPosition = false;');
-  }
-
-  infolocationUpdate(){
-    document.getElementById('location-info').innerHTML =
-      this.world.locationInfo(this.player.coord_x + this.player.coord_y * this.columns)
-      + ' ('+this.player.coord_x+','+this.player.coord_y+')';
-  }
-
-  heroInfoUpdate(heroInfo){
-    this.gameUIService.heroInfoInitialize(heroInfo);
-  }
-
-  drawTerrain(){
-    /* Get the min and max column and row in the map to draw. For the min
-    column and row (x and y) we use floor to round down and for the max we
-    use ceil to round up. We want to get the rows and columns under the borders
-    of the viewport rectangle. This is visualized by the white square in the example. */
-// console.log('this.viewport.x, this.viewport.w: ' + this.viewport.x, this.viewport.w);
-// console.log('this.viewport.y, this.viewport.h: ' + this.viewport.y, this.viewport.h);
-    let xMin = Math.floor(this.viewport.x / this.scaledSize);
-    let yMin = Math.floor(this.viewport.y / this.scaledSize);
-    let xMax = Math.ceil((this.viewport.x + this.viewport.w) / this.scaledSize);
-    let yMax = Math.ceil((this.viewport.y + this.viewport.h) / this.scaledSize);
-
-    /* the min and max column and row values cannot go beyond the boundaries
-    of the map. Those values are 0 and the number of columns and rows in the map. */
-    if (xMin < 0) { xMin = 0; }
-    if (yMin < 0) { yMin = 0; }
-    if (xMax > this.columns) { xMax = this.columns; }
-    if (yMax > this.rows) { yMax = this.rows; }
-
-    /* Now we loop through the tiles in the map, but only between the min
-    and max columns and rows that the this.viewport is over. To do this we use two
-    for loops, one for the columns (x) and one for the rows (y) of the map. */
-    for (let x = xMin; x < xMax; x ++) {
-      for (let y = yMin; y < yMax; y ++) {
-        this.drawTileInViewport(x, y);
-      }
-    }
-  }
-
-  drawTileInViewport(x, y){
-    //let value = pole[y * columns + x];// Tile value
-
-    const ppp = x + y * this.columns;
-
-    const poleLinkOpis = this.world.drawTile(ppp*3).split('|||');
-// console.log('poleLinkOpis: ');
-// console.log(poleLinkOpis);
-    let plo0 = poleLinkOpis[0];
-    if ( poleLinkOpis[1] === 'monster'){
-      plo0 = this.getMonsterImagePosition(ppp);
-    }
-
-    const bckpoz = plo0.split('|');
-
-    // if (bckpoz[1] != '0') bpx = '-'+bckpoz[1]+'px'; else bpx = '0';
-    // if (bckpoz[0] != '0') bpy = '-'+bckpoz[0]+'px'; else bpy = '0';
-
-     //console.log("x= "+x+", y= "+y+", ppp= "+ppp+", poleLinkOpis= "+poleLinkOpis);
-     // x= 12, y= 6, ppp= 1212, poleLinkOpis= 490|294|1,woda
-
-    // Tile x destination for drawing
-    const tileX = Math.floor(x * this.scaledSize - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5);
-    // Tile y destination for
-    const tileY = Math.floor(y * this.scaledSize - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5);
-
-    // let tileX = Math.floor(x * this.scaledSize) - viewport.x;
-    // let tileY = Math.floor(y * this.scaledSize) - viewport.y;
-
-    // Draw tile from tileSheet
-    this.context.drawImage(
-      this.tileSheet,
-      parseInt(bckpoz[1], 10),
-      parseInt(bckpoz[0], 10),
-      this.spriteSize,
-      this.spriteSize,
-      tileX,
-      tileY,
-      this.scaledSize,
-      this.scaledSize
-    );
-  }
-
-  getMonsterImagePosition(ppp){
-    // console.log('monster found at: ' + ppp);
-    // console.log('image pos: ' + this.monsters[ppp]);
-    let imagePosition = this.monsters[ppp].image;
-
-    if (this.monsters[ppp].alive === false){
-      imagePosition = '39';
-    }
-
-    if (imagePosition.includes(',')){ // for non-standard "dead picture" monsters
-      imagePosition = imagePosition.split(',');
-      imagePosition = imagePosition[0]; // if alive
-
-      if (this.monsters[ppp].alive === false){
-        imagePosition = imagePosition[1]; // if dead
-      }
-    }
-
-    return (11 * this.scaledSize)+'|'+(imagePosition * this.scaledSize);
-  }
-
-  /* Draw the this.player. Remember to offset by the viewport position and
-    center screen position. (???) */
-  drawHero(currentFrameTime){
-    this.player.drawHero(currentFrameTime);
-  }
-
-  showError(errorMessage){
-    document.getElementById('error-info').innerHTML = errorMessage;
-    document.getElementById('error-info').style.display = 'block';
-
-    setTimeout(() => document.getElementById('error-info').style.display = 'none', 3000);
-  }
-
-  showSuccess(successMessage){
-    console.log(successMessage);
-    document.getElementById('success-info').innerHTML = successMessage;
-    document.getElementById('success-info').style.display = 'block';
-
-    setTimeout(() => document.getElementById('success-info').style.display = 'none', 3000);
-  }
-
   mapLocationAction(action) {
 
     console.log('mapLocationAction in MapComponent:');
@@ -558,12 +343,13 @@ console.log('this.columns: '+this.columns);
         this.heroInfoUpdate(data.playerData);
         this.player.level = data.playerData.level;
         this.world.setLevel(this.player.level);
+        // TODO: uncomment / call from MapGfx
         this.loadGameMap(data.playerData.level);
 
         this.handleFoundLocation(data.foundLocation);
       }
       else {
-        this.showError(data.errorMessage);
+        this.gameUIService.showError(data.errorMessage);
       }
 
     });
@@ -576,7 +362,7 @@ console.log('this.columns: '+this.columns);
         this.loadHeroEssentialData();
       }
       else {
-        this.showError(data.errorMessage);
+        this.gameUIService.showError(data.errorMessage);
       }
 
     });
@@ -587,11 +373,12 @@ console.log('this.columns: '+this.columns);
       if (data.success === true){
         console.log(data);
         this.heroInfoUpdate(data.playerData);
-        this.loadGameMap(data.playerData.level); // TODO: check if can be removed
+        // TODO: uncomment / call from MapGfx
+        //this.loadGameMap(data.playerData.level); // TODO: check if can be removed
         this.gameUIService.changeHeroOccupation('journey');
       }
       else {
-        this.showError(data.errorMessage);
+        this.gameUIService.showError(data.errorMessage);
       }
     });
   }
@@ -599,12 +386,13 @@ console.log('this.columns: '+this.columns);
   startMining(position: number){
     this.mapService.startMining(position).subscribe(data => {
       if (data.success === true){
+        console.log('MINING STARTED');
         console.log(data);
         this.heroInfoUpdate(data.playerData);
         this.gameUIService.changeHeroOccupation('mining');
       }
       else {
-        this.showError(data.errorMessage);
+        this.gameUIService.showError(data.errorMessage);
       }
     });
   }

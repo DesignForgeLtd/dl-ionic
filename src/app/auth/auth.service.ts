@@ -110,6 +110,11 @@ export class AuthService {
     const tokenExpirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(name, userId, token, tokenExpirationDate);
     localStorage.setItem('userData', JSON.stringify(user));
+
+    // TODO: remove
+    if (myHeroRaceId === null){
+      myHeroRaceId = 4;
+    }
     localStorage.setItem('raceId', myHeroRaceId.toString());
 
     this.user.next(user);
