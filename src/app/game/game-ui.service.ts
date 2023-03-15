@@ -100,5 +100,21 @@ export class GameUIService {
       console.log(errorMessage);
     }
   }
+  
+  showError(errorMessage){
+    document.getElementById('error-info').innerHTML = errorMessage;
+    document.getElementById('error-info').style.display = 'block';
+
+    setTimeout(() => document.getElementById('error-info').style.display = 'none', 3000);
+  }
+
+  showSuccess(successMessage){
+    console.log(successMessage);
+    document.getElementById('success-info').innerHTML = successMessage;
+    document.getElementById('success-info').style.display = 'block';
+
+    setTimeout(() => document.getElementById('success-info').style.display = 'none', 3000);
+  }
+
 
 }

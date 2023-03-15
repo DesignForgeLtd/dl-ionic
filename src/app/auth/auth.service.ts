@@ -18,6 +18,7 @@ interface AuthResponseData{
     user_id: number;
     user_name: string;
     expires_in: number;
+    race_id: number;
   };
 }
 
@@ -31,6 +32,18 @@ export class AuthService {
     private router: Router
   ){}
 
+  socialAuth(socialUser){
+    return this.http.post<AuthResponseData>(
+      AppSettings.API_ENDPOINT + '/auth/social',
+      {
+        socialUser
+      }
+    )
+    .pipe(tap(response => { // catchError(this.handleError),
+      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in, response.data.race_id);
+    }));
+  }
+
   login(email: string, password: string){
     return this.http.post<AuthResponseData>(
       AppSettings.API_ENDPOINT + '/auth/login',
@@ -40,7 +53,7 @@ export class AuthService {
       }
     )
     .pipe(tap(response => { // catchError(this.handleError),
-      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in);
+      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in, response.data.race_id);
     }));
   }
 
@@ -54,7 +67,7 @@ export class AuthService {
       }
     )
     .pipe(tap(response => { // catchError(this.handleError),
-      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in);
+      this.handleAuth(response.data.user_name, response.data.user_id, response.data.access_token, response.data.expires_in, response.data.race_id);
     }));
   }
 
@@ -93,10 +106,16 @@ export class AuthService {
 
   }
 
-  private handleAuth(name: string, userId: number, token: string, expiresIn: number){
+  private handleAuth(name: string, userId: number, token: string, expiresIn: number, myHeroRaceId: number){
     const tokenExpirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     const user = new User(name, userId, token, tokenExpirationDate);
     localStorage.setItem('userData', JSON.stringify(user));
+
+    // TODO: remove
+    if (myHeroRaceId === null){
+      myHeroRaceId = 4;
+    }
+    localStorage.setItem('raceId', myHeroRaceId.toString());
 
     this.user.next(user);
   }

@@ -1,6 +1,8 @@
-<div class="ion-canvas">
-  <canvas #canvas></canvas>
-</div>
+<app-map-gfx
+  [playerSubject]="playerSubject"
+  [world]="world"
+  (runHeroLoop) = "heroLoop($event)"
+></app-map-gfx>
 
 <app-mine-portal
   *ngIf="openedModal === 'mine-portal-modal'"

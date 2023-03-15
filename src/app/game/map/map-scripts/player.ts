@@ -1,33 +1,45 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import { HeroPath } from './heropath';
+import { HeroSprite } from './HeroSprite';
 import { World } from './world';
 
 export class Player {
-
+  
   public pixel_x: number;
   public pixel_y: number;
+
   public position: number;
-  public scaled_size: number;
   public direction: string;
-  public prev_direction: string;
+  public orientation: string;
 
   public hero_path = null;
   public hero_path_step = 0;
 
-  private world: World;
+  private heroSprite: HeroSprite;
 
-  constructor(public coord_x: number, public coord_y: number, public level: number, world, scaled_size) {
+  constructor(
+    public coord_x: number, 
+    public coord_y: number, 
+    public level: number, 
+    public raceId: number, 
+    private world: World,
+    public scaled_size: number
+  ) {
+    
+    // TODO: REMOVE THIS LINE
+    this.raceId = 4;
+
     console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
+    console.log('INIT: this.raceId: ' + this.raceId);
 
+    this.heroSprite = new HeroSprite(this.raceId, scaled_size);
 
-    this.scaled_size = scaled_size;
-    this.world = world;
     this.pixel_x = this.coord_x * this.scaled_size; // pixels
     this.pixel_y = this.coord_y * this.scaled_size;
     this.position = this.coord_x + this.coord_y * this.world.columns;
     this.direction = null;
-    this.prev_direction = 'down';
+    this.orientation = 'right';
     this.level = level;
     console.log('INIT: position: ' + this.position);
   };
@@ -65,27 +77,6 @@ export class Player {
     this.pixel_x = this.coord_x * this.scaled_size; // pixels
     this.pixel_y = this.coord_y * this.scaled_size;
   }
-
-  // document.addEventListener('keydown', logKey);
-
-  // function logKey(e) {
-  //   if (`${e.code}` == 'ArrowRight')
-  //   {
-  //     player.repositionTo(++player.coord_x, player.coord_y);
-  //   }
-  //   if (`${e.code}` == 'ArrowDown')
-  //   {
-  //     player.repositionTo(player.coord_x, ++player.coord_y);
-  //   }
-  //   if (`${e.code}` == 'ArrowLeft')
-  //   {
-  //     player.repositionTo(--player.coord_x, player.coord_y);
-  //   }
-  //   if (`${e.code}` == 'ArrowUp')
-  //   {
-  //     player.repositionTo(player.coord_x, --player.coord_y);
-  //   }
-  // }
 
   moveHero(move_x, move_y)
 	{
@@ -183,8 +174,11 @@ export class Player {
     if (this.hero_path == null){
       return;
     }
-console.log('this.world.columns: '+this.world.columns);
-		switch(this.hero_path[this.hero_path_step])
+
+    // console.log('this.world.rows: '+this.world.rows);
+    // console.log('this.world.columns: '+this.world.columns);
+		
+    switch(this.hero_path[this.hero_path_step])
 		{
 			case 1:
 				this.go('right');
@@ -198,12 +192,27 @@ console.log('this.world.columns: '+this.world.columns);
 			case -1 * this.world.columns:
 				this.go('up');
 				break;
+      case this.world.columns - 1:
+        this.go('bottom-left');
+        break;
+			case -1 * this.world.columns - 1:
+				this.go('top-left');
+				break;
+			case -1 * this.world.columns + 1:
+				this.go('top-right');
+				break;
+			case this.world.columns + 1:
+				this.go('bottom-right');
+				break;
 		}
 	}
 
+  setOrientation(orientation){
+    this.orientation = orientation;
+  }
+
   go(direction){
 
-    this.prev_direction=this.direction;
     console.log('before move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     //console.log('go ' + direction);
     switch (direction)
@@ -219,11 +228,38 @@ console.log('this.world.columns: '+this.world.columns);
       case 'right':
         this.coord_x++;
         this.direction='right';
+        this.setOrientation('right');
         break;
       case 'left':
         this.coord_x--;
         this.direction='left';
+        this.setOrientation('left');
         break;
+      case 'top-left':
+        this.coord_x--;
+        this.coord_y--;
+        this.direction='left';
+        this.setOrientation('left');
+        break;
+      case 'bottom-left':
+        this.coord_x--;
+        this.coord_y++;
+        this.direction='left';
+        this.setOrientation('left');
+        break;
+      case 'top-right':
+        this.coord_x++;
+        this.coord_y--;
+        this.direction='right';
+        this.setOrientation('right');
+        break;
+      case 'bottom-right':
+        this.coord_x++;
+        this.coord_y++;
+        this.direction='right';
+        this.setOrientation('right');
+        break;
+              
     }
 
     this.position = this.coord_x + this.coord_y * this.world.columns;
@@ -234,10 +270,51 @@ console.log('this.world.columns: '+this.world.columns);
   stop(){
     if (this.direction!=null)
     {
-      this.prev_direction=this.direction;
       this.direction=null;
       //console.log('stop');
     }
   }
 
+  getVarsToDrawHero(currentFrameTime){
+
+    let vars = this.heroSprite.getVarsToDrawHero(
+      currentFrameTime,
+      this.direction,
+      this.orientation
+    );
+
+    return {
+      'heroImage': vars.heroImage,
+      'sheetOffsetX': vars.sheetOffsetX,
+      'sheetOffsetY': vars.sheetOffsetY,
+      'sizeX': vars.sizeX,
+      'sizeY': vars.sizeY,
+      'pixel_x': this.pixel_x,
+      'pixel_y': this.pixel_y,
+      'scaledSizeX': vars.scaledSizeX,
+      'scaledSizeY': vars.scaledSizeY
+    };
+  
+  }
+
+  // document.addEventListener('keydown', logKey);
+
+  // function logKey(e) {
+  //   if (`${e.code}` == 'ArrowRight')
+  //   {
+  //     player.repositionTo(++player.coord_x, player.coord_y);
+  //   }
+  //   if (`${e.code}` == 'ArrowDown')
+  //   {
+  //     player.repositionTo(player.coord_x, ++player.coord_y);
+  //   }
+  //   if (`${e.code}` == 'ArrowLeft')
+  //   {
+  //     player.repositionTo(--player.coord_x, player.coord_y);
+  //   }
+  //   if (`${e.code}` == 'ArrowUp')
+  //   {
+  //     player.repositionTo(player.coord_x, --player.coord_y);
+  //   }
+  // }
 }

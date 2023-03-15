@@ -3,62 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
 
-interface PlayerData{
-  energy: number;
-  health: number;
-  id: number;
-  level: number;
-  hero_level: number;
-  name: string;
-  occupied_with: string;
-  occupation_start: string;
-  occupation_finish: string;
-  position: number;
-  stamina: number;
-  positionInMine: number;
-}
-
-interface HeroFullData{
-  energy: number;
-  health: number;
-  id: number;
-  level: number;
-  name: string;
-  occupied_with: string;
-  position: number;
-  stamina: number;
-}
-
-interface FoundLocationData{
-  coords: string;
-  description: string;
-  id: number;
-  name: string;
-  position: number;
-  type: number;
-}
-
-interface FoundMonsterData{
-  aktywny: string;
-  opis: string;
-  ostatnioZabil: string;
-  alive: boolean;
-}
-
-interface StrollEventData{
-  type: string;
-  data: JSON;//json
-}
-
-interface MapResponseData{
-  'success': boolean;
-  'errorMessage': string;
-  'playerData': PlayerData;
-  'foundLocation': FoundLocationData;
-  'foundMonster': FoundMonsterData;
-  'foundQuest': boolean;
-  'strollEvent': StrollEventData;
-}
+import { 
+  PlayerData, 
+  FoundLocationData,
+  FoundMonsterData,
+  MapResponseData,
+  HeroFullData
+} from 'src/app/game/shared/map-service.interfaces';
 
 @Injectable({providedIn: 'root'})
 export class MapService {

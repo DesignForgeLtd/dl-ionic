@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { GameComponent } from './game/game.component';
 import { MapComponent } from './game/map/map.component';
+import { MapGfxComponent } from './game/map/map-gfx/map-gfx.component';
 import { MapLocationComponent } from './game/map/map-location/map-location.component';
 import { MenuComponent } from './game/menu/menu.component';
 import { AuthComponent } from './auth/auth.component';
@@ -62,13 +63,27 @@ import { FightComponent } from './game/map/stroll-event/fight/fight.component';
 import { LevelUpHeroComponent } from './game/level-up-hero/level-up-hero.component';
 import { LevelUpOccupationComponent } from './game/level-up-occupation/level-up-occupation.component';
 
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+} from '@abacritt/angularx-social-login';
+import {
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from '@abacritt/angularx-social-login';
 
+import {
+  googleOAuth,
+  facebookOAuth
+} from '../environments/environment';
 
 @NgModule({
   declarations: [
     AppComponent,
     GameComponent,
     MapComponent,
+    MapGfxComponent,
     MapLocationComponent,
     MapProductionLocationComponent,
     ProductionLinesComponent,
@@ -117,6 +132,8 @@ import { LevelUpOccupationComponent } from './game/level-up-occupation/level-up-
   entryComponents: [],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
+    SocialLoginModule,
     IonicModule.forRoot(),
     AppRoutingModule,
 //    StoreModule.forRoot({productionLocation: productionLocationReducer}),
@@ -126,14 +143,33 @@ import { LevelUpOccupationComponent } from './game/level-up-occupation/level-up-
   ],
   providers: [
     {
-      provide: RouteReuseStrategy,
-      useClass: IonicRouteStrategy
+        provide: RouteReuseStrategy,
+        useClass: IonicRouteStrategy
     },
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthInterceptor,
+        multi: true
+    },
+    {
+        provide: 'SocialAuthServiceConfig',
+        useValue: {
+            autoLogin: false,
+            providers: [
+                {
+                    id: GoogleLoginProvider.PROVIDER_ID,
+                    provider: new GoogleLoginProvider(googleOAuth.clientId)
+                },
+                {
+                    id: FacebookLoginProvider.PROVIDER_ID,
+                    provider: new FacebookLoginProvider(facebookOAuth.appId)
+                }
+            ],
+            onError: (err) => {
+                console.error(err);
+            }
+        } as SocialAuthServiceConfig,
+    },
   ],
   bootstrap: [AppComponent],
 })

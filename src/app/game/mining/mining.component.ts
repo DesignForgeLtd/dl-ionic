@@ -20,6 +20,10 @@ export class MiningComponent extends MapComponent implements OnInit {
   rows      = 10;
   portalData = null;
 
+  // TODO: removed those two, when Mining uses MapGfx
+  playerSavedPosition: number;
+  serverSavedNewPosition = true;
+
   constructor(
     public http: HttpClient,
     public mapService: MapService,
@@ -33,12 +37,24 @@ export class MiningComponent extends MapComponent implements OnInit {
     this.miningService.loadMineMap(originalPosition)
       .subscribe(data => {
         this.world.populateMap(data);
+        
+        this.world.columns = this.columns;
+        this.world.rows = this.rows;
       });
+  }
+  
+  setServerSavedNewPosition(){
+    this.serverSavedNewPosition = true;
+    //console.log('this.serverSavedNewPosition = true;');
+  }
+
+  setServerSavedNewPositionToFalse(){
+    this.serverSavedNewPosition = false;
+    //console.log('this.serverSavedNewPosition = false;');
   }
 
   updateHeroPosition(){
     // send info about player's new coords to the server
-
     this.playerSavedPosition = this.player.position;
     this.miningService.updatePositionInMine(this.playerSavedPosition).subscribe(data => {
       this.setServerSavedNewPosition();
@@ -49,7 +65,7 @@ export class MiningComponent extends MapComponent implements OnInit {
           switch (data.foundResource)
           {
             case 'wood':
-              this.showSuccess('Collected resource: ' + data.foundResource);
+              this.gameUIService.showSuccess('Collected resource: ' + data.foundResource);
               this.world.replaceTileInMap(this.player.position, 'p70');
               console.log(data);
               if( data.levelUp ) {
@@ -62,7 +78,7 @@ export class MiningComponent extends MapComponent implements OnInit {
               }
               break;
             case 'none':
-              this.showError('No free space in baggage.');
+              this.gameUIService.showError('No free space in baggage.');
               break;
             case 'portal':
               this.gameUIService.openedModal.emit('mine-portal-modal');
@@ -75,7 +91,7 @@ export class MiningComponent extends MapComponent implements OnInit {
         }
       }
       else {
-        this.showError(data.errorMessage);
+        this.gameUIService.showError(data.errorMessage);
         console.log('HERE');
         this.player.revertHeroLastStep();
         this.player.stop();
@@ -118,7 +134,7 @@ export class MiningComponent extends MapComponent implements OnInit {
         this.gameUIService.openedModal.emit('');
       }
       else {
-        this.showError(data.errorMessage);
+        this.gameUIService.showError(data.errorMessage);
       }
 
       //this.heroInfoUpdate(data.playerData);
