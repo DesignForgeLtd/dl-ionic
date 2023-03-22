@@ -15,6 +15,7 @@ export class BaggagePopoverComponent implements OnInit {
   @Input() location;
 
   inputAmount: number;
+  battleBeltSpace: boolean;
 
   constructor(
     private baggageService: BaggageService,
@@ -65,6 +66,9 @@ export class BaggagePopoverComponent implements OnInit {
       if (data.success === true) {
         this.presentToast('success', 'Equipped hero with ' + this.item.name);
         this.item.in_use = 1;
+        this.baggageService.capacity.baggage.taken -= 1;
+        this.baggageService.battleBeltSpace = data.battleBeltSpace;
+        this.baggageService.baggageUpdated.emit(true);
       } else {
         this.presentToast('danger', 'Could not equip hero with ' + this.item.name);
       }
@@ -80,6 +84,9 @@ export class BaggagePopoverComponent implements OnInit {
       if (data.success === true) {
         this.presentToast('success', 'UnEquipped ' + this.item.name + '');
         this.item.in_use = 0;
+        this.baggageService.capacity.baggage.taken += 1;
+        this.baggageService.battleBeltSpace = data.battleBeltSpace;
+        this.baggageService.baggageUpdated.emit(true);
       } else {
         this.presentToast('danger', 'Could not unEquip ' + this.item.name + '');
       }
@@ -249,6 +256,26 @@ export class BaggagePopoverComponent implements OnInit {
         this.gameUIService.heroInfoUpdate(data.hero_data_to_update);
       } else {
         this.presentToast('danger', 'Could not buy ' + this.item.name);
+      }
+      this.baggageItemController.dismiss();
+    });
+  }
+
+  insertToBattleBelt(){
+    console.log('insert item to battle belt ' + this.item.name);
+    this.baggageService
+    .insertToBattleBelt(this.item.hero_item_id)
+    .subscribe(data => {
+      console.log('data: ');
+      console.log(data);
+      if (data.success === true) {
+        this.presentToast('success', 'Inserted ' + this.item.name + ' to Battle Belt');
+        this.item.quantity -= data.quantity;
+        this.baggageService.capacity.baggage.taken -= data.quantity;
+        this.baggageService.battleBeltSpace = data.battleBeltSpace;
+        this.baggageService.baggageUpdated.emit(true);
+      } else {
+        this.presentToast('danger', 'Could not insert ' + this.item.name);
       }
       this.baggageItemController.dismiss();
     });
