@@ -42,6 +42,7 @@ export class BaggageComponent implements OnInit {
         this.baggageItems = data.items.result;
         this.baggageTypes = data.types;
         this.baggageService.capacity = data.capacity;
+        this.baggageService.battleBeltSpace = data.battleBeltSpace;
         this.capacity = this.baggageService.capacity;
 
         console.log('loadBaggageDataWithTypes: ');

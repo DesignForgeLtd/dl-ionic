@@ -37,12 +37,12 @@ export class MiningComponent extends MapComponent implements OnInit {
     this.miningService.loadMineMap(originalPosition)
       .subscribe(data => {
         this.world.populateMap(data);
-        
+
         this.world.columns = this.columns;
         this.world.rows = this.rows;
       });
   }
-  
+
   setServerSavedNewPosition(){
     this.serverSavedNewPosition = true;
     //console.log('this.serverSavedNewPosition = true;');
