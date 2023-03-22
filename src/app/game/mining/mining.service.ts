@@ -27,6 +27,16 @@ interface MineResponseData{
   'portalData': any;
   'mineMap': any;
   'heroPositionInMine': any; // can I take it from playerData instead, and remove this?
+  'levelUp': {
+    'hero': {
+      'name': string;
+      'level': number;
+    };
+    'occupation': {
+      'name': string;
+      'level': number;
+    };
+  };
 }
 
 @Injectable({providedIn: 'root'})

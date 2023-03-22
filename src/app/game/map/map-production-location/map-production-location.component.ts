@@ -25,7 +25,7 @@ export class MapProductionLocationComponent implements OnInit {
           this.initialize();
           //this.productionService.productionLinesUpdated.emit(false);
         }
-      )
+      );
     }
 
   ngOnInit() {

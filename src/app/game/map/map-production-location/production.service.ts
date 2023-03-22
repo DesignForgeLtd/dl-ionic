@@ -5,6 +5,16 @@ import { AppSettings } from 'src/app/AppSettings';
 // interface ProductionLocationData{
 
 // }
+interface LevelUp{
+  'hero': {
+    'name': string;
+    'level': number;
+  };
+  'occupation': {
+    'name': string;
+    'level': number;
+  };
+}
 
 @Injectable({providedIn: 'root'})
 export class ProductionService {
@@ -21,7 +31,7 @@ export class ProductionService {
   }
 
   startProduction(itemId: number, quantity: number){
-    return this.http.post<{'success': boolean; 'errorMessage': string;}>(
+    return this.http.post<{'success': boolean; 'errorMessage': string; 'levelUp': LevelUp}>(
       AppSettings.API_ENDPOINT + '/production/start-production',
       {
         item_id: itemId,

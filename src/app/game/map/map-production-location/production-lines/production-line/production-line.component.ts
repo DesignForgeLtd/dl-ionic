@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { GameUIService } from 'src/app/game/game-ui.service';
 import { ProductionService } from '../../production.service';
 
 @Component({
@@ -11,7 +12,10 @@ export class ProductionLineComponent implements OnInit {
   @Input() productionLine = null;
   @Input() available = null; // = production possible (enough components etc)
 
-  constructor(private productionService: ProductionService) { }
+  constructor(
+    private gameUIService: GameUIService,
+    private productionService: ProductionService,
+    ) { }
 
   ngOnInit() {
     if (this.productionLine.component1_required_quantity > this.productionLine.component1_in_baggage){
@@ -34,6 +38,15 @@ export class ProductionLineComponent implements OnInit {
       console.log(data);
       if (data.success === true) {
         this.productionService.productionLinesUpdated.emit(true);
+
+        if( data.levelUp ) {
+          if( data.levelUp.hero ) {
+            this.gameUIService.openedLevelUpHeroPopup.emit(data.levelUp.hero);
+          }
+          if( data.levelUp.occupation ) {
+            this.gameUIService.openedLevelUpOccupationPopup.emit(data.levelUp.occupation);
+          }
+        }
       }
     });
   }
