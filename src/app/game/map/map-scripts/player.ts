@@ -48,23 +48,24 @@ export class Player {
 
     const x = this.coord_x * this.scaled_size;
     const y = this.coord_y * this.scaled_size;
+    const animationSpeed = 4;
 
     /* Gradually moves the player closer to x, y every time animate() is called. */
     if (x < this.pixel_x)
     {
-      this.pixel_x-=4;
+      this.pixel_x -= animationSpeed;
     }
     else if (x > this.pixel_x)
     {
-      this.pixel_x+=4;
+      this.pixel_x += animationSpeed;
     }
     if (y < this.pixel_y)
     {
-      this.pixel_y-=4;
+      this.pixel_y -= animationSpeed;
     }
     else if (y > this.pixel_y)
     {
-      this.pixel_y+=4;
+      this.pixel_y += animationSpeed;
     }
     //this.pixel_x += (x - this.pixel_x - scaled_size * 0.0) * 0.05;
     //this.pixel_y += (y - this.pixel_y - scaled_size * 0.4) * 0.05;
@@ -86,10 +87,11 @@ export class Player {
     // TODO: check if have EN, HP, KO... otherwise return with error msg
 
     // TODO: add "queued-up" move (change destination before reaching current; after current step; (2) in flow chart)
-		let currentStep = false;
-    if (this.hero_path !== null)
+
+		let currentStep = false;//TODO: what's this logic?
+    if (this.hero_path !== null)//TODO: what's this logic?
 		{
-      currentStep = this.hero_path[this.hero_path_step];
+      currentStep = this.hero_path[this.hero_path_step]; //TODO: what's this logic?
     }
 
     console.log(
@@ -107,12 +109,6 @@ export class Player {
 
     const pathfinder = new HeroPath(this.world, this.coord_x, this.coord_y, move_x, move_y);
     this.hero_path = pathfinder.findSteps();
-
-    // if Hero was already moving, find new path, but add current step as first in the new path
-    if (currentStep !== false){
-      console.log('currentStep: ' + currentStep);
-      //this.hero_path.unshift(currentStep);
-    }
 
     let hero_path_string = '';
     this.hero_path_step = 0;

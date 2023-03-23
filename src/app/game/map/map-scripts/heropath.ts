@@ -102,17 +102,17 @@ export class HeroPath
 
 				if (x !== this.max_x && y !== this.min_y) // North-East
 				{
-					this.addNeighbourIfValid(-1 * this.world.columns + 1);
+					this.addNeighbourIfValid(-1 * this.world.columns + 1, true);
 				}
-				if (x !== this.min_x && y !== this.min_y) // North-West
+				if (x !== this.min_x && y !== this.min_y, true) // North-West
 				{
 					this.addNeighbourIfValid(-1 * this.world.columns - 1);
 				}
-				if (x !== this.max_x && y !== this.max_y) // South-East
+				if (x !== this.max_x && y !== this.max_y, true) // South-East
 				{
 					this.addNeighbourIfValid(this.world.columns + 1);
 				}
-				if (x !== this.min_x && y !== this.max_y) // South-West
+				if (x !== this.min_x && y !== this.max_y, true) // South-West
 				{
 					this.addNeighbourIfValid(this.world.columns - 1);
 				}												
@@ -148,7 +148,7 @@ export class HeroPath
 		//console.log(this.graph);
 	}
 
-	addNeighbourIfValid(offset)
+	addNeighbourIfValid(offset, isDiagonal = false)
 	{
 		const adjacent_node_position = this.current_node_position + offset;
 
@@ -163,14 +163,14 @@ export class HeroPath
 			{
 				key = 'finish';
 			}
-			const weight = this.getEdgeWeight(this.current_node_position, adjacent_node_position);
+			const weight = this.getEdgeWeight(this.current_node_position, adjacent_node_position, isDiagonal);
 			Object.assign(this.neighbours, {[key]: weight});
 		}
 	}
 
-	getEdgeWeight(current_node_position, adjacent_node_position)
+	getEdgeWeight(current_node_position, adjacent_node_position, isDiagonal)
 	{
-		return this.getNodeWeight(current_node_position) + this.getNodeWeight(adjacent_node_position);
+		return (isDiagonal ? 1.4 : 1) * (this.getNodeWeight(current_node_position) + this.getNodeWeight(adjacent_node_position));
 		//return this.getNodeWeight(adjacent_node_position);
 	}
 
