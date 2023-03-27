@@ -1,0 +1,28 @@
+<div class="backdrop"></div>
+<div class="popup-container">
+
+  <ion-card>
+
+    <ion-card-header>
+      <ion-toolbar>
+        <h1>Occupation Level Up</h1>
+        <ion-buttons slot="end">
+          <ion-button color="danger" (click)="closePopup()">
+            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+
+
+    <ion-card-content>
+
+          <ng-container>
+            <h2>{{ data.name }}</h2>
+            <h2> level {{ data.level }}</h2>
+          </ng-container>
+
+    </ion-card-content>
+
+  </ion-card>
+</div>

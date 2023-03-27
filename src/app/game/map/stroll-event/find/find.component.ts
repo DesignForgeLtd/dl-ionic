@@ -7,12 +7,10 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class FindComponent implements OnInit {
 
-  @Input() data;
+  @Input() strollEventFind = [];
 
   constructor() { }
 
-  ngOnInit() {
-    console.log(this.data);
-  }
+  ngOnInit() { }
 
 }

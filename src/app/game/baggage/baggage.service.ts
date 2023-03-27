@@ -9,6 +9,7 @@ interface BaggageData{
   };
   'types': Array<string>;
   'capacity': Capacity;
+  'battleBeltSpace': boolean;
 }
 
 interface Capacity{
@@ -32,6 +33,7 @@ interface BaggageActionResponseData{
   'priceMin': number;
   'priceMax': number;
   'quick_belt': number;
+  'battleBeltSpace': boolean;
 }
 
 interface QuickUseBeltResponseData{
@@ -52,6 +54,7 @@ export class BaggageService {
   baggageUpdated = new EventEmitter<boolean>();
 
   capacity: Capacity;
+  battleBeltSpace: boolean;
 
   constructor(private http: HttpClient){}
 
@@ -212,6 +215,15 @@ export class BaggageService {
       {
         baggageItemId,
         quantity
+      }
+    );
+  }
+
+  insertToBattleBelt(baggageItemID: number){
+    return this.http.post<BaggageActionResponseData>(
+      AppSettings.API_ENDPOINT + '/baggage/insertToBattleBelt',
+      {
+        baggageItemID
       }
     );
   }

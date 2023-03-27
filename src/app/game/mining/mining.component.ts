@@ -37,12 +37,12 @@ export class MiningComponent extends MapComponent implements OnInit {
     this.miningService.loadMineMap(originalPosition)
       .subscribe(data => {
         this.world.populateMap(data);
-        
+
         this.world.columns = this.columns;
         this.world.rows = this.rows;
       });
   }
-  
+
   setServerSavedNewPosition(){
     this.serverSavedNewPosition = true;
     //console.log('this.serverSavedNewPosition = true;');
@@ -67,6 +67,15 @@ export class MiningComponent extends MapComponent implements OnInit {
             case 'wood':
               this.gameUIService.showSuccess('Collected resource: ' + data.foundResource);
               this.world.replaceTileInMap(this.player.position, 'p70');
+              console.log(data);
+              if( data.levelUp ) {
+                if( data.levelUp.hero ) {
+                  this.gameUIService.openedLevelUpHeroPopup.emit(data.levelUp.hero);
+                }
+                if( data.levelUp.occupation ) {
+                  this.gameUIService.openedLevelUpOccupationPopup.emit(data.levelUp.occupation);
+                }
+              }
               break;
             case 'none':
               this.gameUIService.showError('No free space in baggage.');

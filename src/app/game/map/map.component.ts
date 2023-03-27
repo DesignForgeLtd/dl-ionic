@@ -40,11 +40,11 @@ export class MapComponent implements OnInit {
   locationFullData = null;
   monsterData = null;
 
-  strollEvent = [];
   strollEventFind = [];
+  strollEventInterval = null;
   strollEventFight = null;
 
-  // // TODO: remove 
+  // // TODO: remove
   heroImage: HTMLImageElement;
 
   serverSavedNewPosition = true;
@@ -53,7 +53,7 @@ export class MapComponent implements OnInit {
   constructor(
     public http: HttpClient,
     public mapService: MapService,
-    public gameUIService: GameUIService    
+    public gameUIService: GameUIService
   ) {
     this.heroImage = new Image();
 
@@ -80,7 +80,7 @@ export class MapComponent implements OnInit {
       //console.log(playerData);
       //       console.log('HERE: this.columns: ' + this.columns);
       //  console.log('HERE: this.rows: ' + this.rows);
-      
+
       this.world = new World(playerData.level, this.columns, this.rows);
 
       const originalPosition = playerData.position;
@@ -98,7 +98,7 @@ export class MapComponent implements OnInit {
         this.world,
         this.scaledSize
       );
-      
+
       this.loadGameMap(this.player.level, this.player.position);
 
       this.playerSubject.next(this.player);
@@ -109,7 +109,7 @@ export class MapComponent implements OnInit {
       this.handleFoundQuest(data.foundQuest);
     });
   }
-  
+
   loadGameMap(level: number, originalPosition: number = null){
     this.http.get(
       'assets/detailedMap'+(level+1)+'.txt',
@@ -136,7 +136,7 @@ export class MapComponent implements OnInit {
   }
 
   heroLoop(){
-    
+
     // if animation of the current step complete
     if (this.player.coord_x * this.scaledSize === this.player.pixel_x
       && this.player.coord_y * this.scaledSize === this.player.pixel_y)
@@ -172,7 +172,7 @@ export class MapComponent implements OnInit {
     }
   }
 
-  
+
   updateHeroPosition(){
     // send info about player's new coords to the server
       this.playerSavedPosition = this.player.position;
@@ -216,11 +216,17 @@ export class MapComponent implements OnInit {
 
     if (data.strollEvent !== null) {
       if (data.strollEvent.type === 'find') {
+        if(this.strollEventInterval) {
+          clearInterval(this.strollEventInterval);
+        }
         this.strollEventFind.push(data.strollEvent.data);
-        console.log(data.strollEvent.data);
+        this.strollEventInterval = setInterval(() => {
+            this.strollEventFind = [];
+            clearInterval(this.strollEventInterval);
+        }, 2222);
       }
 
-      // TODO: remove 'false &&' to enable fight stroll 
+      // TODO: remove 'false &&' to enable fight stroll
       if (false && data.strollEvent.type === 'fight') {
         this.openedModal = 'fight';
         this.strollEventFight = data.strollEvent.data;
