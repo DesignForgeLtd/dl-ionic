@@ -18,7 +18,8 @@ export class HeroEquipmentComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.heroService.loadEquipment().subscribe(data => {
+    this.heroService.loadEquipment()
+    .subscribe(data => {
       this.data = data.data;
       this.isLoading = false;
       this.error = ! data.success;

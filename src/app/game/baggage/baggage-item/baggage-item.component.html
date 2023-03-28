@@ -36,7 +36,7 @@
 
   <div *ngIf="item.beltItems && area === 'hero'">
     Belt Items:
-    <app-belt-item *ngFor="let beltItem of item.beltItems; let i = index" [item]="beltItem" [index]="i"></app-belt-item>
+    <app-belt-item *ngFor="let beltItem of item.beltItems | keyvalue" [index]="beltItem.key" [item]="beltItem.value"></app-belt-item>
   </div>
 </div>
 
