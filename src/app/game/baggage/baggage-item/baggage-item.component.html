@@ -1,18 +1,42 @@
 <div
   *ngIf="item.quantity > 0 || item.quantity === null"
   class="baggage-item"
-  (click)="baggageItemClick($event)"
 >
-  <ion-badge *ngIf="item.in_use" color="success">Equipped</ion-badge>
-  <ion-badge *ngIf="item.quick_use_belt" color="success">QUB</ion-badge>
+  <ion-badge *ngIf="item.in_use && area !== 'hero'" color="success">Equipped</ion-badge>
   <ion-badge *ngIf="item.quantity > 1" color="secondary">{{ item.quantity }}</ion-badge>
+  <ion-badge *ngIf="item.quick_belt" color="success">QUB</ion-badge>
   <div
     class="baggage-item-image {{ item.weapon }}"
-    style="background-image: url('../../../assets/graphics/items/{{ item.image }}');"
+    style="background-image: url('../../../assets/graphics/{{ itemImgSrc }}/{{ item.image }}');"
+    (click)="baggageItemClick($event)"
   ></div>
   <b>{{ item.name }}</b>
   <span *ngIf="item.price">
     <br>
     Price: <b>{{ item.priceMin && item.priceMin !== item.priceMax ? item.priceMin + ' - ' + item.priceMax : item.price }}</b>
   </span>
+  <div *ngIf="item.params">
+    <div *ngIf="item.params.damage">Damage: {{ item.params.damage }}</div>
+    <div *ngIf="item.params.armour">Armor: {{ item.params.armour }}</div>
+    <div *ngIf="item.params.magic_fire && item.params.magic_fire > 0">Magic Fire: {{ item.params.magic_fire }}</div>
+    <div *ngIf="item.params.magic_wind && item.params.magic_wind > 0">Magic Wind: {{ item.params.magic_wind }}</div>
+    <div *ngIf="item.params.magic_earth && item.params.magic_earth > 0">Magic Earth: {{ item.params.magic_earth }}</div>
+    <div *ngIf="item.params.magic_water && item.params.magic_water > 0">Magic Water: {{ item.params.magic_water }}</div>
+    <div *ngIf="item.params.points">Points: {{ item.params.points }}</div>
+    <div *ngIf="item.params.range && item.params.range > 0">Range: {{ item.params.range }}</div>
+    <div *ngIf="item.params.slots && item.params.slots > 0">Slots: {{ item.params.slots }}</div>
+    <div *ngIf="item.params.capacity">Capacity: {{ item.params.capacity }}</div>
+    <div *ngIf="item.params.durability_max">Durability: {{ item.durability }} / {{ item.params.durability_max }}</div>
+    <div *ngIf="item.params.min_level && item.params.min_level > 0">min Level: {{ item.params.min_level }}</div>
+    <div *ngIf="item.params.min_strength && item.params.min_strength > 0">min Strength: {{ item.params.min_strength }}</div>
+    <div *ngIf="item.params.min_dexterity && item.params.min_dexterity > 0">min Dexterity: {{ item.params.min_dexterity }}</div>
+    <div *ngIf="item.params.min_intelligence && item.params.min_intelligence > 0">min Intelligence: {{ item.params.min_intelligence }}</div>
+    <div *ngIf="item.params.stamina_usage && item.params.stamina_usage > 0">Stamina usage: {{ item.params.stamina_usage }}</div>
+  </div>
+
+  <div *ngIf="item.beltItems && area === 'hero'">
+    Belt Items:
+    <app-belt-item *ngFor="let beltItem of item.beltItems; let i = index" [item]="beltItem" [index]="i"></app-belt-item>
+  </div>
 </div>
+

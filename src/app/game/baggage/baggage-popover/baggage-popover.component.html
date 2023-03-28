@@ -84,20 +84,20 @@
     </ion-item>
 
     <ion-item
-        *ngIf="item.points !== null && baggageService.battleBeltSpace"
+        *ngIf="item.points !== null && battleBeltSpace"
         class="pointer" (click)="insertToBattleBelt()">
       <ion-icon name="wallet-outline"></ion-icon> Insert to Battle Belt
     </ion-item>
 
     <ion-item
         *ngIf="item.weapon === 'weapon' && item.in_use === 0"
-        class="pointer" (click)="equipHero()">
+        class="pointer" (click)="equipHero(1)">
       <ion-icon name="person-add-outline"></ion-icon> Equip hero
     </ion-item>
 
     <ion-item
         *ngIf="item.weapon === 'weapon' && item.in_use === 1"
-        class="pointer" (click)="unEquipHero()">
+        class="pointer" (click)="equipHero(0)">
       <ion-icon name="person-remove-outline"></ion-icon> UnEquip hero
     </ion-item>
 
@@ -187,6 +187,15 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+    </ion-item>
+
+  </ng-container>
+
+  <ng-container *ngIf="area === 'hero'">
+
+    <ion-item
+        class="pointer" (click)="equipHero(0)">
+      <ion-icon name="person-remove-outline"></ion-icon> UnEquip
     </ion-item>
 
   </ng-container>
