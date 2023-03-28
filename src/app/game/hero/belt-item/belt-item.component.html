@@ -1,0 +1,7 @@
+<div *ngIf="item" class="baggage-item"
+    (click)="removeFromBattleBelt()">
+  <ion-badge color="danger">&times;</ion-badge>
+  <div class="baggage-item-image"
+      style="background-image: url('../../../assets/graphics/items/{{ item.params.image }}');"
+    ></div>
+</div>

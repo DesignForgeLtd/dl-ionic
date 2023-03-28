@@ -35,6 +35,7 @@ export class BaggagePopoverComponent implements OnInit {
         this.inputAmount = this.item.quantity > baggageCapacity ? baggageCapacity : this.item.quantity;
       }
     }
+    this.battleBeltSpace = this.baggageService.battleBeltSpace;
     console.log(this.item);
     console.log('area: '+this.area);
     console.log('location: '+this.location);
@@ -58,37 +59,23 @@ export class BaggagePopoverComponent implements OnInit {
     });
   }
 
-  equipHero(){
-    console.log('Putting on ' + this.item.name);
-    this.baggageService.equipHero(this.item.hero_item_id, 1).subscribe(data => {
-      console.log('data: ');
+  equipHero(state: number){
+    this.baggageService.equipHero(this.item.hero_item_id, state).subscribe(data => {
       console.log(data);
       if (data.success === true) {
-        this.presentToast('success', 'Equipped hero with ' + this.item.name);
-        this.item.in_use = 1;
-        this.baggageService.capacity.baggage.taken -= 1;
+        const stateName = state === 1 ? 'Equipped hero with ' : 'UnEquipped ';
+        this.presentToast('success', stateName + this.item.name);
+        this.item.in_use = state;
+        if( state === 1 ) {
+          this.baggageService.capacity.baggage.taken -= 1;
+        } else {
+          this.baggageService.capacity.baggage.taken += 1;
+        }
         this.baggageService.battleBeltSpace = data.battleBeltSpace;
         this.baggageService.baggageUpdated.emit(true);
       } else {
-        this.presentToast('danger', 'Could not equip hero with ' + this.item.name);
-      }
-      this.baggageItemController.dismiss();
-    });
-  }
-
-  unEquipHero(){
-    console.log('Taking off on ' + this.item.name);
-    this.baggageService.equipHero(this.item.hero_item_id, 0).subscribe(data => {
-      console.log('data: ');
-      console.log(data);
-      if (data.success === true) {
-        this.presentToast('success', 'UnEquipped ' + this.item.name + '');
-        this.item.in_use = 0;
-        this.baggageService.capacity.baggage.taken += 1;
-        this.baggageService.battleBeltSpace = data.battleBeltSpace;
-        this.baggageService.baggageUpdated.emit(true);
-      } else {
-        this.presentToast('danger', 'Could not unEquip ' + this.item.name + '');
+        const stateName = state === 1 ? 'equip hero with ' : 'unEquip ';
+        this.presentToast('danger', 'Could not ' + stateName + this.item.name);
       }
       this.baggageItemController.dismiss();
     });

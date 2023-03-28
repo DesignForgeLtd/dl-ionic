@@ -14,6 +14,7 @@ export class HeroComponent implements OnInit {
     {label: 'occupations', name: 'Occupations'},
     {label: 'active-elixirs', name: 'Active Elixirs'},
     {label: 'badges', name: 'Badges'},
+    {label: 'equipment', name: 'Equipment'},
   ];
 
   public chosenTab = 'attributes';
@@ -26,7 +27,7 @@ export class HeroComponent implements OnInit {
     this.gameUIService.openedModal.emit(null);
   }
 
-  openTab(heroTab){
+  openTab(heroTab: string){
     this.chosenTab = heroTab;
   }
 

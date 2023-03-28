@@ -1,0 +1,21 @@
+<ion-button *ngIf="message" expand="full" color="{{ error ? 'danger' : 'success' }}">{{ message }}</ion-button>
+
+<h1>Equipment</h1>
+
+<div *ngIf="isLoading" style="text-align: center;">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+
+<div *ngIf="! isLoading">
+  <div *ngFor="let item of data | keyvalue">
+    <div *ngIf="$any(item.value).in_use">
+      <h2>{{ item.key }}</h2>
+      <app-baggage-item [item]="item" [area]="'hero'"></app-baggage-item>
+    </div>
+  </div>
+
+  <div *ngIf="data">
+    <button (click)="unEquipAll()">unEquip All</button>
+  </div>
+</div>
+

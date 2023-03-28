@@ -77,6 +77,8 @@ import {
   googleOAuth,
   facebookOAuth
 } from '../environments/environment';
+import { HeroEquipmentComponent } from './game/hero/hero-equipment/hero-equipment.component';
+import { BeltItemComponent } from './game/hero/belt-item/belt-item.component';
 
 @NgModule({
   declarations: [
@@ -127,7 +129,9 @@ import {
     FindComponent,
     FightComponent,
     LevelUpHeroComponent,
-    LevelUpOccupationComponent
+    LevelUpOccupationComponent,
+    HeroEquipmentComponent,
+    BeltItemComponent
   ],
   entryComponents: [],
   imports: [
