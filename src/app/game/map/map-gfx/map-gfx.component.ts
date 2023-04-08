@@ -48,6 +48,9 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   animationFrame;
 
+  frameCounter: number;
+  previousSecond: number;
+
   @Input() playerSubject: Subject<Player>;
   player: Player;
   
@@ -78,6 +81,9 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.loadMonsters();
     this.addCanvasClickListener();
+
+    this.frameCounter = 0;
+    this.previousSecond = Math.floor(Date.now() / 1000);
 
     this.playerSubject.subscribe(v => { 
       console.log('PLAYER', v);
@@ -137,6 +143,16 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
     this.rows = this.world.rows;
     this.animationFrame = window.requestAnimationFrame(() => this.loop());
     const currentFrameTime = Date.now();
+
+    const currentSecond = Math.floor(Date.now() / 1000);
+    this.frameCounter++;
+
+    if (this.previousSecond != currentSecond)
+    {
+      //console.log("Last second ("+this.previousSecond+")frame count:" + this.frameCounter);
+      this.previousSecond = currentSecond;
+      this.frameCounter = 0;
+    }
 
     this.gfxLoop(currentFrameTime);
   }

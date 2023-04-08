@@ -50,6 +50,9 @@ export class MapComponent implements OnInit {
   serverSavedNewPosition = true;
   playerSavedPosition: number;
 
+  lastFrameRenderTime;
+  lastFrameTime;
+
   constructor(
     public http: HttpClient,
     public mapService: MapService,
@@ -65,6 +68,7 @@ export class MapComponent implements OnInit {
   ngOnInit(): void {
     console.log('Map component initialized');
 
+    this.lastFrameTime = Date.now();
     this.loadHeroEssentialData();
   }
 
@@ -72,8 +76,8 @@ export class MapComponent implements OnInit {
   loadHeroEssentialData(){
     this.mapService.loadHeroEssentialData()
     .subscribe(data => {
-      console.log('Loaded: ');
-      console.log(data);
+      // console.log('Loaded: ');
+      // console.log(data);
 
       const playerData = data.playerData;
 
@@ -136,13 +140,26 @@ export class MapComponent implements OnInit {
   }
 
   heroLoop(){
-
+    
     // if animation of the current step complete
     if (this.player.coord_x * this.scaledSize === this.player.pixel_x
       && this.player.coord_y * this.scaledSize === this.player.pixel_y)
     {
       if (this.serverSavedNewPosition === true){
-        this.tryHeroNextStep();
+        if (this.player.hero_path != null)
+        {
+          this.lastFrameRenderTime = Date.now() - this.lastFrameTime;
+          this.lastFrameTime = Date.now();
+          console.log('Last frame render time: ' + this.lastFrameRenderTime);
+
+          this.tryHeroNextStep();
+        }
+        else
+        {
+          // or make hero stand still
+          this.player.stop();
+          
+        }
       }
       else{
         console.log('Hero stuck due to serverSavedNewPosition === false');
@@ -152,24 +169,22 @@ export class MapComponent implements OnInit {
     }
     else
     {
-      this.player.animate();
+      this.player.animate(this.lastFrameRenderTime);
     }
   }
 
   tryHeroNextStep(){
-    if (this.player.hero_path != null)
-    {
+    
       // proceed with next step
       this.setServerSavedNewPositionToFalse();
       this.player.moveHeroStep();
-      this.player.animate();
+      this.player.animate(this.lastFrameRenderTime);
       this.updateHeroPosition();
-    }
-    else
-    {
-      // or make hero stand still
-      this.player.stop();
-    }
+    // }
+    // else
+    // {
+     
+    // }
   }
 
 
@@ -179,12 +194,12 @@ export class MapComponent implements OnInit {
       this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
         this.setServerSavedNewPosition();
         if (data.success === true){
-          console.log('data.strollEvent:');
-          console.log(data.strollEvent);
-          console.log('data.foundLocation:');
-          console.log(data.foundLocation);
-          console.log('data:');
-          console.log(data);
+          // console.log('data.strollEvent:');
+          // console.log(data.strollEvent);
+          // console.log('data.foundLocation:');
+          // console.log(data.foundLocation);
+          // console.log('data:');
+          // console.log(data);
           //this.handleFoundMonster(data.foundMonster);
 
           this.processMapResponse(data);
@@ -201,8 +216,8 @@ export class MapComponent implements OnInit {
   }
 
   processMapResponse(data){
-    console.log('RECEIVED FROM MAP-GFX:');
-    console.log(data);
+    // console.log('RECEIVED FROM MAP-GFX:');
+    // console.log(data);
 
     if (data.foundMonster !== null && data.foundMonster.alive === true){
       console.log('Monster is alive!!!');
@@ -313,8 +328,8 @@ export class MapComponent implements OnInit {
 
   handleFoundQuest(foundQuest: boolean){
     this.gameUIService.showQuestIcon(foundQuest);
-    console.log('found Quest is: ');
-    console.log(foundQuest);
+    // console.log('found Quest is: ');
+    // console.log(foundQuest);
   }
 
   mapLocationAction(action) {

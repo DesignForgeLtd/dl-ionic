@@ -18,6 +18,11 @@ export class Player {
 
   private heroSprite: HeroSprite;
 
+  private msToMoveOneSquare = 500;
+
+  private pixelsLeftInCurrentStepAnimation = 76;
+  private estimatedPositionChanges = 30;
+
   constructor(
     public coord_x: number, 
     public coord_y: number, 
@@ -44,12 +49,28 @@ export class Player {
     console.log('INIT: position: ' + this.position);
   };
 
-  animate() {
+  animate(lastFrameRenderTime) {
+
+    if (typeof lastFrameRenderTime == 'number'){
+      this.estimatedPositionChanges = Math.round(this.msToMoveOneSquare / lastFrameRenderTime);
+    }
 
     const x = this.coord_x * this.scaled_size;
     const y = this.coord_y * this.scaled_size;
-    const animationSpeed = 4;
+    let animationSpeed = Math.round(this.pixelsLeftInCurrentStepAnimation / this.estimatedPositionChanges);
+    if (animationSpeed == 0)
+    {
+      animationSpeed = 1;
+    }
+  //console.log("animationSpeed: "+animationSpeed);
 
+    if (animationSpeed > this.pixelsLeftInCurrentStepAnimation)
+    {
+      animationSpeed = this.pixelsLeftInCurrentStepAnimation;
+    }
+    
+    this.pixelsLeftInCurrentStepAnimation -= animationSpeed;
+  //console.log("this.pixelsLeftInCurrentStepAnimation: "+this.pixelsLeftInCurrentStepAnimation);
     /* Gradually moves the player closer to x, y every time animate() is called. */
     if (x < this.pixel_x)
     {
@@ -67,6 +88,13 @@ export class Player {
     {
       this.pixel_y += animationSpeed;
     }
+
+    if (this.pixelsLeftInCurrentStepAnimation == 0)
+    {
+      this.pixelsLeftInCurrentStepAnimation = 76;
+    }
+
+    //console.log("X,Y (pixels): " + this.pixel_x + ',' + this.pixel_y);
     //this.pixel_x += (x - this.pixel_x - scaled_size * 0.0) * 0.05;
     //this.pixel_y += (y - this.pixel_y - scaled_size * 0.4) * 0.05;
 
@@ -82,6 +110,7 @@ export class Player {
   moveHero(move_x, move_y)
 	{
     if (this.coord_x === move_x && this.coord_y === move_y){
+      this.pixelsLeftInCurrentStepAnimation = 76;
       return false;
     }
     // TODO: check if have EN, HP, KO... otherwise return with error msg
@@ -124,8 +153,7 @@ export class Player {
     else // means we got empty array in this.hero_path
     {
       this.hero_path = null;
-      // eslint-disable-next-line @typescript-eslint/quotes
-      return "I can't find a way...";
+      return 'I can\'t find a way...';
     }
 
     return true;
@@ -209,7 +237,7 @@ export class Player {
 
   go(direction){
 
-    console.log('before move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
+    //console.log('before move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     //console.log('go ' + direction);
     switch (direction)
     {
@@ -259,8 +287,8 @@ export class Player {
     }
 
     this.position = this.coord_x + this.coord_y * this.world.columns;
-    console.log('after move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
-    console.log('after move: position: ' + this.position);
+    // console.log('after move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
+    // console.log('after move: position: ' + this.position);
   }
 
   stop(){
