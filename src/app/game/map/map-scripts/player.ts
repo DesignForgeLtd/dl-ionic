@@ -21,7 +21,14 @@ export class Player {
   private msToMoveOneSquare = 500;
 
   private pixelsLeftInCurrentStepAnimation = 76;
-  private estimatedPositionChanges = 30;
+  private estimatedPositionChangesLeft = 30;
+
+  lastFrameRenderDuration;
+  lastFrameRenderTime = 0;
+  framesRenderedInStep = 0;
+  averageFrameRenderDuration;
+  totalRenderDuration = 0;
+
 
   constructor(
     public coord_x: number, 
@@ -35,8 +42,8 @@ export class Player {
     // TODO: REMOVE THIS LINE
     this.raceId = 4;
 
-    console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
-    console.log('INIT: this.raceId: ' + this.raceId);
+    // console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
+    // console.log('INIT: this.raceId: ' + this.raceId);
 
     this.heroSprite = new HeroSprite(this.raceId, scaled_size);
 
@@ -46,23 +53,40 @@ export class Player {
     this.direction = null;
     this.orientation = 'right';
     this.level = level;
-    console.log('INIT: position: ' + this.position);
+    // console.log('INIT: position: ' + this.position);
   };
 
-  animate(lastFrameRenderTime) {
+  animate() {
 
-    if (typeof lastFrameRenderTime == 'number'){
-      this.estimatedPositionChanges = Math.round(this.msToMoveOneSquare / lastFrameRenderTime);
+    if (this.lastFrameRenderTime == 0){
+      this.lastFrameRenderDuration = 15;
+    } else {
+      this.lastFrameRenderDuration = Date.now() - this.lastFrameRenderTime;
     }
+
+    this.totalRenderDuration += this.lastFrameRenderDuration;
+    this.framesRenderedInStep++;
+    this.averageFrameRenderDuration = Math.round(this.totalRenderDuration / this.framesRenderedInStep);
+
+    this.estimatedPositionChangesLeft = Math.round(
+      (this.msToMoveOneSquare  - this.totalRenderDuration) 
+      / this.averageFrameRenderDuration
+    );
+
+    this.lastFrameRenderTime = Date.now();
+    // console.log('lastFrameRenderDuration: ' + this.lastFrameRenderDuration);
+    // console.log('totalRenderDuration: ' + this.totalRenderDuration);
+    // console.log('framesRenderedInStep: ' + this.framesRenderedInStep);
+    // console.log('averageFrameRenderDuration: ' + this.averageFrameRenderDuration);
 
     const x = this.coord_x * this.scaled_size;
     const y = this.coord_y * this.scaled_size;
-    let animationSpeed = Math.round(this.pixelsLeftInCurrentStepAnimation / this.estimatedPositionChanges);
-    if (animationSpeed == 0)
-    {
-      animationSpeed = 1;
-    }
-  //console.log("animationSpeed: "+animationSpeed);
+    let animationSpeed = Math.round(this.pixelsLeftInCurrentStepAnimation / this.estimatedPositionChangesLeft);
+    // if (animationSpeed == 0)
+    // {
+    //   animationSpeed = 1;
+    // }
+  console.log("animationSpeed: "+animationSpeed);
 
     if (animationSpeed > this.pixelsLeftInCurrentStepAnimation)
     {
@@ -92,6 +116,14 @@ export class Player {
     if (this.pixelsLeftInCurrentStepAnimation == 0)
     {
       this.pixelsLeftInCurrentStepAnimation = 76;
+      this.lastFrameRenderTime = 0;
+      this.totalRenderDuration = 0;
+      this.framesRenderedInStep = 0;
+
+      // console.log('lastFrameRenderDuration: ' + this.lastFrameRenderDuration);
+      // console.log('totalRenderDuration: ' + this.totalRenderDuration);
+      // console.log('framesRenderedInStep: ' + this.framesRenderedInStep);
+      // console.log('averageFrameRenderDuration: ' + this.averageFrameRenderDuration);
     }
 
     //console.log("X,Y (pixels): " + this.pixel_x + ',' + this.pixel_y);
@@ -111,17 +143,29 @@ export class Player {
 	{
     if (this.coord_x === move_x && this.coord_y === move_y){
       this.pixelsLeftInCurrentStepAnimation = 76;
+      this.lastFrameRenderTime = 0;
+      this.totalRenderDuration = 0;
+      this.framesRenderedInStep = 0;
       return false;
     }
+
+    // disable changing direction before reaching current target destination
+    if (this.hero_path !== null)
+		{
+      //return false; // it was here to fix a bug, but seems it's gone now. we can probably remove it
+    }
+
     // TODO: check if have EN, HP, KO... otherwise return with error msg
 
-    // TODO: add "queued-up" move (change destination before reaching current; after current step; (2) in flow chart)
+    // TODO: add "queued-up" move (change destination before reaching current; after current step; (2) in flow chart) -- already added ???
 
-		let currentStep = false;//TODO: what's this logic?
-    if (this.hero_path !== null)//TODO: what's this logic?
+    //TODO: what's this logic?
+		let currentStep = false;
+    if (this.hero_path !== null)
 		{
-      currentStep = this.hero_path[this.hero_path_step]; //TODO: what's this logic?
+      currentStep = this.hero_path[this.hero_path_step];
     }
+    //TODO: end
 
     console.log(
       'Going from ('+ this.coord_x+', '+ this.coord_y + ')='+(this.coord_x + this.coord_y * this.world.columns)
@@ -170,6 +214,11 @@ export class Player {
   clearMovementParams(){
     this.hero_path_step = 0;
     this.hero_path = null;
+
+    this.pixelsLeftInCurrentStepAnimation = 76;
+    this.lastFrameRenderTime = 0;
+    this.totalRenderDuration = 0;
+    this.framesRenderedInStep = 0;
   }
 
   revertHeroLastStep(){
@@ -187,6 +236,22 @@ export class Player {
 			case 'up':
 				this.coord_y++;
 				break;
+      case 'top-left':
+        this.coord_x++;
+        this.coord_y++;
+        break;
+      case 'bottom-left':
+        this.coord_x++;
+        this.coord_y--;
+        break;
+      case 'top-right':
+        this.coord_x--;
+        this.coord_y++;
+        break;
+      case 'bottom-right':
+        this.coord_x--;
+        this.coord_y--;
+        break;
 		}
 
     this.position = this.coord_x + this.coord_y * this.world.columns;
@@ -244,47 +309,61 @@ export class Player {
       case 'up':
         this.coord_y--;
         this.direction='up';
+        this.msToMoveOneSquare = 500;
         break;
       case 'down':
         this.coord_y++;
         this.direction='down';
+        this.msToMoveOneSquare = 500;
         break;
       case 'right':
         this.coord_x++;
         this.direction='right';
         this.setOrientation('right');
+        this.msToMoveOneSquare = 500;
         break;
       case 'left':
         this.coord_x--;
         this.direction='left';
         this.setOrientation('left');
+        this.msToMoveOneSquare = 500;
         break;
       case 'top-left':
         this.coord_x--;
         this.coord_y--;
+        // this.direction='top-left';
         this.direction='left';
         this.setOrientation('left');
+        this.msToMoveOneSquare = 700;
         break;
       case 'bottom-left':
         this.coord_x--;
         this.coord_y++;
+        // this.direction='bottom-left';
         this.direction='left';
         this.setOrientation('left');
+        this.msToMoveOneSquare = 700;
         break;
       case 'top-right':
         this.coord_x++;
         this.coord_y--;
+        // this.direction='top-right';
         this.direction='right';
         this.setOrientation('right');
+        this.msToMoveOneSquare = 700;
         break;
       case 'bottom-right':
         this.coord_x++;
         this.coord_y++;
+        // this.direction='bottom-right';
         this.direction='right';
         this.setOrientation('right');
+        this.msToMoveOneSquare = 700;
         break;
               
     }
+
+   // this.direction = direction; // TODO: remove 8x from switch above
 
     this.position = this.coord_x + this.coord_y * this.world.columns;
     // console.log('after move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);

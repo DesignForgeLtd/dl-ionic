@@ -173,8 +173,9 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
     /* Draw the this.player. Remember to offset by the viewport position and
        center screen position. (???) */
     this.drawHero(currentFrameTime);    
-
+    //console.log('map-gfx: ' + Date.now());
     this.runHeroLoop.emit(true);
+    
   //   // console.log('this.player.pixel_x, this.player.pixel_y: ' + this.player.pixel_x, this.player.pixel_y);
    
      this.infolocationUpdate();

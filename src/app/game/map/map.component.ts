@@ -131,16 +131,16 @@ export class MapComponent implements OnInit {
 
   setServerSavedNewPosition(){
     this.serverSavedNewPosition = true;
-    //console.log('this.serverSavedNewPosition = true;');
+    console.log('this.serverSavedNewPosition = true;');
   }
 
   setServerSavedNewPositionToFalse(){
     this.serverSavedNewPosition = false;
-    //console.log('this.serverSavedNewPosition = false;');
+    console.log('this.serverSavedNewPosition = false;');
   }
 
   heroLoop(){
-    
+    //console.log('map: ' + Date.now());
     // if animation of the current step complete
     if (this.player.coord_x * this.scaledSize === this.player.pixel_x
       && this.player.coord_y * this.scaledSize === this.player.pixel_y)
@@ -169,7 +169,7 @@ export class MapComponent implements OnInit {
     }
     else
     {
-      this.player.animate(this.lastFrameRenderTime);
+      this.player.animate();
     }
   }
 
@@ -178,7 +178,8 @@ export class MapComponent implements OnInit {
       // proceed with next step
       this.setServerSavedNewPositionToFalse();
       this.player.moveHeroStep();
-      this.player.animate(this.lastFrameRenderTime);
+      //this.player.animate(this.lastFrameRenderTime);
+      this.player.animate();
       this.updateHeroPosition();
     // }
     // else

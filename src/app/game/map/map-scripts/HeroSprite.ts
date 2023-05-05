@@ -28,7 +28,7 @@ export class HeroSprite {
   ) {
     
    // console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
-    console.log('INIT HeroSprite: this.raceId: ' + this.raceId);
+    // console.log('INIT HeroSprite: this.raceId: ' + this.raceId);
 
     this.heroImage = new Image();
 
@@ -132,9 +132,13 @@ export class HeroSprite {
         }
         break;
       case 'right':
+      case 'top-right':
+      case 'bottom-right':
         sheetOffsetY = this.heroSSWalkingRightRow * this.sizeY;
         break;
       case 'left':
+      case 'top-left':
+      case 'bottom-left':
         sheetOffsetY = this.heroSSWalkingLeftRow * this.sizeY; // 1 * this.sizeX;
         sheetOffsetX = (this.heroSSFrameTotalCount - 1 - currentFrame) * this.sizeX;
         break;
