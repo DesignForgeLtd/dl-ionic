@@ -14,7 +14,7 @@ export class ProductionLineComponent implements OnInit {
 
   constructor(
     private gameUIService: GameUIService,
-    private productionService: ProductionService,
+    private productionService: ProductionService
     ) { }
 
   ngOnInit() {

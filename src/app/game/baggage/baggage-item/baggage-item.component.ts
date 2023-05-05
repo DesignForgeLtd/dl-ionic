@@ -16,10 +16,15 @@ export class BaggageItemComponent implements OnInit {
 
   @Output() loadListOfItems = new EventEmitter<number>();
 
+  itemImgSrc = 'items';
+
   constructor(public baggageItemController: PopoverController) { }
 
   ngOnInit() {
     this.item = this.item.value;
+    if( this.item.weapon ) {
+      this.itemImgSrc = 'uzbrojenie';
+    }
     console.log(this.item);
   }
 
