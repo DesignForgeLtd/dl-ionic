@@ -82,10 +82,10 @@ export class Player {
     const x = this.coord_x * this.scaled_size;
     const y = this.coord_y * this.scaled_size;
     let animationSpeed = Math.round(this.pixelsLeftInCurrentStepAnimation / this.estimatedPositionChangesLeft);
-    // if (animationSpeed == 0)
-    // {
-    //   animationSpeed = 1;
-    // }
+    if (animationSpeed <= 0)
+    {
+      animationSpeed = 1;
+    }
   console.log("animationSpeed: "+animationSpeed);
 
     if (animationSpeed > this.pixelsLeftInCurrentStepAnimation)
@@ -331,32 +331,32 @@ export class Player {
       case 'top-left':
         this.coord_x--;
         this.coord_y--;
-        // this.direction='top-left';
-        this.direction='left';
+        this.direction='top-left';
+        //this.direction='left';
         this.setOrientation('left');
         this.msToMoveOneSquare = 700;
         break;
       case 'bottom-left':
         this.coord_x--;
         this.coord_y++;
-        // this.direction='bottom-left';
-        this.direction='left';
+        this.direction='bottom-left';
+        //this.direction='left';
         this.setOrientation('left');
         this.msToMoveOneSquare = 700;
         break;
       case 'top-right':
         this.coord_x++;
         this.coord_y--;
-        // this.direction='top-right';
-        this.direction='right';
+        this.direction='top-right';
+        //this.direction='right';
         this.setOrientation('right');
         this.msToMoveOneSquare = 700;
         break;
       case 'bottom-right':
         this.coord_x++;
         this.coord_y++;
-        // this.direction='bottom-right';
-        this.direction='right';
+        this.direction='bottom-right';
+        //this.direction='right';
         this.setOrientation('right');
         this.msToMoveOneSquare = 700;
         break;
@@ -375,6 +375,8 @@ export class Player {
     {
       this.direction=null;
       //console.log('stop');
+
+      this.clearMovementParams();
     }
   }
 

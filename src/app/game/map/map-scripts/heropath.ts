@@ -104,17 +104,17 @@ export class HeroPath
 				{
 					this.addNeighbourIfValid(-1 * this.world.columns + 1, true);
 				}
-				if (x !== this.min_x && y !== this.min_y, true) // North-West
+				if (x !== this.min_x && y !== this.min_y) // North-West
 				{
-					this.addNeighbourIfValid(-1 * this.world.columns - 1);
+					this.addNeighbourIfValid(-1 * this.world.columns - 1, true);
 				}
-				if (x !== this.max_x && y !== this.max_y, true) // South-East
+				if (x !== this.max_x && y !== this.max_y) // South-East
 				{
-					this.addNeighbourIfValid(this.world.columns + 1);
+					this.addNeighbourIfValid(this.world.columns + 1, true);
 				}
-				if (x !== this.min_x && y !== this.max_y, true) // South-West
+				if (x !== this.min_x && y !== this.max_y) // South-West
 				{
-					this.addNeighbourIfValid(this.world.columns - 1);
+					this.addNeighbourIfValid(this.world.columns - 1, true);
 				}												
 				if (x !== this.max_x) // East
 				{
