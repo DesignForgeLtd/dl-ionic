@@ -2,6 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
+import { World } from './map-scripts/world';
 
 import { 
   PlayerData, 
@@ -13,7 +14,10 @@ import {
 
 @Injectable({providedIn: 'root'})
 export class MapService {
-  constructor(private http: HttpClient){}
+  constructor(
+    private http: HttpClient,
+    private world: World
+  ){}
 
   loadHeroEssentialData(){
     // eslint-disable-next-line max-len
@@ -27,6 +31,17 @@ export class MapService {
       AppSettings.API_ENDPOINT + '/hero/getEssentialData',
       {responseType: 'json'}
     );
+  }
+
+  loadGameMap(level: number, originalPosition: number = null) {
+    this.http.get(
+      'assets/detailedMap' + (level + 1) + '.txt',
+      { responseType: 'text' }
+    )
+      .subscribe(data => {
+        this.world.populateMap(data);
+        console.log('MAP LOADED');
+      });
   }
 
   loadMonstersData(){

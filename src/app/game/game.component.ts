@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { GameUIService } from './game-ui.service';
+import { Player } from './map/map-scripts/player';
 import { World } from './map/map-scripts/world';
 import { MapService } from './map/map.service';
 
@@ -38,7 +39,8 @@ export class GameComponent implements OnInit {
     public http: HttpClient,
     private mapService: MapService,
     private gameUIService: GameUIService,
-    private world: World
+    protected world: World,
+    protected player: Player
   ) {
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
@@ -84,7 +86,13 @@ export class GameComponent implements OnInit {
     });
   }
 
-  handleFoundLocation(foundLocation, foundMonster = null) {
+  handleFoundLocation(data) {
+    let foundLocation = data.foundLocation; 
+    let foundMonster =  data.foundMonster;
+    console.log("data: ");
+    console.log( data);
+    console.log("foundLocation: ");
+    console.log( foundLocation);
     if (foundLocation !== null) {
       switch (foundLocation.type) {
         case 1:
@@ -162,7 +170,7 @@ export class GameComponent implements OnInit {
 
   mapLocationAction(action) {
 
-    console.log('mapLocationAction in MapComponent:');
+    console.log('mapLocationAction in GameComponent:');
     console.log(action);
 
     switch (action.name) {
@@ -190,12 +198,14 @@ export class GameComponent implements OnInit {
       if (data.success === true) {
         console.log(data);
         this.gameUIService.heroInfoInitialize(data.playerData);
-        // this.player.level = data.playerData.level; // TODO: FIX
-        // this.world.setLevel(this.player.level); // TODO: FIX
-        // TODO: uncomment / call from MapGfx
-        this.loadGameMap(data.playerData.level);
+        this.player.level = data.playerData.level; // TODO: FIX
+        this.world.setLevel(this.player.level); // TODO: FIX
+        this.mapService.loadGameMap(data.playerData.level, data.playerData.position);
 
-        this.handleFoundLocation(data.foundLocation);
+        this.handleFoundLocation({
+          'foundLocation': data.foundLocation,
+          'foundMonster': data.foundMonster
+        });
       }
       else {
         this.gameUIService.showError(data.errorMessage);
@@ -222,8 +232,7 @@ export class GameComponent implements OnInit {
       if (data.success === true) {
         console.log(data);
         this.gameUIService.heroInfoInitialize(data.playerData);
-        // TODO: uncomment / call from MapGfx
-        //this.loadGameMap(data.playerData.level); // TODO: check if can be removed
+        //this.mapService.loadGameMap(data.playerData.level); // TODO: check if can be removed
         this.gameUIService.changeHeroOccupation('journey');
       }
       else {
@@ -246,14 +255,4 @@ export class GameComponent implements OnInit {
     });
   }
 
-  loadGameMap(level: number, originalPosition: number = null) {
-    this.http.get(
-      'assets/detailedMap' + (level + 1) + '.txt',
-      { responseType: 'text' }
-    )
-      .subscribe(data => {
-        this.world.populateMap(data);
-        console.log('MAP LOADED');
-      });
-  }
 }

@@ -47,7 +47,6 @@ export class MapGfxComponent implements OnInit, OnDestroy {
     private player: Player
   ) {
     this.tileSheet = new Image();
-
   }
 
   ngOnInit() {

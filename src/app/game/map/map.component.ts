@@ -114,8 +114,6 @@ export class MapComponent implements OnInit {
       .subscribe(data => {
 
         const playerData = data.playerData;
-        //this.world = new World(playerData.level, this.columns, this.rows);
-        //this.world = new World();
 
         const originalPosition = playerData.position;
         if (playerData.occupied_with === 'mining') {
@@ -140,32 +138,20 @@ export class MapComponent implements OnInit {
           this.scaledSize
         );
 
-        this.loadGameMap(this.player.level, this.player.position);
-
+        this.mapService.loadGameMap(this.player.level, this.player.position);
 
         this.gameUIService.heroInfoInitialize(playerData);
 
-        //this.handleFoundLocation(data.foundLocation, data.foundMonster);
-        this.foundLocation.emit(data.foundLocation);
+        this.foundLocation.emit({
+          'foundLocation': data.foundLocation,
+          'foundMonster': data.foundMonster
+        });
         
         this.handleFoundQuest(data.foundQuest);
 
         this.animationFrame = window.requestAnimationFrame(() => this.loop());
       });
   }
-
-  // TODO: remove duplication / make World a singleton
-  loadGameMap(level: number, originalPosition: number = null) {
-    this.http.get(
-      'assets/detailedMap' + (level + 1) + '.txt',
-      { responseType: 'text' }
-    )
-      .subscribe(data => {
-        this.world.populateMap(data);
-        console.log('MAP LOADED');
-      });
-  }
-
 
   setServerSavedNewPosition() {
     this.serverSavedNewPosition = true;
@@ -243,8 +229,11 @@ export class MapComponent implements OnInit {
       this.player.incrementHeroStep();
     }
 
-    //this.handleFoundLocation(data.foundLocation, data.foundMonster);
-    this.foundLocation.emit(data.foundLocation);
+    this.foundLocation.emit({
+      'foundLocation': data.foundLocation,
+      'foundMonster': data.foundMonster
+    });
+
     this.handleFoundQuest(data.foundQuest);
 
     if (data.strollEvent !== null) {
@@ -268,7 +257,6 @@ export class MapComponent implements OnInit {
       }
     }
   }
-
 
   handleFoundQuest(foundQuest: boolean) {
     this.gameUIService.showQuestIcon(foundQuest);
