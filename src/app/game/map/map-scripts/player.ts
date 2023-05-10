@@ -3,6 +3,9 @@
 import { HeroPath } from './heropath';
 import { HeroSprite } from './HeroSprite';
 import { World } from './world';
+import { Injectable } from "@angular/core";
+
+@Injectable({providedIn: 'root'})
 
 export class Player {
   
@@ -29,17 +32,31 @@ export class Player {
   averageFrameRenderDuration;
   totalRenderDuration = 0;
 
-  //private world: World;
+  public coord_x: number;
+  public coord_y: number; 
+  public level: number;
+  public raceId: number; 
+  public scaled_size: number;
 
-  constructor(
-    public coord_x: number, 
-    public coord_y: number, 
-    public level: number, 
-    public raceId: number, 
-    private world: World,
-    public scaled_size: number
-  ) {
-    
+  constructor(private world: World) {
+    this.direction = null;
+    this.orientation = 'right';
+  };
+
+  setPlayerData(
+    coord_x: number, 
+    coord_y: number, 
+    level: number, 
+    raceId: number, 
+    scaled_size: number
+  )
+  {
+    this.coord_x = coord_x; 
+    this.coord_y = coord_y;
+    this.level = level;
+    this.raceId = raceId; 
+    this.scaled_size = scaled_size;
+
     // TODO: REMOVE THIS LINE
     this.raceId = 4;
 
@@ -51,11 +68,7 @@ export class Player {
     this.pixel_x = this.coord_x * this.scaled_size; // pixels
     this.pixel_y = this.coord_y * this.scaled_size;
     this.position = this.coord_x + this.coord_y * this.world.columns;
-    this.direction = null;
-    this.orientation = 'right';
-    this.level = level;
-    // console.log('INIT: position: ' + this.position);
-  };
+  }
 
   animate() {
 

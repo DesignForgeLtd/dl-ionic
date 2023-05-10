@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Component, ViewChild, OnInit, Output, EventEmitter } from '@angular/core';
 
 import { Player } from './map-scripts/player';
 import { World } from './map-scripts/world';
@@ -24,8 +23,6 @@ export class MapComponent implements OnInit {
   @Output() foundLocation : EventEmitter<any> = new EventEmitter();
   @ViewChild(MapGfxComponent, {static : true}) mapGfx : MapGfxComponent;
 
-  playerSubject: Subject<Player> = new Subject();
-
   //TODO: see which properties can be deleted
   scaledSize = 76;
   spriteSize = 76;
@@ -40,7 +37,7 @@ export class MapComponent implements OnInit {
   monsters: any;
 
 
-  player: Player;
+  // player: Player;
   otherHero: Hero;
 
   openedModal = null;
@@ -67,7 +64,8 @@ export class MapComponent implements OnInit {
     public http: HttpClient,
     public mapService: MapService,
     public gameUIService: GameUIService,
-    protected world: World
+    protected world: World,
+    protected player: Player
   ) {
     this.heroImage = new Image();
 
@@ -104,6 +102,7 @@ export class MapComponent implements OnInit {
       this.frameCounter = 0;
     }
 
+    this.heroLoop();
     this.mapGfx.gfxLoop(currentFrameTime);
   }
 
@@ -125,21 +124,21 @@ export class MapComponent implements OnInit {
           playerData.position = playerData.positionInMine;
         }
 
-        this.player = new Player(
+        //this.player = new Player(
+        this.player.setPlayerData(
           playerData.position % this.columns,
           Math.floor(playerData.position / this.columns),
           playerData.level,
           playerData.race_id,
-          this.world,
           this.scaledSize
         );
 
-        this.otherHero = new Hero(
+        this.otherHero = new Hero();
+        this.otherHero.setPlayerData(
           playerData.position % this.columns + 2,
           Math.floor(playerData.position / this.columns),
           playerData.level,
           playerData.race_id,
-          this.world,
           this.scaledSize
         );
 
@@ -147,8 +146,6 @@ export class MapComponent implements OnInit {
 
 
         this.heroInfoUpdate(playerData);
-
-        this.playerSubject.next(this.player);
 
         //this.handleFoundLocation(data.foundLocation, data.foundMonster);
         this.foundLocation.emit(data.foundLocation);

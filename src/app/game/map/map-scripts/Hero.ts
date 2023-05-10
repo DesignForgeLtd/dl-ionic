@@ -29,18 +29,32 @@ export class Hero {
   averageFrameRenderDuration;
   totalRenderDuration = 0;
 
+  world_columns = 200;
 
-  constructor(
-    public coord_x: number, 
-    public coord_y: number, 
-    public level: number, 
-    public raceId: number, 
-    private world: World,
-    public scaled_size: number
-  ) {
-    
-    // TODO: REMOVE THIS LINE
-    this.raceId = 2;
+  public coord_x: number;
+  public coord_y: number; 
+  public level: number;
+  public raceId: number; 
+  public scaled_size: number;
+
+  constructor() {
+    this.direction = null;
+    this.orientation = 'right';
+  };
+
+  setPlayerData(
+    coord_x: number, 
+    coord_y: number, 
+    level: number, 
+    raceId: number, 
+    scaled_size: number
+  )
+  {
+    this.coord_x = coord_x; 
+    this.coord_y = coord_y;
+    this.level = level;
+    this.raceId = raceId; 
+    this.scaled_size = scaled_size;
 
     // console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     // console.log('INIT: this.raceId: ' + this.raceId);
@@ -49,12 +63,8 @@ export class Hero {
 
     this.pixel_x = this.coord_x * this.scaled_size; // pixels
     this.pixel_y = this.coord_y * this.scaled_size;
-    this.position = this.coord_x + this.coord_y * this.world.columns;
-    this.direction = null;
-    this.orientation = 'right';
-    this.level = level;
-    // console.log('INIT: position: ' + this.position);
-  };
+    this.position = this.coord_x + this.coord_y * this.world_columns;
+  }
 
   animate() {
 
@@ -139,70 +149,6 @@ export class Hero {
     this.pixel_y = this.coord_y * this.scaled_size;
   }
 
-  moveHero(move_x, move_y)
-	{
-    if (this.coord_x === move_x && this.coord_y === move_y){
-      this.pixelsLeftInCurrentStepAnimation = 76;
-      this.lastFrameRenderTime = 0;
-      this.totalRenderDuration = 0;
-      this.framesRenderedInStep = 0;
-      return false;
-    }
-
-    // disable changing direction before reaching current target destination
-    if (this.hero_path !== null)
-		{
-      //return false; // it was here to fix a bug, but seems it's gone now. we can probably remove it
-    }
-
-    // TODO: check if have EN, HP, KO... otherwise return with error msg
-
-    // TODO: add "queued-up" move (change destination before reaching current; after current step; (2) in flow chart) -- already added ???
-
-    //TODO: what's this logic?
-		let currentStep = false;
-    if (this.hero_path !== null)
-		{
-      currentStep = this.hero_path[this.hero_path_step];
-    }
-    //TODO: end
-
-    console.log(
-      'Going from ('+ this.coord_x+', '+ this.coord_y + ')='+(this.coord_x + this.coord_y * this.world.columns)
-      +' to ('+ move_x+', '+ move_y + ')='+(move_x + move_y *this.world.columns)+'');
-
-    const destination = move_x + move_y*this.world.columns;
-
-    const positionAccessible = this.world.positionAccessible(destination);
-    if (positionAccessible !== true)
-    {
-      // eslint-disable-next-line @typescript-eslint/quotes
-      return "You can't walk into " + positionAccessible;
-    }
-
-    const pathfinder = new HeroPath(this.world, this.coord_x, this.coord_y, move_x, move_y);
-    this.hero_path = pathfinder.findSteps();
-
-    let hero_path_string = '';
-    this.hero_path_step = 0;
-
-    if (this.hero_path.length > 0)
-    {
-      for (const hero_step of this.hero_path)
-      {
-        hero_path_string += hero_step + ';';
-      }
-      console.log('Path to reach this destination is: '+hero_path_string);
-    }
-    else // means we got empty array in this.hero_path
-    {
-      this.hero_path = null;
-      return 'I can\'t find a way...';
-    }
-
-    return true;
-	}
-
   incrementHeroStep(){
     this.hero_path_step++;
 
@@ -254,7 +200,7 @@ export class Hero {
         break;
 		}
 
-    this.position = this.coord_x + this.coord_y * this.world.columns;
+    this.position = this.coord_x + this.coord_y * this.world_columns;
 
     this.clearMovementParams();
   }
@@ -264,9 +210,6 @@ export class Hero {
       return;
     }
 
-    // console.log('this.world.rows: '+this.world.rows);
-    // console.log('this.world.columns: '+this.world.columns);
-		
     switch(this.hero_path[this.hero_path_step])
 		{
 			case 1:
@@ -275,22 +218,22 @@ export class Hero {
 			case -1:
 				this.go('left');
 				break;
-			case this.world.columns:
+			case this.world_columns:
 				this.go('down');
 				break;
-			case -1 * this.world.columns:
+			case -1 * this.world_columns:
 				this.go('up');
 				break;
-      case this.world.columns - 1:
+      case this.world_columns - 1:
         this.go('bottom-left');
         break;
-			case -1 * this.world.columns - 1:
+			case -1 * this.world_columns - 1:
 				this.go('top-left');
 				break;
-			case -1 * this.world.columns + 1:
+			case -1 * this.world_columns + 1:
 				this.go('top-right');
 				break;
-			case this.world.columns + 1:
+			case this.world_columns + 1:
 				this.go('bottom-right');
 				break;
 		}
@@ -365,7 +308,7 @@ export class Hero {
 
    // this.direction = direction; // TODO: remove 8x from switch above
 
-    this.position = this.coord_x + this.coord_y * this.world.columns;
+    this.position = this.coord_x + this.coord_y * this.world_columns;
     // console.log('after move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     // console.log('after move: position: ' + this.position);
   }

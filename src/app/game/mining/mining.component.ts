@@ -8,6 +8,7 @@ import { MapComponent } from '../map/map.component';
 import { MiningService } from './mining.service';
 import { MapService } from '../map/map.service';
 import { World } from '../map/map-scripts/world';
+import { Player } from '../map/map-scripts/player';
 
 
 @Component({
@@ -30,9 +31,10 @@ export class MiningComponent extends MapComponent implements OnInit {
     public mapService: MapService,
     public miningService: MiningService,
     public gameUIService: GameUIService,
-    protected world: World
+    protected world: World,
+    protected player: Player
   ) {
-    super(http, mapService, gameUIService, world);
+    super(http, mapService, gameUIService, world, player);
   }
 
   loadGameMap(level: number, originalPosition: number){

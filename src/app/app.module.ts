@@ -80,6 +80,7 @@ import {
 import { HeroEquipmentComponent } from './game/hero/hero-equipment/hero-equipment.component';
 import { BeltItemComponent } from './game/hero/belt-item/belt-item.component';
 import { World } from './game/map/map-scripts/world';
+import { Player } from './game/map/map-scripts/player';
 
 @NgModule({
   declarations: [
@@ -175,7 +176,8 @@ import { World } from './game/map/map-scripts/world';
             }
         } as SocialAuthServiceConfig,
     },
-    World
+    World,
+    Player
   ],
   bootstrap: [AppComponent],
 })

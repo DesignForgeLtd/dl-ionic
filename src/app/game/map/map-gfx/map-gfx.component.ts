@@ -1,6 +1,5 @@
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Input, EventEmitter, Output, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
 
 import { MapService } from '../map.service';
 import { GameUIService } from '../../game-ui.service';
@@ -16,7 +15,7 @@ import { MapResponseData } from 'src/app/game/shared/map-service.interfaces';
   templateUrl: './map-gfx.component.html',
   styleUrls: ['./map-gfx.component.scss']
 })
-export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
+export class MapGfxComponent implements OnInit, OnDestroy {
 
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
@@ -24,9 +23,7 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
   tileSheet: HTMLImageElement;
   viewport: Viewport;
 
-
   monsters: any;
-
 
   scaledSize = 76;
   spriteSize = 76;
@@ -41,21 +38,17 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
   
   height: number;
   width: number;
-
-
-  @Input() playerSubject: Subject<Player>;
-  player: Player;
   
   constructor(
     public http: HttpClient,
     public mapService: MapService,
     public gameUIService: GameUIService,
-    protected world: World
+    private world: World,
+    private player: Player
   ) {
     this.tileSheet = new Image();
 
   }
-
 
   ngOnInit() {
     this.context = this.canvas.nativeElement.getContext('2d');
@@ -64,27 +57,16 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
     this.height = document.documentElement.clientHeight;
     this.width  = document.documentElement.clientWidth;
 
-
-    //this.tileSheet.addEventListener('load', (event) => { this.loop(); });
-
     //let viewport = new Viewport(0, 0, (gamemap_size_x*spriteSize), (gamemap_size_y*spriteSize));
     this.viewport = new Viewport(0, 0, this.width, this.height);
     
     this.tileSheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
 
     this.loadMonsters();
-   
-    this.playerSubject.subscribe(v => { 
-      console.log('PLAYER', v);
-      this.player = v;
-    });
 
     this.addCanvasClickListener();
   }  
-  
-  ngAfterViewInit() {
 
-  }
   
   ngOnDestroy(): void {
     console.log('MapGfx component destroyed');
@@ -116,7 +98,7 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
         Math.floor(this.pointer.x / this.scaledSize),
         Math.floor(this.pointer.y / this.scaledSize)
       );
-      //console.log('result', result);
+
       if (result !== true && result !== false)
       {
         this.gameUIService.showError(result);
@@ -149,17 +131,6 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
    
      this.infolocationUpdate();
   }
-
-
-  // handleFoundMonster(foundMonster){
-  //   if (foundMonster === null) {
-  //     return;
-  //   }
-
-  //   if (foundMonster.alive){
-  //     console.log('MONSTER ZYJE!!!');
-  //   }
-  // }
 
 
   infolocationUpdate(){
