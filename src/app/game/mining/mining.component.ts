@@ -101,7 +101,7 @@ export class MiningComponent extends MapComponent implements OnInit {
         this.player.stop();
       }
 
-      this.heroInfoUpdate(data.playerData);
+      this.gameUIService.heroInfoInitialize(data.playerData);
     });
   }
 

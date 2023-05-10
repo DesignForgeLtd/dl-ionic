@@ -189,7 +189,7 @@ export class GameComponent implements OnInit {
     this.mapService.useUndergroundPassage(direction).subscribe(data => {
       if (data.success === true) {
         console.log(data);
-        this.heroInfoUpdate(data.playerData);
+        this.gameUIService.heroInfoInitialize(data.playerData);
         // this.player.level = data.playerData.level; // TODO: FIX
         // this.world.setLevel(this.player.level); // TODO: FIX
         // TODO: uncomment / call from MapGfx
@@ -221,7 +221,7 @@ export class GameComponent implements OnInit {
     this.mapService.usePortConnection(portConnection).subscribe(data => {
       if (data.success === true) {
         console.log(data);
-        this.heroInfoUpdate(data.playerData);
+        this.gameUIService.heroInfoInitialize(data.playerData);
         // TODO: uncomment / call from MapGfx
         //this.loadGameMap(data.playerData.level); // TODO: check if can be removed
         this.gameUIService.changeHeroOccupation('journey');
@@ -237,19 +237,13 @@ export class GameComponent implements OnInit {
       if (data.success === true) {
         console.log('MINING STARTED');
         console.log(data);
-        this.heroInfoUpdate(data.playerData);
+        this.gameUIService.heroInfoInitialize(data.playerData);
         this.gameUIService.changeHeroOccupation('mining');
       }
       else {
         this.gameUIService.showError(data.errorMessage);
       }
     });
-  }
-
-
-  // TODO: remove this method / replace with gameUI call directly
-  heroInfoUpdate(heroInfo) {
-    this.gameUIService.heroInfoInitialize(heroInfo);
   }
 
   loadGameMap(level: number, originalPosition: number = null) {

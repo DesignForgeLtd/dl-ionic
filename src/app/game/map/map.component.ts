@@ -82,8 +82,6 @@ export class MapComponent implements OnInit {
 
     this.frameCounter = 0;
     this.previousSecond = Math.floor(Date.now() / 1000);
-
-    
   }
 
   loop() {// The game loop
@@ -145,7 +143,7 @@ export class MapComponent implements OnInit {
         this.loadGameMap(this.player.level, this.player.position);
 
 
-        this.heroInfoUpdate(playerData);
+        this.gameUIService.heroInfoInitialize(playerData);
 
         //this.handleFoundLocation(data.foundLocation, data.foundMonster);
         this.foundLocation.emit(data.foundLocation);
@@ -218,11 +216,6 @@ export class MapComponent implements OnInit {
     this.updateHeroPosition();
   }
 
-  // TODO: remove this method / replace with gameUI call directly
-  heroInfoUpdate(heroInfo) {
-    this.gameUIService.heroInfoInitialize(heroInfo);
-  }
-
   updateHeroPosition() {
     // send info about player's new coords to the server
     this.playerSavedPosition = this.player.position;
@@ -238,7 +231,7 @@ export class MapComponent implements OnInit {
         this.player.stop();
       }
 
-      this.heroInfoUpdate(data.playerData);
+      this.gameUIService.heroInfoInitialize(data.playerData);
     });
   }
 
