@@ -21,7 +21,6 @@ import { MapGfxComponent } from './map-gfx/map-gfx.component';
 })
 export class MapComponent implements OnInit {
 
-  @Input() world: World;
   @Output() foundLocation : EventEmitter<any> = new EventEmitter();
   @ViewChild(MapGfxComponent, {static : true}) mapGfx : MapGfxComponent;
 
@@ -67,7 +66,8 @@ export class MapComponent implements OnInit {
   constructor(
     public http: HttpClient,
     public mapService: MapService,
-    public gameUIService: GameUIService
+    public gameUIService: GameUIService,
+    protected world: World
   ) {
     this.heroImage = new Image();
 

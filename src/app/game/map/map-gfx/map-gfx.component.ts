@@ -18,8 +18,6 @@ import { MapResponseData } from 'src/app/game/shared/map-service.interfaces';
 })
 export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @Input() world: World;
-
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
   context: CanvasRenderingContext2D;
@@ -51,7 +49,8 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public http: HttpClient,
     public mapService: MapService,
-    public gameUIService: GameUIService    
+    public gameUIService: GameUIService,
+    protected world: World
   ) {
     this.tileSheet = new Image();
 

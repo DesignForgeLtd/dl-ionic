@@ -2,7 +2,6 @@
 <app-map 
     *ngIf="playerDataOccupiedWith === ''"
     (foundLocation) = "handleFoundLocation($event)"
-    [world]="world"
 ></app-map>
 
 <app-mining *ngIf="playerDataOccupiedWith === 'mining'"></app-mining>
