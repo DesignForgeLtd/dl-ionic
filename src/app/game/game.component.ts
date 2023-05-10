@@ -32,12 +32,13 @@ export class GameComponent implements OnInit {
 
   locationData = null;
   monsterData = null;
-  world: World;
+  
 
   constructor(
     public http: HttpClient,
     private mapService: MapService,
-    private gameUIService: GameUIService
+    private gameUIService: GameUIService,
+    private world: World
   ) {
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
@@ -78,7 +79,7 @@ export class GameComponent implements OnInit {
       console.log(data);
 
       const playerData = data.playerData;
-      this.world = new World(playerData.level, 200, 200);
+      //this.world = new World(playerData.level, 200, 200);
      
     });
   }

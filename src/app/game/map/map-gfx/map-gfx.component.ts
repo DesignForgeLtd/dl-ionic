@@ -14,13 +14,11 @@ import { MapResponseData } from 'src/app/game/shared/map-service.interfaces';
 @Component({
   selector: 'app-map-gfx',
   templateUrl: './map-gfx.component.html',
-  styleUrls: ['./map-gfx.component.scss'],
+  styleUrls: ['./map-gfx.component.scss']
 })
 export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() world: World;
-
-  @Output() runHeroLoop : EventEmitter<boolean> = new EventEmitter();
 
   @ViewChild('canvas', { static: true })
   canvas: ElementRef<HTMLCanvasElement>;
@@ -38,18 +36,14 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
   playerSize = 32;
   playerScaledSize = 32;
 
-  columns: number;// columns and rows in map below
-  rows: number;
+  columns: number = 200;// columns and rows in map below
+  rows: number = 200;
   
   pointer = { x:100, y:100 };// The adjusted mouse position
   
   height: number;
   width: number;
 
-  animationFrame;
-
-  frameCounter: number;
-  previousSecond: number;
 
   @Input() playerSubject: Subject<Player>;
   player: Player;
@@ -80,18 +74,13 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
     this.tileSheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
 
     this.loadMonsters();
-    this.addCanvasClickListener();
-
-    this.frameCounter = 0;
-    this.previousSecond = Math.floor(Date.now() / 1000);
-
+   
     this.playerSubject.subscribe(v => { 
       console.log('PLAYER', v);
       this.player = v;
-      //this.playerSavedPosition = this.player.position;
-      this.animationFrame = window.requestAnimationFrame(() => this.loop());
     });
 
+    this.addCanvasClickListener();
   }  
   
   ngAfterViewInit() {
@@ -100,7 +89,6 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
   
   ngOnDestroy(): void {
     console.log('MapGfx component destroyed');
-    cancelAnimationFrame(this.animationFrame);
   }
 
   loadMonsters(){
@@ -138,24 +126,7 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  loop() {// The game loop
-    this.columns = this.world.columns;
-    this.rows = this.world.rows;
-    this.animationFrame = window.requestAnimationFrame(() => this.loop());
-    const currentFrameTime = Date.now();
-
-    const currentSecond = Math.floor(Date.now() / 1000);
-    this.frameCounter++;
-
-    if (this.previousSecond != currentSecond)
-    {
-      //console.log("Last second ("+this.previousSecond+")frame count:" + this.frameCounter);
-      this.previousSecond = currentSecond;
-      this.frameCounter = 0;
-    }
-
-    this.gfxLoop(currentFrameTime);
-  }
+  
 
   gfxLoop(currentFrameTime){
     this.height = document.documentElement.clientHeight;
@@ -174,7 +145,6 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
        center screen position. (???) */
     this.drawHero(currentFrameTime);    
     //console.log('map-gfx: ' + Date.now());
-    this.runHeroLoop.emit(true);
     
   //   // console.log('this.player.pixel_x, this.player.pixel_y: ' + this.player.pixel_x, this.player.pixel_y);
    

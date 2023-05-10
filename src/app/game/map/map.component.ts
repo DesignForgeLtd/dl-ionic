@@ -7,6 +7,7 @@ import { World } from './map-scripts/world';
 import { MapService } from './map.service';
 import { GameUIService } from '../game-ui.service';
 import { Hero } from './map-scripts/Hero';
+import { MapGfxComponent } from './map-gfx/map-gfx.component';
 
 // interface MonstersData{
 //   positions: any;
@@ -20,9 +21,11 @@ import { Hero } from './map-scripts/Hero';
 })
 export class MapComponent implements OnInit {
 
-  playerSubject: Subject<Player> = new Subject();
+  @Input() world: World;
   @Output() foundLocation : EventEmitter<any> = new EventEmitter();
+  @ViewChild(MapGfxComponent, {static : true}) mapGfx : MapGfxComponent;
 
+  playerSubject: Subject<Player> = new Subject();
 
   //TODO: see which properties can be deleted
   scaledSize = 76;
@@ -31,13 +34,15 @@ export class MapComponent implements OnInit {
   playerSize = 32;
   playerScaledSize = 32;
 
-  columns = 200;// columns and rows in map below
-  rows = 200;
+
+  columns: number = 200;// columns and rows in map below
+  rows: number = 200;
+
+  monsters: any;
 
 
   player: Player;
   otherHero: Hero;
-  world: World;
 
   openedModal = null;
 
@@ -53,6 +58,11 @@ export class MapComponent implements OnInit {
 
   lastFrameRenderTime;
   lastFrameTime;
+
+  animationFrame;
+
+  frameCounter: number;
+  previousSecond: number;
 
   constructor(
     public http: HttpClient,
@@ -71,15 +81,43 @@ export class MapComponent implements OnInit {
 
     this.lastFrameTime = Date.now();
     this.loadHeroEssentialData();
+
+    this.frameCounter = 0;
+    this.previousSecond = Math.floor(Date.now() / 1000);
+
+    
   }
 
+  loop() {// The game loop
+    this.columns = this.world.columns;
+    this.rows = this.world.rows;
+    this.animationFrame = window.requestAnimationFrame(() => this.loop());
+    const currentFrameTime = Date.now();
+
+    const currentSecond = Math.floor(Date.now() / 1000);
+    this.frameCounter++;
+
+    if (this.previousSecond != currentSecond)
+    {
+      //console.log("Last second ("+this.previousSecond+")frame count:" + this.frameCounter);
+      this.previousSecond = currentSecond;
+      this.frameCounter = 0;
+    }
+
+    this.mapGfx.gfxLoop(currentFrameTime);
+  }
+
+  ngOnDestroy(): void {
+    console.log('Map component destroyed');
+    cancelAnimationFrame(this.animationFrame);
+  }
 
   loadHeroEssentialData() {
     this.mapService.loadHeroEssentialData()
       .subscribe(data => {
 
         const playerData = data.playerData;
-        this.world = new World(playerData.level, this.columns, this.rows);
+        //this.world = new World(playerData.level, this.columns, this.rows);
         //this.world = new World();
 
         const originalPosition = playerData.position;
@@ -107,17 +145,21 @@ export class MapComponent implements OnInit {
 
         this.loadGameMap(this.player.level, this.player.position);
 
-        this.playerSubject.next(this.player);
 
         this.heroInfoUpdate(playerData);
+
+        this.playerSubject.next(this.player);
 
         //this.handleFoundLocation(data.foundLocation, data.foundMonster);
         this.foundLocation.emit(data.foundLocation);
         
         this.handleFoundQuest(data.foundQuest);
+
+        this.animationFrame = window.requestAnimationFrame(() => this.loop());
       });
   }
 
+  // TODO: remove duplication / make World a singleton
   loadGameMap(level: number, originalPosition: number = null) {
     this.http.get(
       'assets/detailedMap' + (level + 1) + '.txt',

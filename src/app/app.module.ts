@@ -79,6 +79,7 @@ import {
 } from '../environments/environment';
 import { HeroEquipmentComponent } from './game/hero/hero-equipment/hero-equipment.component';
 import { BeltItemComponent } from './game/hero/belt-item/belt-item.component';
+import { World } from './game/map/map-scripts/world';
 
 @NgModule({
   declarations: [
@@ -174,6 +175,7 @@ import { BeltItemComponent } from './game/hero/belt-item/belt-item.component';
             }
         } as SocialAuthServiceConfig,
     },
+    World
   ],
   bootstrap: [AppComponent],
 })

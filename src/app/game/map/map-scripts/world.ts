@@ -10,7 +10,10 @@ export class World{
 
   private level: number;
 
-  constructor(level: number = 0, columns: number = 200, rows: number = 200) {
+  constructor() {
+	let level = 0;
+	let columns = 200;
+	let rows = 200;
     this.tiles = new Array(columns * rows);
     this.level = level;
     this.columns = columns;
