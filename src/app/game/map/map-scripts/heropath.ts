@@ -26,7 +26,7 @@ export class HeroPath
   private world: World;
 
 	constructor(world, from_x, from_y, to_x, to_y){
-    this.world = world;
+		this.world = world;
 		this.from_x = from_x;
 		this.from_y = from_y;
 		this.to_x = to_x;

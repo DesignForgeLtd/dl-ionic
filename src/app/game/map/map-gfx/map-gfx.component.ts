@@ -315,5 +315,22 @@ export class MapGfxComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
+  drawOtherHero(currentFrameTime){
+
+    // var varsToDraw = this.otherHero.getVarsToDrawHero(currentFrameTime);
+
+    // this.context.drawImage(
+    //     varsToDraw.heroImage,
+    //     varsToDraw.sheetOffsetX,
+    //     varsToDraw.sheetOffsetY,
+    //     varsToDraw.sizeX,
+    //     varsToDraw.sizeY,
+    //     Math.round(varsToDraw.pixel_x - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5),
+    //     Math.round(varsToDraw.pixel_y - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5),
+    //     varsToDraw.scaledSizeX,
+    //     varsToDraw.scaledSizeY
+    // );
+  }
+
 
 }

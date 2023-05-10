@@ -4,7 +4,7 @@ import { HeroPath } from './heropath';
 import { HeroSprite } from './HeroSprite';
 import { World } from './world';
 
-export class Player {
+export class Hero {
   
   public pixel_x: number;
   public pixel_y: number;
@@ -29,7 +29,6 @@ export class Player {
   averageFrameRenderDuration;
   totalRenderDuration = 0;
 
-  //private world: World;
 
   constructor(
     public coord_x: number, 
@@ -41,7 +40,7 @@ export class Player {
   ) {
     
     // TODO: REMOVE THIS LINE
-    this.raceId = 4;
+    this.raceId = 2;
 
     // console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     // console.log('INIT: this.raceId: ' + this.raceId);
@@ -87,7 +86,7 @@ export class Player {
     {
       animationSpeed = 1;
     }
-  //console.log("animationSpeed: "+animationSpeed);
+  console.log("animationSpeed: "+animationSpeed);
 
     if (animationSpeed > this.pixelsLeftInCurrentStepAnimation)
     {
