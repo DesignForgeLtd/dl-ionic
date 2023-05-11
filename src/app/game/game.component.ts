@@ -198,9 +198,12 @@ export class GameComponent implements OnInit {
       if (data.success === true) {
         console.log(data);
         this.gameUIService.heroInfoInitialize(data.playerData);
-        this.player.level = data.playerData.level; // TODO: FIX
-        this.world.setLevel(this.player.level); // TODO: FIX
+        this.player.level = data.playerData.level;
+        this.world.setLevel(this.player.level);
         this.mapService.loadGameMap(data.playerData.level, data.playerData.position);
+
+        this.gameUIService.openedModal.emit('');
+
 
         this.handleFoundLocation({
           'foundLocation': data.foundLocation,

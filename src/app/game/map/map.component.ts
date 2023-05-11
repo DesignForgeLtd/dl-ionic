@@ -115,6 +115,8 @@ export class MapComponent implements OnInit {
 
         const playerData = data.playerData;
 
+        this.world.setLevel(playerData.level);
+
         const originalPosition = playerData.position;
         if (playerData.occupied_with === 'mining') {
           playerData.position = playerData.positionInMine;
