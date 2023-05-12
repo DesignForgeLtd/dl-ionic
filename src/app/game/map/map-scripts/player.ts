@@ -15,6 +15,7 @@ export class Player {
   constructor(private world: World) {};
 
   setPlayerData(
+    id: number, 
     coord_x: number, 
     coord_y: number, 
     level: number, 
@@ -26,11 +27,11 @@ export class Player {
     // TODO: REMOVE THIS LINE
     raceId = 4;
 
-    this.hero = new Hero(raceId, coord_x, coord_y);
+    this.hero = new Hero(id, raceId, coord_x, coord_y);
   }
 
 
-  moveHero(move_x, move_y)
+  movePlayerHero(move_x, move_y)
 	{
     if (this.hero.coord_x === move_x && this.hero.coord_y === move_y){
       this.hero.clearHeroAnimationParams();

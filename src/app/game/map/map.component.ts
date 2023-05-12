@@ -87,6 +87,11 @@ export class MapComponent implements OnInit {
 
   }
 
+  getVisibleHeroByID(id: number)
+  {
+
+  }
+
   loadHeroEssentialData() {
     this.mapService.loadHeroEssentialData()
       .subscribe(data => {
@@ -102,6 +107,7 @@ export class MapComponent implements OnInit {
 
         //this.player = new Player(
         this.player.setPlayerData(
+          playerData.id,
           playerData.position % this.columns,
           Math.floor(playerData.position / this.columns),
           playerData.level,
@@ -128,6 +134,7 @@ export class MapComponent implements OnInit {
   loadOtherHeroes()
   {
     let otherHero = new Hero(
+      66,
       2, 
       this.player.hero.coord_x - 2,
       this.player.hero.coord_y
@@ -136,6 +143,7 @@ export class MapComponent implements OnInit {
     this.visibleHeroes.push(otherHero);
     
     otherHero = new Hero(
+      11,
       3, 
       this.player.hero.coord_x + 2,
       this.player.hero.coord_y + 3

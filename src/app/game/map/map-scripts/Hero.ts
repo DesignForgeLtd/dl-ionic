@@ -4,6 +4,7 @@ import { HeroSprite } from './HeroSprite';
 
 export class Hero {
   
+  public id: number;
   public position: number;
 
   public pixel_x: number;
@@ -36,10 +37,12 @@ export class Hero {
   public coord_y: number;
 
   constructor(
+    id: number,
     raceId: number,
     coord_x: number, 
     coord_y: number
   ) {
+    this.id = id;
     this.direction = null;
     this.orientation = 'right';
 
@@ -99,7 +102,7 @@ export class Hero {
     {
       animationSpeed = 1;
     }
-  console.log("animationSpeed: "+animationSpeed);
+ // console.log("animationSpeed: "+animationSpeed);
 
     if (animationSpeed > this.pixelsLeftInCurrentStepAnimation)
     {

@@ -102,7 +102,7 @@ export class MapGfxComponent implements OnInit, OnDestroy {
         - this.height * 0.5
         + this.viewport.h * 0.5;
 
-      const result = this.player.moveHero(
+      const result = this.player.movePlayerHero(
         Math.floor(this.pointer.x / this.scaledSize),
         Math.floor(this.pointer.y / this.scaledSize)
       );
