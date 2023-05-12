@@ -120,40 +120,30 @@ export class HeroSprite {
 
     sheetOffsetX = currentFrame * this.sizeX;
 
-    switch(this.direction)
+    // TODO: remove direction from here (and Hero?), replace with state
+    //if (this.state == 'moving')
+    if (this.direction !== null)
     {
-      case 'up':
-      case 'down':
-        if(this.orientation == 'right') {
-          sheetOffsetY = this.heroSSWalkingRightRow * this.sizeY;
-        } else {
-          sheetOffsetY = this.heroSSWalkingLeftRow * this.sizeY;
-          sheetOffsetX = (this.heroSSFrameTotalCount - 1 - currentFrame) * this.sizeX;
-        }
-        break;
-      case 'right':
-      case 'top-right':
-      case 'bottom-right':
+      if(this.orientation == 'right') {
         sheetOffsetY = this.heroSSWalkingRightRow * this.sizeY;
-        break;
-      case 'left':
-      case 'top-left':
-      case 'bottom-left':
-        sheetOffsetY = this.heroSSWalkingLeftRow * this.sizeY; // 1 * this.sizeX;
+      } else {
+        sheetOffsetY = this.heroSSWalkingLeftRow * this.sizeY;
         sheetOffsetX = (this.heroSSFrameTotalCount - 1 - currentFrame) * this.sizeX;
-        break;
-      default:
-        currentFrame = Math.floor(milisec / Math.round(1000 / this.heroSSIdleFrameCount));
+      }
+    }
+    //else if (this.state == 'idle')
+    else if (this.direction === null)
+    {
+      currentFrame = Math.floor(milisec / Math.round(1000 / this.heroSSIdleFrameCount));
 
-        sheetOffsetX = currentFrame * this.sizeX;
-        if (this.orientation == 'right')
-        {
-          sheetOffsetY = this.heroSSIdleRightRow * this.sizeY;
-        } else {
-          sheetOffsetX = (this.heroSSFrameTotalCount - 1 - currentFrame) * this.sizeX;
-          sheetOffsetY = this.heroSSIdleLeftRow * this.sizeY;
-        }
-        break;
+      sheetOffsetX = currentFrame * this.sizeX;
+      if (this.orientation == 'right')
+      {
+        sheetOffsetY = this.heroSSIdleRightRow * this.sizeY;
+      } else {
+        sheetOffsetX = (this.heroSSFrameTotalCount - 1 - currentFrame) * this.sizeX;
+        sheetOffsetY = this.heroSSIdleLeftRow * this.sizeY;
+      }
     }
 
     return {

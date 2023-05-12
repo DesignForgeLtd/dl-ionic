@@ -36,10 +36,6 @@ export class MapComponent implements OnInit {
 
   monsters: any;
 
-
-  // player: Player;
-  otherHero: Hero;
-
   openedModal = null;
 
   strollEventFind = [];
@@ -131,15 +127,6 @@ export class MapComponent implements OnInit {
           this.scaledSize
         );
 
-        this.otherHero = new Hero();
-        this.otherHero.setPlayerData(
-          playerData.position % this.columns + 2,
-          Math.floor(playerData.position / this.columns),
-          playerData.level,
-          playerData.race_id,
-          this.scaledSize
-        );
-
         this.mapService.loadGameMap(this.player.level, this.player.position);
 
         this.gameUIService.heroInfoInitialize(playerData);
@@ -168,8 +155,8 @@ export class MapComponent implements OnInit {
   heroLoop() {
     //console.log('map: ' + Date.now());
     // if animation of the current step complete
-    if (this.player.coord_x * this.scaledSize === this.player.pixel_x
-      && this.player.coord_y * this.scaledSize === this.player.pixel_y) {
+    if (this.player.coord_x * this.scaledSize === this.player.hero.pixel_x
+      && this.player.coord_y * this.scaledSize === this.player.hero.pixel_y) {
       if (this.serverSavedNewPosition === true) {
         if (this.player.hero_path != null) {
           this.lastFrameRenderTime = Date.now() - this.lastFrameTime;
@@ -191,7 +178,7 @@ export class MapComponent implements OnInit {
       }
     }
     else {
-      this.player.animate();
+      this.player.hero.animate();
     }
   }
 
@@ -200,7 +187,7 @@ export class MapComponent implements OnInit {
     // proceed with next step
     this.setServerSavedNewPositionToFalse();
     this.player.moveHeroStep();
-    this.player.animate();
+    this.player.hero.animate();
     this.updateHeroPosition();
   }
 

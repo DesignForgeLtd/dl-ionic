@@ -1,24 +1,18 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { HeroPath } from './heropath';
 import { HeroSprite } from './HeroSprite';
-import { World } from './world';
 
 export class Hero {
   
   public pixel_x: number;
   public pixel_y: number;
 
-  public position: number;
   public direction: string;
-  public orientation: string;
-
-  public hero_path = null;
-  public hero_path_step = 0;
+  public orientation: string; // where is hero facing (left OR right)
 
   private heroSprite: HeroSprite;
 
-  private msToMoveOneSquare = 500;
+  public msToMoveOneSquare = 500; // TODO: make private and create accessor
 
   private pixelsLeftInCurrentStepAnimation = 76;
   private estimatedPositionChangesLeft = 30;
@@ -31,39 +25,38 @@ export class Hero {
 
   world_columns = 200;
 
-  public coord_x: number;
-  public coord_y: number; 
-  public level: number;
-  public raceId: number; 
-  public scaled_size: number;
+  scaled_size = 76;// map tile size
 
-  constructor() {
+  public coord_x: number;
+  public coord_y: number;
+
+  constructor(
+    raceId: number,
+    coord_x: number, 
+    coord_y: number
+  ) {
     this.direction = null;
     this.orientation = 'right';
-  };
 
-  setPlayerData(
-    coord_x: number, 
-    coord_y: number, 
-    level: number, 
-    raceId: number, 
-    scaled_size: number
-  )
-  {
     this.coord_x = coord_x; 
     this.coord_y = coord_y;
-    this.level = level;
-    this.raceId = raceId; 
-    this.scaled_size = scaled_size;
-
-    // console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
-    // console.log('INIT: this.raceId: ' + this.raceId);
-
-    this.heroSprite = new HeroSprite(this.raceId, scaled_size);
 
     this.pixel_x = this.coord_x * this.scaled_size; // pixels
     this.pixel_y = this.coord_y * this.scaled_size;
-    this.position = this.coord_x + this.coord_y * this.world_columns;
+
+    this.heroSprite = new HeroSprite(raceId, this.scaled_size);
+  };
+
+  setOrientation(orientation){
+    this.orientation = orientation;
+  }
+
+  clearHeroAnimationParams()
+  {
+    this.pixelsLeftInCurrentStepAnimation = 76;
+    this.lastFrameRenderTime = 0;
+    this.totalRenderDuration = 0;
+    this.framesRenderedInStep = 0;
   }
 
   animate() {
@@ -147,180 +140,6 @@ export class Hero {
     this.coord_y = y;
     this.pixel_x = this.coord_x * this.scaled_size; // pixels
     this.pixel_y = this.coord_y * this.scaled_size;
-  }
-
-  incrementHeroStep(){
-    this.hero_path_step++;
-
-    if (this.hero_path_step >= this.hero_path.length){
-			this.clearMovementParams();
-		}
-  }
-
-  clearMovementParams(){
-    this.hero_path_step = 0;
-    this.hero_path = null;
-
-    this.pixelsLeftInCurrentStepAnimation = 76;
-    this.lastFrameRenderTime = 0;
-    this.totalRenderDuration = 0;
-    this.framesRenderedInStep = 0;
-  }
-
-  revertHeroLastStep(){
-    switch(this.direction)
-		{
-			case 'right':
-        this.coord_x--;
-				break;
-			case 'left':
-				this.coord_x++;
-				break;
-			case 'down':
-        this.coord_y--;
-				break;
-			case 'up':
-				this.coord_y++;
-				break;
-      case 'top-left':
-        this.coord_x++;
-        this.coord_y++;
-        break;
-      case 'bottom-left':
-        this.coord_x++;
-        this.coord_y--;
-        break;
-      case 'top-right':
-        this.coord_x--;
-        this.coord_y++;
-        break;
-      case 'bottom-right':
-        this.coord_x--;
-        this.coord_y--;
-        break;
-		}
-
-    this.position = this.coord_x + this.coord_y * this.world_columns;
-
-    this.clearMovementParams();
-  }
-
-  moveHeroStep(){
-    if (this.hero_path == null){
-      return;
-    }
-
-    switch(this.hero_path[this.hero_path_step])
-		{
-			case 1:
-				this.go('right');
-				break;
-			case -1:
-				this.go('left');
-				break;
-			case this.world_columns:
-				this.go('down');
-				break;
-			case -1 * this.world_columns:
-				this.go('up');
-				break;
-      case this.world_columns - 1:
-        this.go('bottom-left');
-        break;
-			case -1 * this.world_columns - 1:
-				this.go('top-left');
-				break;
-			case -1 * this.world_columns + 1:
-				this.go('top-right');
-				break;
-			case this.world_columns + 1:
-				this.go('bottom-right');
-				break;
-		}
-	}
-
-  setOrientation(orientation){
-    this.orientation = orientation;
-  }
-
-  go(direction){
-
-    //console.log('before move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
-    //console.log('go ' + direction);
-    switch (direction)
-    {
-      case 'up':
-        this.coord_y--;
-        this.direction='up';
-        this.msToMoveOneSquare = 500;
-        break;
-      case 'down':
-        this.coord_y++;
-        this.direction='down';
-        this.msToMoveOneSquare = 500;
-        break;
-      case 'right':
-        this.coord_x++;
-        this.direction='right';
-        this.setOrientation('right');
-        this.msToMoveOneSquare = 500;
-        break;
-      case 'left':
-        this.coord_x--;
-        this.direction='left';
-        this.setOrientation('left');
-        this.msToMoveOneSquare = 500;
-        break;
-      case 'top-left':
-        this.coord_x--;
-        this.coord_y--;
-        this.direction='top-left';
-        //this.direction='left';
-        this.setOrientation('left');
-        this.msToMoveOneSquare = 700;
-        break;
-      case 'bottom-left':
-        this.coord_x--;
-        this.coord_y++;
-        this.direction='bottom-left';
-        //this.direction='left';
-        this.setOrientation('left');
-        this.msToMoveOneSquare = 700;
-        break;
-      case 'top-right':
-        this.coord_x++;
-        this.coord_y--;
-        this.direction='top-right';
-        //this.direction='right';
-        this.setOrientation('right');
-        this.msToMoveOneSquare = 700;
-        break;
-      case 'bottom-right':
-        this.coord_x++;
-        this.coord_y++;
-        this.direction='bottom-right';
-        //this.direction='right';
-        this.setOrientation('right');
-        this.msToMoveOneSquare = 700;
-        break;
-              
-    }
-
-   // this.direction = direction; // TODO: remove 8x from switch above
-
-    this.position = this.coord_x + this.coord_y * this.world_columns;
-    // console.log('after move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
-    // console.log('after move: position: ' + this.position);
-  }
-
-  stop(){
-    if (this.direction!=null)
-    {
-      this.direction=null;
-      //console.log('stop');
-
-      this.clearMovementParams();
-    }
   }
 
   getVarsToDrawHero(currentFrameTime){

@@ -128,7 +128,7 @@ export class MiningComponent extends MapComponent implements OnInit {
         console.log('went through portal!');
         console.log(data);
         this.player.position = data.heroPositionInMine;
-        this.player.updateCoordsAndPixels(
+        this.player.hero.updateCoordsAndPixels( // TODO: this is not the right place for this update
           this.player.position % this.columns,
           Math.floor(this.player.position / this.columns)
         );

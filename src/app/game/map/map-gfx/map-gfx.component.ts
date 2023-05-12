@@ -8,6 +8,7 @@ import { World } from '../map-scripts/world';
 import { Player } from '../map-scripts/player';
 
 import { MapResponseData } from 'src/app/game/shared/map-service.interfaces';
+import { Hero } from '../map-scripts/Hero';
 
 
 @Component({
@@ -38,6 +39,10 @@ export class MapGfxComponent implements OnInit, OnDestroy {
   
   height: number;
   width: number;
+
+
+  // player: Player;
+  public otherHero: Hero;
   
   constructor(
     public http: HttpClient,
@@ -61,6 +66,8 @@ export class MapGfxComponent implements OnInit, OnDestroy {
     
     this.tileSheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
 
+
+
     this.loadMonsters();
 
     this.addCanvasClickListener();
@@ -81,6 +88,12 @@ export class MapGfxComponent implements OnInit, OnDestroy {
 
   addCanvasClickListener(){
     this.context.canvas.addEventListener('click', (event) => {
+
+      this.otherHero = new Hero(
+        2, 
+        Math.floor(this.pointer.x / this.scaledSize),
+        Math.floor(this.pointer.y / this.scaledSize)
+      );
 
       this.pointer.x =
         event.pageX
@@ -117,13 +130,14 @@ export class MapGfxComponent implements OnInit, OnDestroy {
     this.context.canvas.width  = this.width;
     // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
 
-    this.viewport.scrollTo(this.player.pixel_x, this.player.pixel_y);
+    this.viewport.scrollTo(this.player.hero.pixel_x, this.player.hero.pixel_y);
 
     this.drawTerrain();
 
     /* Draw the this.player. Remember to offset by the viewport position and
        center screen position. (???) */
     this.drawHero(currentFrameTime);    
+    this.drawOtherHero(currentFrameTime);    
     //console.log('map-gfx: ' + Date.now());
     
   //   // console.log('this.player.pixel_x, this.player.pixel_y: ' + this.player.pixel_x, this.player.pixel_y);
@@ -239,7 +253,7 @@ export class MapGfxComponent implements OnInit, OnDestroy {
 
   drawHero(currentFrameTime){
 
-    var varsToDraw = this.player.getVarsToDrawHero(currentFrameTime);
+    var varsToDraw = this.player.hero.getVarsToDrawHero(currentFrameTime);
 
     this.context.drawImage(
         varsToDraw.heroImage,
@@ -256,19 +270,19 @@ export class MapGfxComponent implements OnInit, OnDestroy {
 
   drawOtherHero(currentFrameTime){
 
-    // var varsToDraw = this.otherHero.getVarsToDrawHero(currentFrameTime);
+    var varsToDraw = this.otherHero.getVarsToDrawHero(currentFrameTime);
 
-    // this.context.drawImage(
-    //     varsToDraw.heroImage,
-    //     varsToDraw.sheetOffsetX,
-    //     varsToDraw.sheetOffsetY,
-    //     varsToDraw.sizeX,
-    //     varsToDraw.sizeY,
-    //     Math.round(varsToDraw.pixel_x - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5),
-    //     Math.round(varsToDraw.pixel_y - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5),
-    //     varsToDraw.scaledSizeX,
-    //     varsToDraw.scaledSizeY
-    // );
+    this.context.drawImage(
+        varsToDraw.heroImage,
+        varsToDraw.sheetOffsetX,
+        varsToDraw.sheetOffsetY,
+        varsToDraw.sizeX,
+        varsToDraw.sizeY,
+        Math.round(varsToDraw.pixel_x - this.viewport.x + this.width * 0.5 - this.viewport.w * 0.5),
+        Math.round(varsToDraw.pixel_y - this.viewport.y + this.height * 0.5 - this.viewport.h * 0.5),
+        varsToDraw.scaledSizeX,
+        varsToDraw.scaledSizeY
+    );
   }
 
 

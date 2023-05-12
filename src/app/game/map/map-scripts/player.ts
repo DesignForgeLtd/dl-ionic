@@ -1,36 +1,25 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
 import { HeroPath } from './heropath';
-import { HeroSprite } from './HeroSprite';
 import { World } from './world';
 import { Injectable } from "@angular/core";
+import { Hero } from './Hero';
 
 @Injectable({providedIn: 'root'})
 
 export class Player {
   
-  public pixel_x: number;
-  public pixel_y: number;
-
   public position: number;
-  public direction: string;
-  public orientation: string;
+  public direction: string; // takes 8 different values NSWE and diagonals
 
   public hero_path = null;
   public hero_path_step = 0;
 
-  private heroSprite: HeroSprite;
-
-  private msToMoveOneSquare = 500;
-
-  private pixelsLeftInCurrentStepAnimation = 76;
-  private estimatedPositionChangesLeft = 30;
-
-  lastFrameRenderDuration;
-  lastFrameRenderTime = 0;
-  framesRenderedInStep = 0;
-  averageFrameRenderDuration;
-  totalRenderDuration = 0;
+  // lastFrameRenderDuration;
+  // lastFrameRenderTime = 0;
+  // framesRenderedInStep = 0;
+  // averageFrameRenderDuration;
+  // totalRenderDuration = 0;
 
   public coord_x: number;
   public coord_y: number; 
@@ -38,9 +27,10 @@ export class Player {
   public raceId: number; 
   public scaled_size: number;
 
+  public hero: Hero; // TODO: make private and resolve issues related to this
+
   constructor(private world: World) {
     this.direction = null;
-    this.orientation = 'right';
   };
 
   setPlayerData(
@@ -60,106 +50,19 @@ export class Player {
     // TODO: REMOVE THIS LINE
     this.raceId = 4;
 
+    this.hero = new Hero(this.raceId, this.coord_x, this.coord_y);
+
     // console.log('INIT: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
     // console.log('INIT: this.raceId: ' + this.raceId);
 
-    this.heroSprite = new HeroSprite(this.raceId, scaled_size);
-
-    this.pixel_x = this.coord_x * this.scaled_size; // pixels
-    this.pixel_y = this.coord_y * this.scaled_size;
     this.position = this.coord_x + this.coord_y * this.world.columns;
   }
 
-  animate() {
-
-    if (this.lastFrameRenderTime == 0){
-      this.lastFrameRenderDuration = 15;
-    } else {
-      this.lastFrameRenderDuration = Date.now() - this.lastFrameRenderTime;
-    }
-
-    this.totalRenderDuration += this.lastFrameRenderDuration;
-    this.framesRenderedInStep++;
-    this.averageFrameRenderDuration = Math.round(this.totalRenderDuration / this.framesRenderedInStep);
-
-    this.estimatedPositionChangesLeft = Math.round(
-      (this.msToMoveOneSquare  - this.totalRenderDuration) 
-      / this.averageFrameRenderDuration
-    );
-
-    this.lastFrameRenderTime = Date.now();
-    // console.log('lastFrameRenderDuration: ' + this.lastFrameRenderDuration);
-    // console.log('totalRenderDuration: ' + this.totalRenderDuration);
-    // console.log('framesRenderedInStep: ' + this.framesRenderedInStep);
-    // console.log('averageFrameRenderDuration: ' + this.averageFrameRenderDuration);
-
-    const x = this.coord_x * this.scaled_size;
-    const y = this.coord_y * this.scaled_size;
-    let animationSpeed = Math.round(this.pixelsLeftInCurrentStepAnimation / this.estimatedPositionChangesLeft);
-    if (animationSpeed <= 0)
-    {
-      animationSpeed = 1;
-    }
-  //console.log("animationSpeed: "+animationSpeed);
-
-    if (animationSpeed > this.pixelsLeftInCurrentStepAnimation)
-    {
-      animationSpeed = this.pixelsLeftInCurrentStepAnimation;
-    }
-    
-    this.pixelsLeftInCurrentStepAnimation -= animationSpeed;
-  //console.log("this.pixelsLeftInCurrentStepAnimation: "+this.pixelsLeftInCurrentStepAnimation);
-    /* Gradually moves the player closer to x, y every time animate() is called. */
-    if (x < this.pixel_x)
-    {
-      this.pixel_x -= animationSpeed;
-    }
-    else if (x > this.pixel_x)
-    {
-      this.pixel_x += animationSpeed;
-    }
-    if (y < this.pixel_y)
-    {
-      this.pixel_y -= animationSpeed;
-    }
-    else if (y > this.pixel_y)
-    {
-      this.pixel_y += animationSpeed;
-    }
-
-    if (this.pixelsLeftInCurrentStepAnimation == 0)
-    {
-      this.pixelsLeftInCurrentStepAnimation = 76;
-      this.lastFrameRenderTime = 0;
-      this.totalRenderDuration = 0;
-      this.framesRenderedInStep = 0;
-
-      // console.log('lastFrameRenderDuration: ' + this.lastFrameRenderDuration);
-      // console.log('totalRenderDuration: ' + this.totalRenderDuration);
-      // console.log('framesRenderedInStep: ' + this.framesRenderedInStep);
-      // console.log('averageFrameRenderDuration: ' + this.averageFrameRenderDuration);
-    }
-
-    //console.log("X,Y (pixels): " + this.pixel_x + ',' + this.pixel_y);
-    //this.pixel_x += (x - this.pixel_x - scaled_size * 0.0) * 0.05;
-    //this.pixel_y += (y - this.pixel_y - scaled_size * 0.4) * 0.05;
-
-  }
-
-  updateCoordsAndPixels(x, y){
-    this.coord_x = x;
-    this.coord_y = y;
-    this.pixel_x = this.coord_x * this.scaled_size; // pixels
-    this.pixel_y = this.coord_y * this.scaled_size;
-  }
 
   moveHero(move_x, move_y)
 	{
     if (this.coord_x === move_x && this.coord_y === move_y){
-      this.pixelsLeftInCurrentStepAnimation = 76;
-      this.lastFrameRenderTime = 0;
-      this.totalRenderDuration = 0;
-      this.framesRenderedInStep = 0;
+      this.hero.clearHeroAnimationParams();
       return false;
     }
 
@@ -229,10 +132,7 @@ export class Player {
     this.hero_path_step = 0;
     this.hero_path = null;
 
-    this.pixelsLeftInCurrentStepAnimation = 76;
-    this.lastFrameRenderTime = 0;
-    this.totalRenderDuration = 0;
-    this.framesRenderedInStep = 0;
+    this.hero.clearHeroAnimationParams();
   }
 
   revertHeroLastStep(){
@@ -310,10 +210,6 @@ export class Player {
 		}
 	}
 
-  setOrientation(orientation){
-    this.orientation = orientation;
-  }
-
   go(direction){
 
     //console.log('before move: this.coord_x: ' + this.coord_x +', this.coord_y: ' + this.coord_y);
@@ -323,56 +219,56 @@ export class Player {
       case 'up':
         this.coord_y--;
         this.direction='up';
-        this.msToMoveOneSquare = 500;
+        this.hero.msToMoveOneSquare = 500;
         break;
       case 'down':
         this.coord_y++;
         this.direction='down';
-        this.msToMoveOneSquare = 500;
+        this.hero.msToMoveOneSquare = 500;
         break;
       case 'right':
         this.coord_x++;
         this.direction='right';
-        this.setOrientation('right');
-        this.msToMoveOneSquare = 500;
+        this.hero.setOrientation('right');
+        this.hero.msToMoveOneSquare = 500;
         break;
       case 'left':
         this.coord_x--;
         this.direction='left';
-        this.setOrientation('left');
-        this.msToMoveOneSquare = 500;
+        this.hero.setOrientation('left');
+        this.hero.msToMoveOneSquare = 500;
         break;
       case 'top-left':
         this.coord_x--;
         this.coord_y--;
         this.direction='top-left';
         //this.direction='left';
-        this.setOrientation('left');
-        this.msToMoveOneSquare = 700;
+        this.hero.setOrientation('left');
+        this.hero.msToMoveOneSquare = 700;
         break;
       case 'bottom-left':
         this.coord_x--;
         this.coord_y++;
         this.direction='bottom-left';
         //this.direction='left';
-        this.setOrientation('left');
-        this.msToMoveOneSquare = 700;
+        this.hero.setOrientation('left');
+        this.hero.msToMoveOneSquare = 700;
         break;
       case 'top-right':
         this.coord_x++;
         this.coord_y--;
         this.direction='top-right';
         //this.direction='right';
-        this.setOrientation('right');
-        this.msToMoveOneSquare = 700;
+        this.hero.setOrientation('right');
+        this.hero.msToMoveOneSquare = 700;
         break;
       case 'bottom-right':
         this.coord_x++;
         this.coord_y++;
         this.direction='bottom-right';
         //this.direction='right';
-        this.setOrientation('right');
-        this.msToMoveOneSquare = 700;
+        this.hero.setOrientation('right');
+        this.hero.msToMoveOneSquare = 700;
         break;
               
     }
@@ -392,28 +288,6 @@ export class Player {
 
       this.clearMovementParams();
     }
-  }
-
-  getVarsToDrawHero(currentFrameTime){
-
-    let vars = this.heroSprite.getVarsToDrawHero(
-      currentFrameTime,
-      this.direction,
-      this.orientation
-    );
-
-    return {
-      'heroImage': vars.heroImage,
-      'sheetOffsetX': vars.sheetOffsetX,
-      'sheetOffsetY': vars.sheetOffsetY,
-      'sizeX': vars.sizeX,
-      'sizeY': vars.sizeY,
-      'pixel_x': this.pixel_x,
-      'pixel_y': this.pixel_y,
-      'scaledSizeX': vars.scaledSizeX,
-      'scaledSizeY': vars.scaledSizeY
-    };
-  
   }
 
 }
