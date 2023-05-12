@@ -87,41 +87,6 @@ export class MapComponent implements OnInit {
 
   }
 
-  loop() {// The game loop
-    this.animationFrame = window.requestAnimationFrame(() => this.loop());
-
-    //this.frameTimeDebug();
-
-    this.heroLoop();
-    this.mapGfx.gfxLoop(this.visibleHeroes);
-
-    this.infolocationUpdate();
-  }
-
-  frameTimeDebug()
-  {
-    const currentSecond = Math.floor(Date.now() / 1000);
-    this.frameCounter++;
-
-    if (this.previousSecond != currentSecond)
-    {
-      //console.log("Last second ("+this.previousSecond+")frame count:" + this.frameCounter);
-      this.previousSecond = currentSecond;
-      this.frameCounter = 0;
-    }
-  }
-
-  infolocationUpdate(){
-    document.getElementById('location-info').innerHTML =
-      this.world.locationInfo(this.player.coord_x + this.player.coord_y * this.columns)
-      + ' ('+this.player.coord_x+','+this.player.coord_y+')';
-  }
-
-  ngOnDestroy(): void {
-    console.log('Map component destroyed');
-    cancelAnimationFrame(this.animationFrame);
-  }
-
   loadHeroEssentialData() {
     this.mapService.loadHeroEssentialData()
       .subscribe(data => {
@@ -180,14 +145,19 @@ export class MapComponent implements OnInit {
     this.visibleHeroes.push(otherHero);
   }
 
-  setServerSavedNewPosition() {
-    this.serverSavedNewPosition = true;
-    console.log('this.serverSavedNewPosition = true;');
-  }
 
-  setServerSavedNewPositionToFalse() {
-    this.serverSavedNewPosition = false;
-    console.log('this.serverSavedNewPosition = false;');
+  /*
+    The game loop
+  */
+  loop() {
+    this.animationFrame = window.requestAnimationFrame(() => this.loop());
+
+    //this.frameTimeDebug();
+
+    this.heroLoop();
+    this.mapGfx.gfxLoop(this.visibleHeroes);
+
+    this.infolocationUpdate();
   }
 
   heroLoop() {
@@ -206,7 +176,6 @@ export class MapComponent implements OnInit {
         else {
           // or make hero stand still
           this.player.stop();
-
         }
       }
       else {
@@ -221,7 +190,6 @@ export class MapComponent implements OnInit {
   }
 
   tryHeroNextStep() {
-
     // proceed with next step
     this.setServerSavedNewPositionToFalse();
     this.player.moveHeroStep();
@@ -283,6 +251,17 @@ export class MapComponent implements OnInit {
         this.player.stop();
       }
     }
+  }T
+
+
+  setServerSavedNewPosition() {
+    this.serverSavedNewPosition = true;
+    console.log('this.serverSavedNewPosition = true;');
+  }
+
+  setServerSavedNewPositionToFalse() {
+    this.serverSavedNewPosition = false;
+    console.log('this.serverSavedNewPosition = false;');
   }
 
   handleFoundQuest(foundQuest: boolean) {
@@ -291,8 +270,31 @@ export class MapComponent implements OnInit {
     // console.log(foundQuest);
   }
 
+  frameTimeDebug()
+  {
+    const currentSecond = Math.floor(Date.now() / 1000);
+    this.frameCounter++;
+
+    if (this.previousSecond != currentSecond)
+    {
+      //console.log("Last second ("+this.previousSecond+")frame count:" + this.frameCounter);
+      this.previousSecond = currentSecond;
+      this.frameCounter = 0;
+    }
+  }
+
+  infolocationUpdate(){
+    document.getElementById('location-info').innerHTML =
+      this.world.locationInfo(this.player.coord_x + this.player.coord_y * this.columns)
+      + ' ('+this.player.coord_x+','+this.player.coord_y+')';
+  }
 
   closeModal() {
     this.gameUIService.openedModal.emit(null);
+  }
+
+  ngOnDestroy(): void {
+    console.log('Map component destroyed');
+    cancelAnimationFrame(this.animationFrame);
   }
 }
