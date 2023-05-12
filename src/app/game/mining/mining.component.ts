@@ -59,18 +59,18 @@ export class MiningComponent extends MapComponent implements OnInit {
 
   updateHeroPosition(){
     // send info about player's new coords to the server
-    this.playerSavedPosition = this.player.position;
+    this.playerSavedPosition = this.player.hero.position;
     this.miningService.updatePositionInMine(this.playerSavedPosition).subscribe(data => {
       this.setServerSavedNewPosition();
       if (data.success === true){
-        this.player.incrementHeroStep();
+        this.player.hero.incrementHeroStep();
         this.gameUIService.openedModal.emit('');
         if (data.foundResource !== false){
           switch (data.foundResource)
           {
             case 'wood':
               this.gameUIService.showSuccess('Collected resource: ' + data.foundResource);
-              this.world.replaceTileInMap(this.player.position, 'p70');
+              this.world.replaceTileInMap(this.player.hero.position, 'p70');
               console.log(data);
               if( data.levelUp ) {
                 if( data.levelUp.hero ) {
@@ -97,8 +97,8 @@ export class MiningComponent extends MapComponent implements OnInit {
       else {
         this.gameUIService.showError(data.errorMessage);
         console.log('HERE');
-        this.player.revertHeroLastStep();
-        this.player.stop();
+        this.player.hero.revertHeroLastStep();
+        this.player.hero.stop();
       }
 
       this.gameUIService.heroInfoInitialize(data.playerData);
@@ -127,10 +127,10 @@ export class MiningComponent extends MapComponent implements OnInit {
       if (data.success === true){
         console.log('went through portal!');
         console.log(data);
-        this.player.position = data.heroPositionInMine;
+        this.player.hero.position = data.heroPositionInMine;
         this.player.hero.updateCoordsAndPixels( // TODO: this is not the right place for this update
-          this.player.position % this.columns,
-          Math.floor(this.player.position / this.columns)
+          this.player.hero.position % this.columns,
+          Math.floor(this.player.hero.position / this.columns)
         );
 
         this.world.populateMap(data.mineMap);

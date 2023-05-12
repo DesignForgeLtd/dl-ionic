@@ -105,11 +105,10 @@ export class MapComponent implements OnInit {
           playerData.position % this.columns,
           Math.floor(playerData.position / this.columns),
           playerData.level,
-          playerData.race_id,
-          this.scaledSize
+          playerData.race_id
         );
 
-        this.mapService.loadGameMap(this.player.level, this.player.position);
+        this.mapService.loadGameMap(playerData.level, playerData.position);
 
         this.gameUIService.heroInfoInitialize(playerData);
 
@@ -130,16 +129,16 @@ export class MapComponent implements OnInit {
   {
     let otherHero = new Hero(
       2, 
-      this.player.coord_x - 2,
-      this.player.coord_y
+      this.player.hero.coord_x - 2,
+      this.player.hero.coord_y
     );
 
     this.visibleHeroes.push(otherHero);
     
     otherHero = new Hero(
       3, 
-      this.player.coord_x + 2,
-      this.player.coord_y + 3
+      this.player.hero.coord_x + 2,
+      this.player.hero.coord_y + 3
     );
 
     this.visibleHeroes.push(otherHero);
@@ -163,10 +162,10 @@ export class MapComponent implements OnInit {
   heroLoop() {
     //console.log('map: ' + Date.now());
     // if animation of the current step complete
-    if (this.player.coord_x * this.scaledSize === this.player.hero.pixel_x
-      && this.player.coord_y * this.scaledSize === this.player.hero.pixel_y) {
+    if (this.player.hero.coord_x * this.scaledSize === this.player.hero.pixel_x
+      && this.player.hero.coord_y * this.scaledSize === this.player.hero.pixel_y) {
       if (this.serverSavedNewPosition === true) {
-        if (this.player.hero_path != null) {
+        if (this.player.hero.hero_path != null) {
           this.lastFrameRenderTime = Date.now() - this.lastFrameTime;
           this.lastFrameTime = Date.now();
           console.log('Last frame render time: ' + this.lastFrameRenderTime);
@@ -175,7 +174,7 @@ export class MapComponent implements OnInit {
         }
         else {
           // or make hero stand still
-          this.player.stop();
+          this.player.hero.stop();
         }
       }
       else {
@@ -192,14 +191,14 @@ export class MapComponent implements OnInit {
   tryHeroNextStep() {
     // proceed with next step
     this.setServerSavedNewPositionToFalse();
-    this.player.moveHeroStep();
+    this.player.hero.moveHeroStep();
     this.player.hero.animate();
     this.updateHeroPosition();
   }
 
   updateHeroPosition() {
     // send info about player's new coords to the server
-    this.playerSavedPosition = this.player.position;
+    this.playerSavedPosition = this.player.hero.position;
     this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
       this.setServerSavedNewPosition();
       if (data.success === true) {
@@ -208,8 +207,8 @@ export class MapComponent implements OnInit {
       else {
         this.gameUIService.showError(data.errorMessage);
         console.log('HERE');
-        this.player.revertHeroLastStep();
-        this.player.stop();
+        this.player.hero.revertHeroLastStep();
+        this.player.hero.stop();
       }
 
       this.gameUIService.heroInfoInitialize(data.playerData);
@@ -219,9 +218,9 @@ export class MapComponent implements OnInit {
   processMapResponse(data) {
     if (data.foundMonster !== null && data.foundMonster.alive === true) {
       console.log('Monster is alive!!!');
-      this.player.revertHeroLastStep();
+      this.player.hero.revertHeroLastStep();
     } else {
-      this.player.incrementHeroStep();
+      this.player.hero.incrementHeroStep();
     }
 
     this.foundLocation.emit({
@@ -247,8 +246,8 @@ export class MapComponent implements OnInit {
       if (false && data.strollEvent.type === 'fight') {
         this.openedModal = 'fight';
         this.strollEventFight = data.strollEvent.data;
-        this.player.clearMovementParams();
-        this.player.stop();
+        this.player.hero.clearMovementParams();
+        this.player.hero.stop();
       }
     }
   }T
@@ -285,8 +284,8 @@ export class MapComponent implements OnInit {
 
   infolocationUpdate(){
     document.getElementById('location-info').innerHTML =
-      this.world.locationInfo(this.player.coord_x + this.player.coord_y * this.columns)
-      + ' ('+this.player.coord_x+','+this.player.coord_y+')';
+      this.world.locationInfo(this.player.hero.coord_x + this.player.hero.coord_y * this.columns)
+      + ' ('+this.player.hero.coord_x+','+this.player.hero.coord_y+')';
   }
 
   closeModal() {
