@@ -56,6 +56,8 @@ export class MapComponent implements OnInit {
   frameCounter: number;
   previousSecond: number;
 
+  visibleHeroes: Hero[];
+
   constructor(
     public http: HttpClient,
     public mapService: MapService,
@@ -64,6 +66,7 @@ export class MapComponent implements OnInit {
     protected player: Player
   ) {
     this.heroImage = new Image();
+    this.visibleHeroes = new Array<Hero>;
 
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
@@ -73,19 +76,30 @@ export class MapComponent implements OnInit {
   ngOnInit(): void {
     console.log('Map component initialized');
 
+    this.columns = this.world.columns;
+    this.rows = this.world.rows;
+
     this.lastFrameTime = Date.now();
     this.loadHeroEssentialData();
 
     this.frameCounter = 0;
     this.previousSecond = Math.floor(Date.now() / 1000);
+
   }
 
   loop() {// The game loop
-    this.columns = this.world.columns;
-    this.rows = this.world.rows;
     this.animationFrame = window.requestAnimationFrame(() => this.loop());
-    const currentFrameTime = Date.now();
 
+    //this.frameTimeDebug();
+
+    this.heroLoop();
+    this.mapGfx.gfxLoop(this.visibleHeroes);
+
+    this.infolocationUpdate();
+  }
+
+  frameTimeDebug()
+  {
     const currentSecond = Math.floor(Date.now() / 1000);
     this.frameCounter++;
 
@@ -95,9 +109,12 @@ export class MapComponent implements OnInit {
       this.previousSecond = currentSecond;
       this.frameCounter = 0;
     }
+  }
 
-    this.heroLoop();
-    this.mapGfx.gfxLoop(currentFrameTime);
+  infolocationUpdate(){
+    document.getElementById('location-info').innerHTML =
+      this.world.locationInfo(this.player.coord_x + this.player.coord_y * this.columns)
+      + ' ('+this.player.coord_x+','+this.player.coord_y+')';
   }
 
   ngOnDestroy(): void {
@@ -138,8 +155,29 @@ export class MapComponent implements OnInit {
         
         this.handleFoundQuest(data.foundQuest);
 
+        this.loadOtherHeroes();
+
         this.animationFrame = window.requestAnimationFrame(() => this.loop());
       });
+  }
+
+  loadOtherHeroes()
+  {
+    let otherHero = new Hero(
+      2, 
+      this.player.coord_x - 2,
+      this.player.coord_y
+    );
+
+    this.visibleHeroes.push(otherHero);
+    
+    otherHero = new Hero(
+      3, 
+      this.player.coord_x + 2,
+      this.player.coord_y + 3
+    );
+
+    this.visibleHeroes.push(otherHero);
   }
 
   setServerSavedNewPosition() {

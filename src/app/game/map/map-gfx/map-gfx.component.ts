@@ -66,7 +66,9 @@ export class MapGfxComponent implements OnInit, OnDestroy {
     
     this.tileSheet.src = 'assets/graphics/terrain/mapa_plachta.jpg';
 
-
+    this.context.canvas.height = this.height;
+    this.context.canvas.width  = this.width;
+    // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
 
     this.loadMonsters();
 
@@ -88,12 +90,6 @@ export class MapGfxComponent implements OnInit, OnDestroy {
 
   addCanvasClickListener(){
     this.context.canvas.addEventListener('click', (event) => {
-
-      this.otherHero = new Hero(
-        2, 
-        Math.floor(this.pointer.x / this.scaledSize),
-        Math.floor(this.pointer.y / this.scaledSize)
-      );
 
       this.pointer.x =
         event.pageX
@@ -119,43 +115,20 @@ export class MapGfxComponent implements OnInit, OnDestroy {
     });
   }
 
-  
+  gfxLoop(visibleHeroes: Hero[]){
 
-  gfxLoop(currentFrameTime){
-    this.height = document.documentElement.clientHeight;
-    this.width  = document.documentElement.clientWidth;
-
-    /* Resize canvas on every frame */
-    this.context.canvas.height = this.height;
-    this.context.canvas.width  = this.width;
-    // this.context.imageSmoothingEnabled = false;// prevent antialiasing of drawn image
+    const currentFrameTime = Date.now();
 
     this.viewport.scrollTo(this.player.hero.pixel_x, this.player.hero.pixel_y);
 
     this.drawTerrain();
-
-    /* Draw the this.player. Remember to offset by the viewport position and
-       center screen position. (???) */
     this.drawHero(currentFrameTime);    
-    this.drawOtherHero(currentFrameTime);    
-    //console.log('map-gfx: ' + Date.now());
-    
-  //   // console.log('this.player.pixel_x, this.player.pixel_y: ' + this.player.pixel_x, this.player.pixel_y);
-   
-     this.infolocationUpdate();
+
+    visibleHeroes.forEach(hero => {
+        this.drawOtherHero(hero, currentFrameTime);
+    });
   }
-
-
-  infolocationUpdate(){
-    document.getElementById('location-info').innerHTML =
-      this.world.locationInfo(this.player.coord_x + this.player.coord_y * this.columns)
-      + ' ('+this.player.coord_x+','+this.player.coord_y+')';
-  }
-
-  heroInfoUpdate(heroInfo){
-    this.gameUIService.heroInfoInitialize(heroInfo);
-  }
-
+  
   drawTerrain(){
     /* Get the min and max column and row in the map to draw. For the min
     column and row (x and y) we use floor to round down and for the max we
@@ -268,9 +241,9 @@ export class MapGfxComponent implements OnInit, OnDestroy {
     );
   }
 
-  drawOtherHero(currentFrameTime){
+  drawOtherHero(hero: Hero, currentFrameTime){
 
-    var varsToDraw = this.otherHero.getVarsToDrawHero(currentFrameTime);
+    var varsToDraw = hero.getVarsToDrawHero(currentFrameTime);
 
     this.context.drawImage(
         varsToDraw.heroImage,
