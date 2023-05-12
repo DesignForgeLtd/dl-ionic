@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { World } from './world';
+import { World } from './World';
 
 export class HeroPath
 {

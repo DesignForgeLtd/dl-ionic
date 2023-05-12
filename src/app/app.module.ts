@@ -79,8 +79,8 @@ import {
 } from '../environments/environment';
 import { HeroEquipmentComponent } from './game/hero/hero-equipment/hero-equipment.component';
 import { BeltItemComponent } from './game/hero/belt-item/belt-item.component';
-import { World } from './game/map/map-scripts/world';
-import { Player } from './game/map/map-scripts/player';
+import { World } from './game/map/map-scripts/World';
+import { Player } from './game/map/map-scripts/Player';
 
 @NgModule({
   declarations: [

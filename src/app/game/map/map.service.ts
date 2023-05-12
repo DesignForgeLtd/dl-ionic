@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppSettings } from 'src/app/AppSettings';
-import { World } from './map-scripts/world';
+import { World } from './map-scripts/World';
 
 import { 
   PlayerData, 

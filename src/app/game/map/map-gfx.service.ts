@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Viewport } from './map-scripts/viewport';
+import { Viewport } from './map-scripts/Viewport';
 
 @Injectable({providedIn: 'root'})
 export class MapGfxService {

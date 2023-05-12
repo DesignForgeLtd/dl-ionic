@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild, OnInit, Output, EventEmitter } from '@angular/core';
 
-import { Player } from './map-scripts/player';
-import { World } from './map-scripts/world';
+import { Player } from './map-scripts/Player';
+import { World } from './map-scripts/World';
 import { MapService } from './map.service';
 import { GameUIService } from '../game-ui.service';
 import { Hero } from './map-scripts/Hero';

@@ -7,8 +7,8 @@ import { MapComponent } from '../map/map.component';
 
 import { MiningService } from './mining.service';
 import { MapService } from '../map/map.service';
-import { World } from '../map/map-scripts/world';
-import { Player } from '../map/map-scripts/player';
+import { World } from '../map/map-scripts/World';
+import { Player } from '../map/map-scripts/Player';
 
 
 @Component({

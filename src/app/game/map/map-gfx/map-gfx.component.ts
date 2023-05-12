@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { MapService } from '../map.service';
 import { GameUIService } from '../../game-ui.service';
-import { Viewport } from '../map-scripts/viewport';
-import { World } from '../map-scripts/world';
-import { Player } from '../map-scripts/player';
+import { Viewport } from '../map-scripts/Viewport';
+import { World } from '../map-scripts/World';
+import { Player } from '../map-scripts/Player';
 
 import { MapResponseData } from 'src/app/game/shared/map-service.interfaces';
 import { Hero } from '../map-scripts/Hero';

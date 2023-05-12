@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { HeroPath } from './heropath';
-import { World } from './world';
+import { HeroPath } from './HeroPath';
+import { World } from './World';
 import { Injectable } from "@angular/core";
 import { Hero } from './Hero';
 
