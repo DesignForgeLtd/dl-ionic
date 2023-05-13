@@ -87,9 +87,36 @@ export class MapComponent implements OnInit {
 
   }
 
-  getVisibleHeroByID(id: number)
+  setHeroPath(id: number, path)
   {
+    let hero = this.getHeroByID(id);
+    
+    if (hero === null)
+    {
+      return;
+    }
 
+    hero.hero_path_step = 0;
+    hero.hero_path = [];
+
+    path.forEach(step => {
+      hero.hero_path.push(step);
+    });
+
+    console.log(hero.hero_path);
+    console.log(this.visibleHeroes);
+  }
+  
+  getHeroByID(id: number)
+  {
+    const foundHero = this.visibleHeroes.find(hero => hero.id == id);
+
+    if (typeof foundHero != 'undefined')
+    {
+      return foundHero;    
+    }
+
+    return null;
   }
 
   loadHeroEssentialData() {
@@ -127,6 +154,35 @@ export class MapComponent implements OnInit {
 
         this.loadOtherHeroes();
 
+        window.setTimeout(() => {
+          this.setHeroPath(11, [-200,-200,-200,-200,-201, -200, -200]);
+          this.setHeroPath(99, [-200,-200,-200,-200,-200, -200, -200]);
+        }, 3000);
+
+        window.setTimeout(() => {
+          this.setHeroPath(11, [-200,-1,-201]);
+          this.setHeroPath(2, [-200,-1, -1, -199, -200, 201]);
+        }, 13000);
+
+
+        window.setTimeout(() => {
+          this.setHeroPath(66, [-1, -1, -199, -1, -1]);
+          this.setHeroPath(99, [1,201,1, 201, -200,-1,-201]);
+          this.setHeroPath(2, [-200,-1,-201]);
+        }, 16000);
+
+        window.setTimeout(() => {
+          this.setHeroPath(11, [-200,-1,-201]);
+          this.setHeroPath(2, [-200,-1, -1, -199, -200, 201]);
+        }, 18000);
+
+
+        window.setTimeout(() => {
+          this.setHeroPath(66, [-1, -1, -199, -1, -1]);
+          this.setHeroPath(99, [1,201,1, 201, -200,-1,-201]);
+          this.setHeroPath(2, [-200,-1,-201]);
+        }, 21000);
+
         this.animationFrame = window.requestAnimationFrame(() => this.loop());
       });
   }
@@ -150,6 +206,24 @@ export class MapComponent implements OnInit {
     );
 
     this.visibleHeroes.push(otherHero);
+    
+    otherHero = new Hero(
+      99,
+      5, 
+      this.player.hero.coord_x + 3,
+      this.player.hero.coord_y + 3
+    );
+
+    this.visibleHeroes.push(otherHero);
+
+    otherHero = new Hero(
+      2,
+      6, 
+      this.player.hero.coord_x + 4,
+      this.player.hero.coord_y + 5
+    );
+
+    this.visibleHeroes.push(otherHero);
   }
 
 
@@ -162,9 +236,30 @@ export class MapComponent implements OnInit {
     //this.frameTimeDebug();
 
     this.heroLoop();
+    this.otherHeroesLoop();
+
     this.mapGfx.gfxLoop(this.visibleHeroes);
 
     this.infolocationUpdate();
+  }
+
+  otherHeroesLoop(){
+    this.visibleHeroes.forEach(hero => {
+      if (hero.coord_x * this.scaledSize === hero.pixel_x
+        && hero.coord_y * this.scaledSize === hero.pixel_y) 
+      {
+        if (hero.hero_path != null) {
+          hero.moveHeroStep();
+          hero.animate(); 
+        }
+        else {
+          hero.stop();
+        }
+      }
+      else {
+        hero.animate();
+      }
+    });
   }
 
   heroLoop() {
@@ -176,7 +271,7 @@ export class MapComponent implements OnInit {
         if (this.player.hero.hero_path != null) {
           this.lastFrameRenderTime = Date.now() - this.lastFrameTime;
           this.lastFrameTime = Date.now();
-          console.log('Last frame render time: ' + this.lastFrameRenderTime);
+          //console.log('Last frame render time: ' + this.lastFrameRenderTime);
 
           this.tryHeroNextStep();
         }

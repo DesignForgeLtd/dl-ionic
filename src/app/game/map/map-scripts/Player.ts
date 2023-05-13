@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
+import { Injectable } from "@angular/core";
+
 import { HeroPath } from './HeroPath';
 import { World } from './World';
-import { Injectable } from "@angular/core";
 import { Hero } from './Hero';
 
 @Injectable({providedIn: 'root'})
@@ -27,7 +28,7 @@ export class Player {
     // TODO: REMOVE THIS LINE
     raceId = 4;
 
-    this.hero = new Hero(id, raceId, coord_x, coord_y);
+    this.hero = new Hero(id, raceId, coord_x, coord_y, true);
   }
 
 

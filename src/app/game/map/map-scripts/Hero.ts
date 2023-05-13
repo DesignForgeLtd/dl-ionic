@@ -36,13 +36,18 @@ export class Hero {
   public coord_x: number;
   public coord_y: number;
 
+  isPlayerHero = false;
+
   constructor(
     id: number,
     raceId: number,
     coord_x: number, 
-    coord_y: number
+    coord_y: number,
+    isPlayerHero: boolean = false
   ) {
     this.id = id;
+    this.isPlayerHero = isPlayerHero;
+
     this.direction = null;
     this.orientation = 'right';
 
@@ -90,6 +95,7 @@ export class Hero {
     );
 
     this.lastFrameRenderTime = Date.now();
+    // console.log('heroID: ' + this.id);
     // console.log('lastFrameRenderDuration: ' + this.lastFrameRenderDuration);
     // console.log('totalRenderDuration: ' + this.totalRenderDuration);
     // console.log('framesRenderedInStep: ' + this.framesRenderedInStep);
@@ -131,6 +137,11 @@ export class Hero {
 
     if (this.pixelsLeftInCurrentStepAnimation == 0)
     {
+      if ( ! this.isPlayerHero)
+      {
+        this.incrementHeroStep();
+      }
+      
       this.pixelsLeftInCurrentStepAnimation = 76;
       this.lastFrameRenderTime = 0;
       this.totalRenderDuration = 0;
