@@ -7,6 +7,7 @@ import { MapService } from './map.service';
 import { GameUIService } from '../game-ui.service';
 import { Hero } from './map-scripts/Hero';
 import { MapGfxComponent } from './map-gfx/map-gfx.component';
+import { WS } from 'src/app/websockets/WS';
 
 // interface MonstersData{
 //   positions: any;
@@ -60,6 +61,7 @@ export class MapComponent implements OnInit {
 
   constructor(
     public http: HttpClient,
+    public WS: WS,
     public mapService: MapService,
     public gameUIService: GameUIService,
     protected world: World,
@@ -74,7 +76,7 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('Map component initialized');
+    //console.log('Map component initialized');
 
     this.columns = this.world.columns;
     this.rows = this.world.rows;
@@ -152,80 +154,13 @@ export class MapComponent implements OnInit {
         
         this.handleFoundQuest(data.foundQuest);
 
-        this.loadOtherHeroes();
+        // this.loadOtherHeroes();
+        // this.moveOtherHeroes();
 
-        window.setTimeout(() => {
-          this.setHeroPath(11, [-200,-200,-200,-200,-201, -200, -200]);
-          this.setHeroPath(99, [-200,-200,-200,-200,-200, -200, -200]);
-        }, 3000);
-
-        window.setTimeout(() => {
-          this.setHeroPath(11, [-200,-1,-201]);
-          this.setHeroPath(2, [-200,-1, -1, -199, -200, 201]);
-        }, 13000);
-
-
-        window.setTimeout(() => {
-          this.setHeroPath(66, [-1, -1, -199, -1, -1]);
-          this.setHeroPath(99, [1,201,1, 201, -200,-1,-201]);
-          this.setHeroPath(2, [-200,-1,-201]);
-        }, 16000);
-
-        window.setTimeout(() => {
-          this.setHeroPath(11, [-200,-1,-201]);
-          this.setHeroPath(2, [-200,-1, -1, -199, -200, 201]);
-        }, 18000);
-
-
-        window.setTimeout(() => {
-          this.setHeroPath(66, [-1, -1, -199, -1, -1]);
-          this.setHeroPath(99, [1,201,1, 201, -200,-1,-201]);
-          this.setHeroPath(2, [-200,-1,-201]);
-        }, 21000);
-
+        
         this.animationFrame = window.requestAnimationFrame(() => this.loop());
       });
   }
-
-  loadOtherHeroes()
-  {
-    let otherHero = new Hero(
-      66,
-      2, 
-      this.player.hero.coord_x - 2,
-      this.player.hero.coord_y
-    );
-
-    this.visibleHeroes.push(otherHero);
-    
-    otherHero = new Hero(
-      11,
-      3, 
-      this.player.hero.coord_x + 2,
-      this.player.hero.coord_y + 3
-    );
-
-    this.visibleHeroes.push(otherHero);
-    
-    otherHero = new Hero(
-      99,
-      5, 
-      this.player.hero.coord_x + 3,
-      this.player.hero.coord_y + 3
-    );
-
-    this.visibleHeroes.push(otherHero);
-
-    otherHero = new Hero(
-      2,
-      6, 
-      this.player.hero.coord_x + 4,
-      this.player.hero.coord_y + 5
-    );
-
-    this.visibleHeroes.push(otherHero);
-  }
-
 
   /*
     The game loop
@@ -300,6 +235,7 @@ export class MapComponent implements OnInit {
   }
 
   updateHeroPosition() {
+    this.WS.send('hello there! I wanna go to: ' + this.player.hero.position)        
     // send info about player's new coords to the server
     this.playerSavedPosition = this.player.hero.position;
     this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
@@ -399,4 +335,83 @@ export class MapComponent implements OnInit {
     console.log('Map component destroyed');
     cancelAnimationFrame(this.animationFrame);
   }
+
+
+
+
+
+  /* TEST METHODS BELOW */
+
+  loadOtherHeroes()
+  {
+    let otherHero = new Hero(
+      66,
+      2, 
+      this.player.hero.coord_x - 2,
+      this.player.hero.coord_y
+    );
+
+    this.visibleHeroes.push(otherHero);
+    
+    otherHero = new Hero(
+      11,
+      3, 
+      this.player.hero.coord_x + 2,
+      this.player.hero.coord_y + 3
+    );
+
+    this.visibleHeroes.push(otherHero);
+    
+    otherHero = new Hero(
+      99,
+      5, 
+      this.player.hero.coord_x + 3,
+      this.player.hero.coord_y + 3
+    );
+
+    this.visibleHeroes.push(otherHero);
+
+    otherHero = new Hero(
+      2,
+      6, 
+      this.player.hero.coord_x + 4,
+      this.player.hero.coord_y + 5
+    );
+
+    this.visibleHeroes.push(otherHero);
+  }
+
+  moveOtherHeroes()
+  {
+    window.setTimeout(() => {
+      this.setHeroPath(11, [-200,-200,-200,-200,-201, -200, -200]);
+      this.setHeroPath(99, [-200,-200,-200,-200,-200, -200, -200]);
+    }, 3000);
+
+    window.setTimeout(() => {
+      this.setHeroPath(11, [-200,-1,-201]);
+      this.setHeroPath(2, [-200,-1, -1, -199, -200, 201]);
+    }, 13000);
+
+
+    window.setTimeout(() => {
+      this.setHeroPath(66, [-1, -1, -199, -1, -1]);
+      this.setHeroPath(99, [1,201,1, 201, -200,-1,-201]);
+      this.setHeroPath(2, [-200,-1,-201]);
+    }, 16000);
+
+    window.setTimeout(() => {
+      this.setHeroPath(11, [-200,-1,-201]);
+      this.setHeroPath(2, [-200,-1, -1, -199, -200, 201]);
+    }, 18000);
+
+
+    window.setTimeout(() => {
+      this.setHeroPath(66, [-1, -1, -199, -1, -1]);
+      this.setHeroPath(99, [1,201,1, 201, -200,-1,-201]);
+      this.setHeroPath(2, [-200,-1,-201]);
+    }, 21000);
+
+  }
+
 }

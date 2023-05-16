@@ -84,7 +84,7 @@ export class MapGfxComponent implements OnInit, OnDestroy {
     this.mapService.loadMonstersData()
     .subscribe(data => {
       this.monsters = data.monsters;
-      console.log(this.monsters);
+      //console.log(this.monsters);
     });
   }
 

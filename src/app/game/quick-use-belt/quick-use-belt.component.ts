@@ -30,8 +30,8 @@ export class QuickUseBeltComponent implements OnInit {
     this.baggageService.showQuickUseItems()
       .subscribe(data => {
 
-        console.log('quick use belt loaded: ');
-        console.log(data);
+        // console.log('quick use belt loaded: ');
+        // console.log(data);
 
         Object.keys(data.result).map(itemsGroup => {
           const group = data.result[itemsGroup];
@@ -46,8 +46,6 @@ export class QuickUseBeltComponent implements OnInit {
   baggageUse(item){
     console.log('Using ' + item.name);
     this.baggageService.use(item.hero_item_id).subscribe(data => {
-      console.log('data: ');
-      console.log(data);
       if (data.success === true) {
         this.presentToast('success', 'Used ' + item.name);
         item.quantity -= data.quantity;

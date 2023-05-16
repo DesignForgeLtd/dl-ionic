@@ -45,8 +45,8 @@ export class BaggagePopoverComponent implements OnInit {
   baggageUse(){
     console.log('Using ' + this.item.name);
     this.baggageService.use(this.item.hero_item_id).subscribe(data => {
-      console.log('data: ');
-      console.log(data);
+      //console.log('data: ');
+      //console.log(data);
       if (data.success === true) {
         this.presentToast('success', 'Used ' + this.item.name);
         this.item.quantity -= data.quantity;
@@ -144,8 +144,8 @@ export class BaggagePopoverComponent implements OnInit {
   shopBuy(quantity: number){
     console.log('buying '+quantity+' of '+this.item.name+'...');
     this.baggageService.shopBuy(this.item.shop_item_id, quantity).subscribe(data => {
-      console.log('data: ');
-      console.log(data);
+      //console.log('data: ');
+      //console.log(data);
       if (data.success === true) {
         this.presentToast('success', 'Bought ' + data.quantity + 'x ' + this.item.name + ' for total price of ' + data.price + ' gold.');
         //this.gameUIService.heroInfoUpdate(data.hero_data_to_update);
@@ -163,8 +163,8 @@ export class BaggagePopoverComponent implements OnInit {
   quickUseBelt(){
     console.log('Quick Use Belt ' + this.item.name);
     this.baggageService.quickUseBelt(this.item.item_id).subscribe(data => {
-      console.log('data: ');
-      console.log(data);
+      //console.log('data: ');
+      //console.log(data);
       if (data.success === true) {
         this.presentToast('success', data.result + ' ' + this.item.name);
         this.baggageService.baggageUpdated.emit(true);
@@ -179,8 +179,8 @@ export class BaggagePopoverComponent implements OnInit {
   putOnSale(quantity: number, price: number){
     console.log('put on sale ' + quantity + ' ' + this.item.name);
     this.baggageService.putOnSale(this.item.hero_item_id, quantity, price).subscribe(data => {
-      console.log('data: ');
-      console.log(data);
+      //console.log('data: ');
+      //console.log(data);
       if (data.success === true) {
         this.presentToast('success', 'Puted on sale ' + this.item.name);
         this.item.quantity -= data.quantity;
@@ -197,8 +197,8 @@ export class BaggagePopoverComponent implements OnInit {
   putToStorage(quantity: number){
     console.log('put to storage ' + quantity + ' ' + this.item.name);
     this.baggageService.putToStorage(this.item.hero_item_id, quantity).subscribe(data => {
-      console.log('data: ');
-      console.log(data);
+      //console.log('data: ');
+      //console.log(data);
       if (data.success === true) {
         this.presentToast('success', 'Puted to storage ' + this.item.name);
         this.item.quantity -= data.quantity;
@@ -215,8 +215,8 @@ export class BaggagePopoverComponent implements OnInit {
   getBack(quantity: number){
     console.log('get back ' + quantity + ' ' + this.item.name);
     this.baggageService.getBack(this.item.hero_item_id, quantity).subscribe(data => {
-      console.log('data: ');
-      console.log(data);
+      //console.log('data: ');
+      //console.log(data);
       if (data.success === true) {
         this.presentToast('success', 'Removed ' + this.item.name);
         this.item.quantity -= data.quantity;
@@ -233,8 +233,8 @@ export class BaggagePopoverComponent implements OnInit {
   buyFromMarketplace(quantity: number){
     console.log('buy from marketplace ' + quantity + ' ' + this.item.name);
     this.baggageService.buyFromMarketplace(this.item.hero_item_id, quantity).subscribe(data => {
-      console.log('data: ');
-      console.log(data);
+      //console.log('data: ');
+      //console.log(data);
       if (data.success === true) {
         this.presentToast('success', 'Bought ' + this.item.name);
         this.item.quantity -= data.quantity;
@@ -253,8 +253,8 @@ export class BaggagePopoverComponent implements OnInit {
     this.baggageService
     .insertToBattleBelt(this.item.hero_item_id)
     .subscribe(data => {
-      console.log('data: ');
-      console.log(data);
+      //console.log('data: ');
+      //console.log(data);
       if (data.success === true) {
         this.presentToast('success', 'Inserted ' + this.item.name + ' to Battle Belt');
         this.item.quantity -= data.quantity;

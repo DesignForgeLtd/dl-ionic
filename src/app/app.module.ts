@@ -62,12 +62,17 @@ import { FindComponent } from './game/map/stroll-event/find/find.component';
 import { FightComponent } from './game/map/stroll-event/fight/fight.component';
 import { LevelUpHeroComponent } from './game/level-up-hero/level-up-hero.component';
 import { LevelUpOccupationComponent } from './game/level-up-occupation/level-up-occupation.component';
+import { HeroEquipmentComponent } from './game/hero/hero-equipment/hero-equipment.component';
+import { BeltItemComponent } from './game/hero/belt-item/belt-item.component';
+import { World } from './game/map/map-scripts/World';
+import { Player } from './game/map/map-scripts/Player';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   SocialLoginModule,
   SocialAuthServiceConfig,
 } from '@abacritt/angularx-social-login';
+
 import {
   GoogleLoginProvider,
   FacebookLoginProvider
@@ -77,10 +82,12 @@ import {
   googleOAuth,
   facebookOAuth
 } from '../environments/environment';
-import { HeroEquipmentComponent } from './game/hero/hero-equipment/hero-equipment.component';
-import { BeltItemComponent } from './game/hero/belt-item/belt-item.component';
-import { World } from './game/map/map-scripts/World';
-import { Player } from './game/map/map-scripts/Player';
+
+import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
+import { WS } from './websockets/WS';
+
+const config: SocketIoConfig = { url: 'http://localhost:5000', options: {} };
+
 
 @NgModule({
   declarations: [
@@ -145,7 +152,8 @@ import { Player } from './game/map/map-scripts/Player';
 //    StoreModule.forRoot({productionLocation: productionLocationReducer}),
     HttpClientModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    SocketIoModule.forRoot(config),
   ],
   providers: [
     {
@@ -177,7 +185,8 @@ import { Player } from './game/map/map-scripts/Player';
         } as SocialAuthServiceConfig,
     },
     World,
-    Player
+    Player,
+    WS
   ],
   bootstrap: [AppComponent],
 })

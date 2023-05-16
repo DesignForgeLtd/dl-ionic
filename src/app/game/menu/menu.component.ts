@@ -31,8 +31,8 @@ export class MenuComponent implements OnInit {
     private mapService: MapService,
     private socialAuthService: SocialAuthService, 
     private miningService: MiningService) {
-      console.log('A');
-      console.log(this.occupiedWith);
+      // console.log('A');
+      // console.log(this.occupiedWith);
       this.gameUIService.currentLocationEmitter.subscribe(
         (currentLocation: string) => this.atLocation = currentLocation !== ''
       );
@@ -45,15 +45,15 @@ export class MenuComponent implements OnInit {
     }
 
   ngOnInit() {
-    console.log('B');
-    console.log(this.occupiedWith);
+    // console.log('B');
+    // console.log(this.occupiedWith);
     if (this.authService.user !== null){
       this.loggedIn = true;
     }
 
     this.atLocation = this.gameUIService.currentLocation !== '';
-    console.log('C');
-    console.log(this.atLocation);
+    // console.log('C');
+    // console.log(this.atLocation);
   }
 
   onOpenMenu(feature: string) {

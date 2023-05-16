@@ -9,6 +9,7 @@ import { MiningService } from './mining.service';
 import { MapService } from '../map/map.service';
 import { World } from '../map/map-scripts/World';
 import { Player } from '../map/map-scripts/Player';
+import { WS } from 'src/app/websockets/WS';
 
 
 @Component({
@@ -28,13 +29,14 @@ export class MiningComponent extends MapComponent implements OnInit {
 
   constructor(
     public http: HttpClient,
+    public ws: WS,
     public mapService: MapService,
     public miningService: MiningService,
     public gameUIService: GameUIService,
     protected world: World,
     protected player: Player
   ) {
-    super(http, mapService, gameUIService, world, player);
+    super(http, ws, mapService, gameUIService, world, player);
   }
 
   loadGameMap(level: number, originalPosition: number){

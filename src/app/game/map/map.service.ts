@@ -40,7 +40,7 @@ export class MapService {
     )
       .subscribe(data => {
         this.world.populateMap(data);
-        console.log('MAP LOADED');
+        // console.log('MAP LOADED');
       });
   }
 

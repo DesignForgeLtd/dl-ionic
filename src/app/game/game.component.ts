@@ -65,7 +65,7 @@ export class GameComponent implements OnInit {
   ngOnInit() {
     // MarrQ
     this.loadHeroEssentialData();
-    console.log(this.playerDataOccupiedWith);
+    //console.log(this.playerDataOccupiedWith);
   }
 
   closeModal(){
@@ -78,7 +78,7 @@ export class GameComponent implements OnInit {
     .subscribe(data => {
       this.heroEssentialData = data;
       this.playerDataOccupiedWith = data.playerData.occupied_with;
-      console.log(data);
+      //console.log(data);
 
       const playerData = data.playerData;
       //this.world = new World(playerData.level, 200, 200);
@@ -89,10 +89,10 @@ export class GameComponent implements OnInit {
   handleFoundLocation(data) {
     let foundLocation = data.foundLocation; 
     let foundMonster =  data.foundMonster;
-    console.log("data: ");
-    console.log( data);
-    console.log("foundLocation: ");
-    console.log( foundLocation);
+    // console.log("data: ");
+    // console.log( data);
+    // console.log("foundLocation: ");
+    // console.log( foundLocation);
     if (foundLocation !== null) {
       switch (foundLocation.type) {
         case 1:

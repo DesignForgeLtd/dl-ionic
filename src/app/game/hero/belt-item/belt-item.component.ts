@@ -35,8 +35,6 @@ export class BeltItemComponent implements OnInit {
     console.log('remove item from battle belt ' + this.item.name + ' [' + this.index + ']');
     this.heroService
     .removeFromBattleBelt(this.item.id, this.index).subscribe(data => {
-      console.log('data: ');
-      console.log(data);
       if (data.success === true) {
         this.presentToast('success', 'Removed ' + this.item.name);
         this.item = null;
