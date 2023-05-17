@@ -235,7 +235,7 @@ export class MapComponent implements OnInit {
   }
 
   updateHeroPosition() {
-    this.WS.send('hello there! I wanna go to: ' + this.player.hero.position)        
+    //this.WS.message("Hero ID: " + this.player.hero.id + ' goes to: ' + this.player.hero.position)        
     // send info about player's new coords to the server
     this.playerSavedPosition = this.player.hero.position;
     this.mapService.updateActualPosition(this.playerSavedPosition).subscribe(data => {
@@ -294,12 +294,12 @@ export class MapComponent implements OnInit {
 
   setServerSavedNewPosition() {
     this.serverSavedNewPosition = true;
-    console.log('this.serverSavedNewPosition = true;');
+    // console.log('this.serverSavedNewPosition = true;');
   }
 
   setServerSavedNewPositionToFalse() {
     this.serverSavedNewPosition = false;
-    console.log('this.serverSavedNewPosition = false;');
+    // console.log('this.serverSavedNewPosition = false;');
   }
 
   handleFoundQuest(foundQuest: boolean) {

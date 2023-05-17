@@ -58,6 +58,16 @@ export class MapService {
     );
   }
 
+  newHeroPath(path){
+    return this.http.post<MapResponseData>(
+      AppSettings.API_ENDPOINT + '/map/new-hero-path',
+      {
+        responseType: 'json',
+        path
+      }
+    );
+  }
+
   useUndergroundPassage(direction){
     return this.http.post<MapResponseData>(
       AppSettings.API_ENDPOINT + '/map/subway/'+direction,

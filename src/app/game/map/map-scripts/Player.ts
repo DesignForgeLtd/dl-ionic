@@ -5,6 +5,8 @@ import { Injectable } from "@angular/core";
 import { HeroPath } from './HeroPath';
 import { World } from './World';
 import { Hero } from './Hero';
+import { MapService } from "../map.service";
+import { WS } from "src/app/websockets/WS";
 
 @Injectable({providedIn: 'root'})
 
@@ -13,7 +15,11 @@ export class Player {
   public level: number; // world level
   public hero: Hero; // TODO: make private and resolve issues related to this
 
-  constructor(private world: World) {};
+  constructor(
+    private world: World,
+    public mapService: MapService,
+    public WS: WS
+  ) {};
 
   setPlayerData(
     id: number, 
@@ -25,8 +31,7 @@ export class Player {
   {
     this.level = level;
     
-    // TODO: REMOVE THIS LINE
-    raceId = 4;
+    //raceId = 2; // TODO: REMOVE THIS LINE
 
     this.hero = new Hero(id, raceId, coord_x, coord_y, true);
   }
@@ -83,6 +88,23 @@ export class Player {
         hero_path_string += hero_step + ';';
       }
       console.log('Path to reach this destination is: '+hero_path_string);
+
+      this.mapService.newHeroPath(hero_path_string).subscribe(data => {
+        if (data.success === true) {
+          //console.log('Saved new path on the server successfully');
+          
+          //this.WS.message("Hero ID: " + this.hero.id + ' goes to: ' + this.hero.position)        
+          this.WS.heroMove({'hero_id': this.hero.id, 'path': hero_path_string});        
+          
+          return true;
+        }
+        else {
+          this.hero.clearMovementParams();
+          this.hero.clearHeroAnimationParams();
+
+          return data.errorMessage;
+        }
+      });
     }
     else // means we got empty array in this.hero_path
     {
@@ -92,6 +114,4 @@ export class Player {
 
     return true;
 	}
-
-
 }

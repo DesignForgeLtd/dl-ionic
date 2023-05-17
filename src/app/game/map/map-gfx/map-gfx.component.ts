@@ -107,7 +107,8 @@ export class MapGfxComponent implements OnInit, OnDestroy {
         Math.floor(this.pointer.y / this.scaledSize)
       );
 
-      if (result !== true && result !== false)
+      //if (result !== true && result !== false)
+      if (result !== true)
       {
         this.gameUIService.showError(result);
       }

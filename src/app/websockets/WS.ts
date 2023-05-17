@@ -15,8 +15,13 @@ export class WS {
         };
     };
 
-    send(text)
+    message(text)
     {
-        this.socket.send(text)        
+        this.socket.send(JSON.stringify({'action': 'message', 'message': text}));        
+    }
+
+    heroMove(data)
+    {
+        this.socket.send(JSON.stringify({'action': 'heroMove', 'data': data}));
     }
 }
