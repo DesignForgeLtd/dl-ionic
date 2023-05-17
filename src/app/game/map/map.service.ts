@@ -27,6 +27,7 @@ export class MapService {
       'locationFullData': any;
       'foundMonster': FoundMonsterData;
       'foundQuest': boolean;
+      'activeHeroes': any;
     }>( // 'id': string;'position': number;'level': number
       AppSettings.API_ENDPOINT + '/hero/getEssentialData',
       {responseType: 'json'}

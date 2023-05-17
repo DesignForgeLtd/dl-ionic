@@ -154,7 +154,7 @@ export class MapComponent implements OnInit {
         
         this.handleFoundQuest(data.foundQuest);
 
-        // this.loadOtherHeroes();
+        this.loadOtherHeroes(data.activeHeroes);
         // this.moveOtherHeroes();
 
         
@@ -336,13 +336,31 @@ export class MapComponent implements OnInit {
     cancelAnimationFrame(this.animationFrame);
   }
 
+  loadOtherHeroes(heroes)
+  {
+    heroes.forEach(hero => {
+      let otherHero = new Hero(
+        hero.id,
+        hero.race_id, 
+        hero.position % this.columns,
+        Math.floor(hero.position / this.columns)
+      );
 
+      this.visibleHeroes.push(otherHero);
+    });
+  }
 
-
+  moveOtherHeroes()
+  {
+    window.setTimeout(() => {
+      this.setHeroPath(11, [-200,-200,-200,-200,-201, -200, -200])
+      this.setHeroPath(99, [-200,-200,-200,-200,-200, -200, -200]);
+    }, 3000);
+  }
 
   /* TEST METHODS BELOW */
 
-  loadOtherHeroes()
+  loadOtherHeroesTest()
   {
     let otherHero = new Hero(
       66,
@@ -381,7 +399,7 @@ export class MapComponent implements OnInit {
     this.visibleHeroes.push(otherHero);
   }
 
-  moveOtherHeroes()
+  moveOtherHeroesTest()
   {
     window.setTimeout(() => {
       this.setHeroPath(11, [-200,-200,-200,-200,-201, -200, -200]);
