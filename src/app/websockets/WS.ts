@@ -1,8 +1,11 @@
-import { Injectable } from "@angular/core";
+import { EventEmitter, Injectable, Output } from "@angular/core";
 
 @Injectable({providedIn: 'root'})
 
 export class WS {
+
+    @Output() heroMoveRegistered : EventEmitter<any> = new EventEmitter();
+
 
     private socket: WebSocket;
 
@@ -10,8 +13,11 @@ export class WS {
         this.socket = new WebSocket('ws://localhost:443/');
         
         this.socket.onmessage = (event) => {
-            // console.log(event)
+            console.log(event.data)
+            console.log(typeof event.data)
             console.log('Message from WS server: ' + event.data);
+
+            this.heroMoveRegistered.emit(event.data);
         };
     };
 

@@ -73,6 +73,10 @@ export class MapComponent implements OnInit {
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
     );
+
+    this.WS.heroMoveRegistered.subscribe(
+      (data: any) => this.setHeroPathWS(data)
+    );
   }
 
   ngOnInit(): void {
@@ -89,9 +93,20 @@ export class MapComponent implements OnInit {
 
   }
 
+  setHeroPathWS(data: string) // {"heroID":number,"path": string}
+  {
+    const dataObj = JSON.parse(data);
+
+    const path = dataObj.path.split(';');
+    
+    this.setHeroPath(dataObj.heroID, path);
+  }
+  
   setHeroPath(id: number, path)
   {
     let hero = this.getHeroByID(id);
+    console.log(typeof hero);
+    console.log(hero);
     
     if (hero === null)
     {
@@ -102,7 +117,9 @@ export class MapComponent implements OnInit {
     hero.hero_path = [];
 
     path.forEach(step => {
-      hero.hero_path.push(step);
+      if (step != ''){
+        hero.hero_path.push(parseInt(step));
+      }
     });
 
     console.log(hero.hero_path);
@@ -124,7 +141,8 @@ export class MapComponent implements OnInit {
   loadHeroEssentialData() {
     this.mapService.loadHeroEssentialData()
       .subscribe(data => {
-
+        console.log(data.playerData)
+        console.log(typeof data.playerData)
         const playerData = data.playerData;
 
         this.world.setLevel(playerData.level);
@@ -155,7 +173,8 @@ export class MapComponent implements OnInit {
         this.handleFoundQuest(data.foundQuest);
 
         this.loadOtherHeroes(data.activeHeroes);
-        // this.moveOtherHeroes();
+        // this.loadOtherHeroesTest();
+        // this.moveOtherHeroesTest();
 
         
         this.animationFrame = window.requestAnimationFrame(() => this.loop());
@@ -350,28 +369,21 @@ export class MapComponent implements OnInit {
     });
   }
 
-  moveOtherHeroes()
-  {
-    window.setTimeout(() => {
-      this.setHeroPath(11, [-200,-200,-200,-200,-201, -200, -200])
-      this.setHeroPath(99, [-200,-200,-200,-200,-200, -200, -200]);
-    }, 3000);
-  }
 
   /* TEST METHODS BELOW */
 
   loadOtherHeroesTest()
   {
-    let otherHero = new Hero(
-      66,
-      2, 
-      this.player.hero.coord_x - 2,
-      this.player.hero.coord_y
-    );
+    // let otherHero = new Hero(
+    //   66,
+    //   2, 
+    //   this.player.hero.coord_x - 2,
+    //   this.player.hero.coord_y
+    // );
 
-    this.visibleHeroes.push(otherHero);
+    // this.visibleHeroes.push(otherHero);
     
-    otherHero = new Hero(
+    let otherHero = new Hero(
       11,
       3, 
       this.player.hero.coord_x + 2,
@@ -380,55 +392,55 @@ export class MapComponent implements OnInit {
 
     this.visibleHeroes.push(otherHero);
     
-    otherHero = new Hero(
-      99,
-      5, 
-      this.player.hero.coord_x + 3,
-      this.player.hero.coord_y + 3
-    );
+    // otherHero = new Hero(
+    //   99,
+    //   5, 
+    //   this.player.hero.coord_x + 3,
+    //   this.player.hero.coord_y + 3
+    // );
 
-    this.visibleHeroes.push(otherHero);
+    // this.visibleHeroes.push(otherHero);
 
-    otherHero = new Hero(
-      2,
-      6, 
-      this.player.hero.coord_x + 4,
-      this.player.hero.coord_y + 5
-    );
+    // otherHero = new Hero(
+    //   2,
+    //   6, 
+    //   this.player.hero.coord_x + 4,
+    //   this.player.hero.coord_y + 5
+    // );
 
-    this.visibleHeroes.push(otherHero);
+    // this.visibleHeroes.push(otherHero);
   }
 
   moveOtherHeroesTest()
   {
     window.setTimeout(() => {
       this.setHeroPath(11, [-200,-200,-200,-200,-201, -200, -200]);
-      this.setHeroPath(99, [-200,-200,-200,-200,-200, -200, -200]);
+    //  this.setHeroPath(99, [-200,-200,-200,-200,-200, -200, -200]);
     }, 3000);
 
-    window.setTimeout(() => {
-      this.setHeroPath(11, [-200,-1,-201]);
-      this.setHeroPath(2, [-200,-1, -1, -199, -200, 201]);
-    }, 13000);
+    // window.setTimeout(() => {
+    //   this.setHeroPath(11, [-200,-1,-201]);
+    //   this.setHeroPath(2, [-200,-1, -1, -199, -200, 201]);
+    // }, 13000);
 
 
-    window.setTimeout(() => {
-      this.setHeroPath(66, [-1, -1, -199, -1, -1]);
-      this.setHeroPath(99, [1,201,1, 201, -200,-1,-201]);
-      this.setHeroPath(2, [-200,-1,-201]);
-    }, 16000);
+    // window.setTimeout(() => {
+    //   this.setHeroPath(66, [-1, -1, -199, -1, -1]);
+    //   this.setHeroPath(99, [1,201,1, 201, -200,-1,-201]);
+    //   this.setHeroPath(2, [-200,-1,-201]);
+    // }, 16000);
 
-    window.setTimeout(() => {
-      this.setHeroPath(11, [-200,-1,-201]);
-      this.setHeroPath(2, [-200,-1, -1, -199, -200, 201]);
-    }, 18000);
+    // window.setTimeout(() => {
+    //   this.setHeroPath(11, [-200,-1,-201]);
+    //   this.setHeroPath(2, [-200,-1, -1, -199, -200, 201]);
+    // }, 18000);
 
 
-    window.setTimeout(() => {
-      this.setHeroPath(66, [-1, -1, -199, -1, -1]);
-      this.setHeroPath(99, [1,201,1, 201, -200,-1,-201]);
-      this.setHeroPath(2, [-200,-1,-201]);
-    }, 21000);
+    // window.setTimeout(() => {
+    //   this.setHeroPath(66, [-1, -1, -199, -1, -1]);
+    //   this.setHeroPath(99, [1,201,1, 201, -200,-1,-201]);
+    //   this.setHeroPath(2, [-200,-1,-201]);
+    // }, 21000);
 
   }
 
