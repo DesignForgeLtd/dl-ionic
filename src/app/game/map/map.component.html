@@ -1,7 +1,7 @@
 <app-map-gfx
   [playerSubject]="playerSubject"
   [world]="world"
-  (runHeroLoop) = "heroLoop($event)"
+  (runHeroLoop)="heroLoop($event)"
 ></app-map-gfx>
 
 <div id="location-info"></div>
@@ -50,6 +50,11 @@
   *ngIf="openedModal === 'weapon-fix'"
   [passedLocationData]="locationData"
 ></app-weapon-fix>
+
+<app-weapon-enhance
+  *ngIf="openedModal === 'weapon-enhance'"
+  [passedLocationData]="locationData"
+></app-weapon-enhance>
 
 <app-monster
   *ngIf="openedModal === 'monster'"

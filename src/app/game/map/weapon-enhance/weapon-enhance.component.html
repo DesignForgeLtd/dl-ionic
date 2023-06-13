@@ -1,0 +1,77 @@
+<div class="backdrop"></div>
+<div class="modal-container">
+
+  <ion-card>
+
+    <ion-card-header>
+      <ion-toolbar>
+        <h1>Weapon Enhance</h1>
+        <ion-buttons slot="end">
+          <ion-button color="danger" (click)="closeModal()">
+            <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-card-header>
+
+
+    <ion-card-content>
+
+          <ng-container>
+
+            <h2>Here you can enhance your weapon.</h2>
+
+            <div *ngIf="resourcesNeeded">
+              To enhance your weapon, you need jewels. It will cost you {{resourcesNeeded.gold}} gold.
+              <br>
+              You can also create unique nickname. Cost of it is {{resourcesNeeded.mm}} MM.
+            </div>
+
+            <div *ngIf="resources">
+              You have now
+              {{resources.gold}} gold
+              and {{resources.mm}} MM
+              and {{resources.jewels.length}} different jewels to enhance.
+            </div>
+
+            <div *ngIf="weaponList.length; else noWeaponList">
+              <h3>Choose weapon to enhance:</h3>
+              <div *ngFor="let weapon of weaponList" class="baggage-item">
+                <div
+                  class="baggage-item-image weapon"
+                  style="background-image: url('../../../assets/graphics/uzbrojenie/{{ weapon.item.image }}');"
+                ></div>
+                <b>{{ weapon.item.name }}</b>
+                <br>
+                Durability: {{ weapon.durability }}
+                <div>Slots: <span *ngIf="weapon.slots > 0">{{weapon.slots - weapon.mountedItems.length}} / </span>{{weapon.slots}}</div>
+                <br>
+
+                <div *ngIf="resources.jewels.length">
+                  <select #jewelToInstall>
+                    <option *ngFor="let jewel of resources.jewels | keyvalue" value="{{jewel.value.item_id}}">{{jewel.value.item.name}}</option>
+                  </select>
+                  <button (click)="enhanceWeapon(weapon)">Enhance Weapon</button>
+                </div>
+
+                <div>
+                  <label for="nickname-for-{{ weapon.id }}">Nickname:</label>
+                  <input type="text" name="nickname" id="nickname-for-{{ weapon.id }}" value="{{ weapon.nickname }}">
+                  <button (click)="nicknameWeapon(weapon)">Create</button>
+                </div>
+
+              </div>
+            </div>
+
+            <ng-template #noWeaponList>
+              <h3>You have no weapon to fix.</h3>
+            </ng-template>
+
+          </ng-container>
+
+          <ion-button *ngIf="message" expand="full" color="warning">{{message}}</ion-button>
+
+    </ion-card-content>
+
+  </ion-card>
+</div>

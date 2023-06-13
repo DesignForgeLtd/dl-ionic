@@ -46,6 +46,7 @@ import { MonsterComponent } from './game/map/monster/monster.component';
 import { BankComponent } from './game/map/bank/bank.component';
 import { WitchComponent } from './game/map/witch/witch.component';
 import { WeaponFixComponent } from './game/map/weapon-fix/weapon-fix.component';
+import { WeaponEnhanceComponent } from './game/map/weapon-enhance/weapon-enhance.component';
 import { ReceivedBadgeComponent } from './game/received-badge/received-badge.component';
 import { MiningComponent } from './game/mining/mining.component';
 import { MinePortalComponent } from './game/mining/mine-portal/mine-portal.component';
@@ -112,6 +113,7 @@ import { BeltItemComponent } from './game/hero/belt-item/belt-item.component';
     BankComponent,
     WitchComponent,
     WeaponFixComponent,
+    WeaponEnhanceComponent,
     BaggagePopoverComponent,
     MonsterComponent,
     MiningComponent,

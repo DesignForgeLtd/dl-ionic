@@ -158,7 +158,7 @@ export class MapComponent implements OnInit {
         {
           // or make hero stand still
           this.player.stop();
-          
+
         }
       }
       else{
@@ -174,7 +174,7 @@ export class MapComponent implements OnInit {
   }
 
   tryHeroNextStep(){
-    
+
       // proceed with next step
       this.setServerSavedNewPositionToFalse();
       this.player.moveHeroStep();
@@ -184,7 +184,7 @@ export class MapComponent implements OnInit {
     // }
     // else
     // {
-     
+
     // }
   }
 
@@ -321,6 +321,9 @@ export class MapComponent implements OnInit {
         break;
       case 81:
         this.gameUIService.showLocationIcon('weapon-fix');
+        break;
+      case 82:
+        this.gameUIService.showLocationIcon('weapon-enhance');
         break;
       default:
         this.gameUIService.showLocationIcon('map-location');
