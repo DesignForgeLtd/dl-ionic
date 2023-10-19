@@ -4,7 +4,7 @@ import { EventEmitter, Injectable, Output } from "@angular/core";
 
 export class WS {
 
-    @Output() heroMoveRegistered : EventEmitter<any> = new EventEmitter();
+    @Output() heroUpdateEvent : EventEmitter<any> = new EventEmitter();
 
 
     private socket: WebSocket;
@@ -13,11 +13,21 @@ export class WS {
         this.socket = new WebSocket('ws://localhost:443/');
         
         this.socket.onmessage = (event) => {
-            console.log(event.data)
-            console.log(typeof event.data)
-            console.log('Message from WS server: ' + event.data);
-
-            this.heroMoveRegistered.emit(event.data);
+            const dataString = event.data;
+            const data = JSON.parse(dataString);
+            console.log('Received from WS: ')
+            console.log(data)
+            switch (data.action)
+            {
+              case 'message': 
+                console.log('Message from WS server: ' + data.message);
+                break;
+              case 'heroMove':
+              case 'heroDisappear':
+                this.heroUpdateEvent.emit(data);
+                break;
+            }
+            
         };
     };
 
@@ -29,5 +39,12 @@ export class WS {
     heroMove(data)
     {
         this.socket.send(JSON.stringify({'action': 'heroMove', 'data': data}));
+    }
+
+    heroDisappear(data)
+    {
+        console.log('heroDis:');
+        console.log(data);
+        this.socket.send(JSON.stringify({'action': 'heroDisappear', 'data': data}));
     }
 }

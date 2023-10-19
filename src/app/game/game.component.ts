@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { WS } from '../websockets/WS';
 import { GameUIService } from './game-ui.service';
 import { Player } from './map/map-scripts/Player';
 import { World } from './map/map-scripts/World';
@@ -40,7 +41,8 @@ export class GameComponent implements OnInit {
     private mapService: MapService,
     private gameUIService: GameUIService,
     protected world: World,
-    protected player: Player
+    protected player: Player,
+    public WS: WS
   ) {
     this.gameUIService.openedModal.subscribe(
       (modal: string) => this.openedModal = modal
@@ -204,6 +206,7 @@ export class GameComponent implements OnInit {
 
         this.gameUIService.openedModal.emit('');
 
+        this.WS.heroDisappear({'heroID': this.player.hero.id});        
 
         this.handleFoundLocation({
           'foundLocation': data.foundLocation,
@@ -221,7 +224,10 @@ export class GameComponent implements OnInit {
     this.mapService.usePortal(portalId).subscribe(data => {
       if (data.success === true) {
         console.log(data);
+        this.WS.heroDisappear({'heroID': this.player.hero.id});
         this.loadHeroEssentialData();
+        this.world.setLevel(this.player.level);
+        this.mapService.loadGameMap(data.playerData.level);
       }
       else {
         this.gameUIService.showError(data.errorMessage);
@@ -233,7 +239,9 @@ export class GameComponent implements OnInit {
   usePort(portConnection: number) {
     this.mapService.usePortConnection(portConnection).subscribe(data => {
       if (data.success === true) {
+        console.log('Used port with success! Hero ID: ' + this.player.hero.id);
         console.log(data);
+        this.WS.heroDisappear({'heroID': this.player.hero.id});
         this.gameUIService.heroInfoInitialize(data.playerData);
         //this.mapService.loadGameMap(data.playerData.level); // TODO: check if can be removed
         this.gameUIService.changeHeroOccupation('journey');

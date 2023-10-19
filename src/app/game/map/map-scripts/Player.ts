@@ -94,7 +94,7 @@ export class Player {
           //console.log('Saved new path on the server successfully');
           
           //this.WS.message("Hero ID: " + this.hero.id + ' goes to: ' + this.hero.position)        
-          this.WS.heroMove({'hero_id': this.hero.id, 'path': hero_path_string});        
+          this.WS.heroMove({'heroID': this.hero.id, 'path': hero_path_string});        
           
           return true;
         }

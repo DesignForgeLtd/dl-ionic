@@ -74,8 +74,8 @@ export class MapComponent implements OnInit {
       (modal: string) => this.openedModal = modal
     );
 
-    this.WS.heroMoveRegistered.subscribe(
-      (data: any) => this.setHeroPathWS(data)
+    this.WS.heroUpdateEvent.subscribe(
+      (data: any) => this.handleHeroUpdateEvent(data)
     );
   }
 
@@ -86,27 +86,41 @@ export class MapComponent implements OnInit {
     this.rows = this.world.rows;
 
     this.lastFrameTime = Date.now();
-    this.loadHeroEssentialData();
+    //this.loadHeroEssentialData();
 
     this.frameCounter = 0;
     this.previousSecond = Math.floor(Date.now() / 1000);
 
   }
 
-  setHeroPathWS(data: string) // {"heroID":number,"path": string}
+  handleHeroUpdateEvent(data)
   {
-    const dataObj = JSON.parse(data);
+    console.log('heroMoveRegistered -> handleHeroUpdateEvent: ' + typeof data);
+    console.log(data);
+  
+    switch (data.action)
+    {
+      case 'heroMove':
+        this.setHeroPathWS(data.data);
+        break;
+      case 'heroDisappear':
+        this.removeHero(data.data.heroID);
+        break;
+    }
+  }
 
-    const path = dataObj.path.split(';');
+  setHeroPathWS(data: {"heroID":number, "path":string})
+  {
+    const path = data.path.split(';');
     
-    this.setHeroPath(dataObj.heroID, path);
+    this.setHeroPath(data.heroID, path);
   }
   
   setHeroPath(id: number, path)
   {
     let hero = this.getHeroByID(id);
-    console.log(typeof hero);
-    console.log(hero);
+    // console.log(typeof hero);
+    // console.log(hero);
     
     if (hero === null)
     {
@@ -122,8 +136,8 @@ export class MapComponent implements OnInit {
       }
     });
 
-    console.log(hero.hero_path);
-    console.log(this.visibleHeroes);
+    // console.log(hero.hero_path);
+    // console.log(this.visibleHeroes);
   }
   
   getHeroByID(id: number)
@@ -136,6 +150,11 @@ export class MapComponent implements OnInit {
     }
 
     return null;
+  }
+
+  removeHero(id: number)
+  {
+    this.visibleHeroes = this.visibleHeroes.filter(hero => hero.id != id);
   }
 
   loadHeroEssentialData() {
@@ -189,8 +208,8 @@ export class MapComponent implements OnInit {
 
     //this.frameTimeDebug();
 
-    this.heroLoop();
     this.otherHeroesLoop();
+    this.heroLoop();
 
     this.mapGfx.gfxLoop(this.visibleHeroes);
 
