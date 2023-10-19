@@ -86,7 +86,7 @@ export class MapComponent implements OnInit {
     this.rows = this.world.rows;
 
     this.lastFrameTime = Date.now();
-    //this.loadHeroEssentialData();
+    this.loadHeroEssentialData();
 
     this.frameCounter = 0;
     this.previousSecond = Math.floor(Date.now() / 1000);
