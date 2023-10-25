@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable, Output } from "@angular/core";
+import { environment } from './../environments/environment';
 
 @Injectable({providedIn: 'root'})
 
@@ -10,7 +11,7 @@ export class WS {
     private socket: WebSocket;
 
     constructor() {
-        this.socket = new WebSocket('ws://localhost:443/');
+        this.socket = new WebSocket(environment.apiBaseURL);
         
         this.socket.onmessage = (event) => {
             const dataString = event.data;

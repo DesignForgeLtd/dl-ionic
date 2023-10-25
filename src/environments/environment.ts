@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiBaseURL: 'http://dl-api.devel'
+  apiBaseURL: 'http://dl-api.devel',
+  webSocketURL: 'ws://localhost:443/'
 };
 
 export const googleOAuth = {
