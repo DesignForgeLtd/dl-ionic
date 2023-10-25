@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   apiBaseURL: 'https://api.dragon-lords.com',
-  webSocketURL: 'ws://localhost:8181/'
+  webSocketURL: 'ws://api.dragon-lords.com:8181/'
 };
