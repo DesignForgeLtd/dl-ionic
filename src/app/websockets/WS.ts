@@ -11,8 +11,8 @@ export class WS {
     private socket: WebSocket;
 
     constructor() {
-        console.log("Connecting to WS at: " + environment.apiBaseURL);
-        this.socket = new WebSocket(environment.apiBaseURL);
+        console.log("Connecting to WS at: " + environment.webSocketURL);
+        this.socket = new WebSocket(environment.webSocketURL);
         
         this.socket.onmessage = (event) => {
             const dataString = event.data;
