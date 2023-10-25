@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  apiBaseURL: 'http://dl-api.devel',
-  webSocketURL: 'ws://localhost:443/'
+  //apiBaseURL: 'http://dl-api.devel',
+  apiBaseURL: 'https://api.dragon-lords.com',
+  webSocketURL: 'ws://localhost:8181/'
 };
 
 export const googleOAuth = {
