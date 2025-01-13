@@ -9,3 +9,9 @@ Set-up steps:
 3. In project root in terminal run: npm install
 
 4. To start app, also in terminal, run: ionic serve
+
+
+*** THIS IS ONLY A FRONT-END AND 
+GAME WILL NOT WORK WITHOUT AN API ***
+
+Working game can be found here: https://dragon-lords.com/
